@@ -521,7 +521,7 @@ export default function FinancialTab({
 
               <HoverInfoCard
                 title={t('tin.advance', 'Advance')}
-                value={`${formatNumber(calculatedValues.advance)} RWF`}
+                value={`${formatNumber((calculatedValues.advance ?? 0))} RWF`}
                 color="amber"
                 formula="price of tag per kg * net weight"
                 data={[
@@ -529,7 +529,7 @@ export default function FinancialTab({
                   { label: "Net Weight", value: formatNumber(net_weight) },
                 ]}
                 outputLabel="Advance"
-                outputValue={`${formatNumber(calculatedValues.advance)} RWF`}
+                outputValue={`${formatNumber((calculatedValues.advance ?? 0))} RWF`}
               />
 
               <HoverInfoCard
@@ -539,9 +539,9 @@ export default function FinancialTab({
                 formula="RRA + (RMA / Exchange Rate) + (Inkomane / Exchange Rate) + (Advance / Exchange Rate)"
                 data={[
                   { label: "RRA", value: `$${formatNumber(calculatedValues.rra)}` },
-                  { label: "RMA / Exchange Rate", value: `(${calculatedValues.rma} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? calculatedValues.rma / financialForm?.exchange_rate: '...'}` },
-                  { label: "Inkomane / Exchange Rate", value: `(${calculatedValues.inkomane_fee} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? calculatedValues.inkomane_fee / financialForm?.exchange_rate: '...'}` },
-                  { label: "Advance / Exchange Rate", value: `(${calculatedValues.advance} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? calculatedValues.advance / financialForm?.exchange_rate: '...'}` },
+                  { label: "RMA / Exchange Rate", value: `(${formatNumber(calculatedValues.rma)} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? formatNumber(calculatedValues.rma / financialForm?.exchange_rate): '...'}` },
+                  { label: "Inkomane / Exchange Rate", value: `(${formatNumber(calculatedValues.inkomane_fee)} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? formatNumber(calculatedValues.inkomane_fee / financialForm?.exchange_rate): '...'}` },
+                  { label: "Advance / Exchange Rate", value: `(${(formatNumber(calculatedValues.advance ?? 0))} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? formatNumber((calculatedValues.advance ?? 0) / financialForm?.exchange_rate): '...'}` },
                 ]}
                 outputLabel="Total Charge"
                 outputValue={`$${formatNumber(calculatedValues.total_charge)}`}

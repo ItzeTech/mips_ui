@@ -431,15 +431,16 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
 
   }
 
-  if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && 
-      calculatedData.advance && exchange_rate) {
+  if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && exchange_rate) {
     calculatedData.total_charge = calculatedData.rra + calculatedData.rma + 
-      (calculatedData.inkomane_fee / exchange_rate) + (calculatedData.advance / exchange_rate);
+      (calculatedData.inkomane_fee / exchange_rate) + ((calculatedData.advance ?? 0) / exchange_rate);
   }
 
   if (calculatedData.total_amount && calculatedData.total_charge) {
     calculatedData.net_amount = calculatedData.total_amount - calculatedData.total_charge;
   }
+
+  console.log(calculatedData);
 
   return calculatedData;
 };

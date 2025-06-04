@@ -467,7 +467,7 @@ export default function FinancialTab({
 
               <HoverInfoCard
                 title={t('tungsten.advance', 'Advance')}
-                value={`${formatNumber(calculatedValues.advance)} RWF`}
+                value={`${formatNumber((calculatedValues.advance ?? 0))} RWF`}
                 color="emerald"
                 formula="price of tag per kg * net weight"
                 data={[
@@ -475,7 +475,7 @@ export default function FinancialTab({
                   { label: "Net Weight", value: formatNumber(net_weight) },
                 ]}
                 outputLabel="Advance"
-                outputValue={`${formatNumber(calculatedValues.advance)} RWF`}
+                outputValue={`${formatNumber((calculatedValues.advance ?? 0))} RWF`}
               />
 
               <HoverInfoCard
@@ -487,7 +487,7 @@ export default function FinancialTab({
                   { label: "RRA", value: `$${formatNumber(calculatedValues.rra)}` },
                   { label: "RMA", value: `$${formatNumber(calculatedValues.rma)}` },
                   { label: "Inkomane / Exchange Rate", value: `(${calculatedValues.inkomane_fee} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? calculatedValues.inkomane_fee / financialForm?.exchange_rate: '...'}` },
-                  { label: "Advance / Exchange Rate", value: `(${calculatedValues.advance} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? calculatedValues.advance / financialForm?.exchange_rate: '...'}` },
+                  { label: "Advance / Exchange Rate", value: `(${(calculatedValues.advance ?? 0)} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? (calculatedValues.advance ?? 0) / financialForm?.exchange_rate: '...'}` },
                 ]}
                 outputLabel="Total Charge"
                 outputValue={`$${formatNumber(calculatedValues.total_charge)}`}
