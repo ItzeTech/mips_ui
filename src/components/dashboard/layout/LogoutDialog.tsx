@@ -52,11 +52,11 @@ const LogoutDialog: React.FC<LogoutDialogProps> = ({ isOpen, onClose, onConfirm 
               </div>
               
               <h3 className="text-lg font-medium text-center text-gray-900 dark:text-white mb-2">
-                {t('confirm_logout')}
+                {t('logout.confirm_logout')}
               </h3>
               
               <p className="text-sm text-center text-gray-500 dark:text-gray-400 mb-6">
-                {t('logout_confirmation_message')}
+                {t('logout.logout_confirmation_message')}
               </p>
               
               <div className="flex justify-center space-x-4">
@@ -66,7 +66,7 @@ const LogoutDialog: React.FC<LogoutDialogProps> = ({ isOpen, onClose, onConfirm 
                   className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none"
                   onClick={onClose}
                 >
-                  {t('cancel')}
+                  {t('logout.cancel')}
                 </motion.button>
                 
                 <motion.button
@@ -75,7 +75,7 @@ const LogoutDialog: React.FC<LogoutDialogProps> = ({ isOpen, onClose, onConfirm 
                   className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none"
                   onClick={handleLogout}
                 >
-                  {t('logout')}
+                  {t('logout.logout')}
                 </motion.button>
               </div>
             </div>

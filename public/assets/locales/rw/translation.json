@@ -1,10 +1,84 @@
 {
+  "common": {
+    "email": "Imeri"
+  },
   "login": {
-    "welcome_back": "Welcome Back",
-    "login_to_access": "Login to access",
-    "username": "Username",
-    "password": "Password",
-    "forgot_password_q": "Forgot password",
-    "login": "login"
+    "welcome_back": "Murakaza Neza",
+    "login_to_access": "Injira kugirango ubone",
+    "username": "Izina ry’umukoresha",
+    "password": "Ijambo ry’ibanga",
+    "forgot_password_q": "Wibagiwe ijambo ry’ibanga",
+    "login": "Injira"
+  },
+  "forgetPasswordPage": {
+    "forgot_password_q": "Wibagiwe ijambo ry’ibanga",
+    "forgot_password_instruction": "Ugomba gukoresha imeri yemewe",
+    "invalid_email": "Imeri ntabwo ari yo",
+    "send_reset_link": "Ohereza umurongo wo gusubiramo",
+    "email_sent": "Imeri yoherejwe",
+    "back_to_login": "Subira ku kwinjira"
+  },
+  "resetPasswordPage": {
+    "reset_password": "Siba ijambo ry’ibanga",
+    "reset_password_instruction": "Wuzuza ibisabwa hasi",
+    "new_password": "Ijambo rishya ry’ibanga",
+    "confirm_password": "Emeza ijambo ry’ibanga",
+    "reset_password_btn": "Siba ijambo ry’ibanga",
+    "back_to_login": "Subira ku kwinjira",
+    "passwords_dont_match": "Amagambo y’ibanga ntahuje",
+    "invalid_or_expired_token": "Ikimenyetso nticyemewe cyangwa cyarangije igihe",
+    "request_new_link": "Saba umurongo mushya",
+    "request_new_link_btn": "Kanda hano kugirango ubone umurongo mushya",
+    "password_reset_success": "Sibiro ry’ijambo ry’ibanga ryagenze neza",
+    "redirecting_to_login": "Koherezwa ku kwinjira",
+    "password_strength": "Imbaraga z’ijambo ry’ibanga",
+    "min_8_chars": "Nibura inyuguti 8",
+    "uppercase_letter": "Inyuguti nini",
+    "number": "Umubare",
+    "special_char": "Ikimenyetso kidasanzwe",
+    "not_strong_enough": "ntigifite imbaraga zihagije",
+    "strong_enough": "gifite imbaraga zihagije"
+  },
+  "logout": {
+    "confirm_logout": "Emeza Gusohoka",
+    "logout_confirmation_message": "Urizeye ko ushaka gusohoka muri konti yawe?",
+    "cancel": "Hagarika",
+    "logout": "Sohoka"
+  },
+  "unauthorized": {
+    "title": "Uburenganzira Bwanze",
+    "description": "Nta burenganzira buhagije ufite bwo kwinjira kuri iyi paji.",
+    "go_to_dashboard": "Jya kuri Dashboard"
+  },
+  "profilePage": {
+    "my_profile": "Profili Yanjye",
+    "loading_user_profile": "Kureba profili y’umukoresha",
+    "failed_to_load_profile": "Ntibyashobotse kureba profili",
+    "full_name": "Izina ryuzuye",
+    "email": "Imeri",
+    "phone_number": "Numero ya telefoni",
+    "national_id": "Indangamuntu",
+    "roles": "Imirimo",
+    "location": "Aho uri",
+    "status": "Imiterere",
+    "created_at": "Yaremwe",
+    "updated_at": "Ihinduwe",
+    "edit_profile": "Hindura Profili",
+    "save": "Bika",
+    "cancel": "Hagarika",
+    "error": "Ntibyashobotse kuvugurura profili. Gerageza nanone.",
+    "not_available": "Ntaboneka",
+    "unknown_error": "Habaye ikosa ritazwi",
+    "profile_details": "Ibisobanuro bya profili",
+    "account_info": "Amakuru ya konti",
+    "member_since": "Umubare kuva",
+    "last_updated": "Ihinduwe bwa nyuma",
+    "profile_completion": "Kuzuza profili",
+    "profile_completion_desc": "Komeza uvugurure profili yawe kugira ngo ubone serivisi nziza.",
+    "quick_actions": "Ibikorwa byihuse",
+    "update_successful_title": "Profili yavuguruwe",
+    "update_successful_message": "Amakuru ya profili yawe yavuguruwe neza.",
+    "ok": "Nibyo",
+    "complete": "Buzuza"
   }
 }

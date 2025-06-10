@@ -3,9 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
-// Layouts
-// import DashboardLayout from '../components/layout/DashboardLayout';
-
 // Pages
 import LoginPage from '../pages/Auth/LoginPage';
 import ForgotPasswordPage from '../pages/Auth/ForgetPasswordPage';
@@ -20,6 +17,7 @@ import ProtectedRoute from './ProtectedRoutes';
 import RoleBasedRoute from './RoleBasedRoute'; // Assuming you have this
 import { useAuth } from '../hooks/useAuth';
 import { DashboardLayoutWithOutlet } from '../components/dashboard/layout/DashboardLayout';
+import Unauthorized from '../pages/Unauthorized';
 
 
 const AnimatedOutlet: React.FC = () => {
@@ -42,7 +40,7 @@ const AnimatedOutlet: React.FC = () => {
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<MotionPage><DashboardOverviewPage /></MotionPage>} />
             <Route path="profile" element={<MotionPage><ProfilePage /></MotionPage>} />
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
+            <Route element={<RoleBasedRoute allowedRoles={['Manageri', 'Bossi']} />}>
               <Route path="settings" element={<MotionPage><SettingsPage /></MotionPage>} />
             </Route>
           </Route>
@@ -53,6 +51,7 @@ const AnimatedOutlet: React.FC = () => {
           path="/" 
           element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
         />
+        <Route path="/unauthorized" element={<MotionPage><Unauthorized /></MotionPage>} />
         <Route path="*" element={<MotionPage><NotFoundPage /></MotionPage>} />
       </Routes>
     </AnimatePresence>

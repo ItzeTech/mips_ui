@@ -1,20 +1,27 @@
 import React, { Fragment, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FiBell, FiMoon, FiSun, FiChevronDown } from 'react-icons/fi';
+import { FiMoon, FiSun, FiChevronDown } from 'react-icons/fi';
 import IconWrapper from '../../common/IconWrapper';
 import { useTheme } from '../../../hooks/useTheme';
 import { useAuth } from '../../../hooks/useAuth';
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { LanguageIcon, BellIcon } from '@heroicons/react/24/outline';
-// import {  } from '@heroicons/react/24/solid';
+import { useUserInfo } from '../../../hooks/useUserInfo';
+import { useNavigate } from 'react-router-dom';
 
 interface TopBarProps {
   sidebarExpanded: boolean;
   onLogout: () => void;
 }
 
-const UserDropdown = ({ sidebarExpanded, showUserMenu, setShowUserMenu, onLogout, t }: any) => {
+const UserDropdown = ({ sidebarExpanded, setShowUserMenu, onLogout, t }: any) => {
+  const { roles } = useAuth();
+  const { user } = useUserInfo();
+  const navigate = useNavigate()
+  const allowedRoles = ['Manager', 'Boss']
+  const userHasRequiredRole = roles.some(role => allowedRoles.includes(role));
+
   return (
     <div className="relative">
       <Menu as="div" className="relative inline-block text-left">
@@ -33,8 +40,8 @@ const UserDropdown = ({ sidebarExpanded, showUserMenu, setShowUserMenu, onLogout
                     exit={{ opacity: 0, x: -10 }}
                     className="hidden md:block"
                   >
-                    <div className="text-sm font-medium text-gray-700 dark:text-gray-200">John Doe</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">Administrator</div>
+                    <div className="text-sm font-medium text-gray-700 dark:text-gray-200">{user.full_name}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">{user.roles.slice().join(', ')}</div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -57,8 +64,8 @@ const UserDropdown = ({ sidebarExpanded, showUserMenu, setShowUserMenu, onLogout
             >
               <Menu.Items className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700 focus:outline-none">
                 <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                  <div className="text-sm font-medium text-gray-700 dark:text-gray-200">John Doe</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">john.doe@example.com</div>
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-200">{user.full_name}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">{user.email}</div>
                 </div>
 
                 <div className="py-1">
@@ -68,22 +75,28 @@ const UserDropdown = ({ sidebarExpanded, showUserMenu, setShowUserMenu, onLogout
                         className={`w-full text-left px-4 py-2 text-sm ${
                           active ? 'bg-gray-100 dark:bg-gray-700' : ''
                         } text-gray-700 dark:text-gray-200`}
+                        onClick={()=>navigate('/profile')}
                       >
                         {t('profile')}
                       </button>
                     )}
                   </Menu.Item>
-                  <Menu.Item>
+                  {
+                    userHasRequiredRole &&
+                    <Menu.Item>
                     {({ active }) => (
                       <button
                         className={`w-full text-left px-4 py-2 text-sm ${
                           active ? 'bg-gray-100 dark:bg-gray-700' : ''
                         } text-gray-700 dark:text-gray-200`}
+                        onClick={()=>navigate('/settings')}
                       >
                         {t('settings')}
                       </button>
                     )}
                   </Menu.Item>
+                  }
+                  
                 </div>
 
                 <div className="py-1 border-t border-gray-200 dark:border-gray-700">
@@ -98,7 +111,7 @@ const UserDropdown = ({ sidebarExpanded, showUserMenu, setShowUserMenu, onLogout
                           onLogout();
                         }}
                       >
-                        {t('logout')}
+                        {t('logout.logout')}
                       </button>
                     )}
                   </Menu.Item>
@@ -116,18 +129,12 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
   const { t, i18n } = useTranslation();
   const { currentTheme, toggleTheme } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const { user } = useAuth();
 
   const [notifications, setNotifications] = useState([
       { id: 1, text: "New user registered", unread: true },
       { id: 2, text: "Server maintenance at 2 AM", unread: true },
       { id: 3, text: "Report generated successfully", unread: false },
     ]);
-  
-  
-  const toggleUserMenu = () => {
-    setShowUserMenu(!showUserMenu);
-  };
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -240,7 +247,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
         </Popover>
         
         {/* User Profile */}
-        <UserDropdown sidebarExpanded={sidebarExpanded} showUserMenu={showUserMenu} onLogout={onLogout} setShowUserMenu={setShowUserMenu} t={t} />
+        <UserDropdown sidebarExpanded={sidebarExpanded} showUserMenu={showUserMenu} onLogout={onLogout} setShowUserMenu={setShowUserMenu} t={t}/>
         
       </div>
     </header>

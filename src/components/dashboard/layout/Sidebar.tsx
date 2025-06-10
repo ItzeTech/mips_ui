@@ -106,7 +106,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                 <li key={item.path}>
                   <Link
                     to={item.path}
-                    className={`flex items-center px-3 py-3 rounded-lg transition-colors duration-200 ${
+                    className={`relative flex items-center px-3 py-3 rounded-lg transition-colors duration-200 ${
                       isActive
                         ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400'
                         : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50'
@@ -137,7 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                     {isActive && expanded && (
                       <motion.div
                         layoutId="activeIndicator"
-                        className="absolute right-3 w-1.5 h-6 bg-indigo-600 dark:bg-indigo-400 rounded-full"
+                        className="absolute right-2 w-1.5 h-6 bg-indigo-600 dark:bg-indigo-400 rounded-full"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.2 }}

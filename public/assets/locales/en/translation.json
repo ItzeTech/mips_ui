@@ -38,6 +38,49 @@
       "special_char": "Special char",
       "not_strong_enough": "not strong enough",
       "strong_enough": "strong enough"
+    },
+    "logout": {
+      "confirm_logout": "Confirm Logout",
+      "logout_confirmation_message": "Are you sure you want to log out from your account?",
+      "cancel": "Cancel",
+      "logout": "Logout"
+    },
+    "unauthorized": {
+      "title": "Access Denied",
+      "description": "You do not have the necessary permissions to access this page.",
+      "go_to_dashboard": "Go to Dashboard"
+    },
+    "profilePage": {
+      "my_profile": "My Profile",
+      "loading_user_profile": "Loading user profile",
+      "failed_to_load_profile": "Failed to load profile",
+      "full_name": "Full Name",
+      "email": "Email",
+      "phone_number": "Phone Number",
+      "national_id": "National ID",
+      "roles": "Roles",
+      "location": "Location",
+      "status": "Status",
+      "created_at": "Created At",
+      "updated_at": "Updated At",
+      "edit_profile": "Edit Profile",
+      "save": "Save",
+      "cancel": "Cancel",
+      "error": "Failed to update profile. Please try again.",
+      "not_available": "Not provided",
+      "unknown_error": "An unknown error occurred",
+      "profile_details": "Profile Details",
+      "account_info": "Account Information",
+      "member_since": "Member Since",
+      "last_updated": "Last Updated",
+      "profile_completion": "Profile Completion",
+      "profile_completion_desc": "Keep your profile updated for the best experience.",
+      "quick_actions": "Quick Actions",
+      "update_successful_title": "Profile Updated",
+      "update_successful_message": "Your profile information has been successfully updated.",
+      "ok": "Got it",
+      "complete": "Complete"
+
     }
 
   }
