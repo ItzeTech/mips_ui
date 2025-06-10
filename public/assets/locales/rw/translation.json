@@ -1,0 +1,10 @@
+{
+  "login": {
+    "welcome_back": "Welcome Back",
+    "login_to_access": "Login to access",
+    "username": "Username",
+    "password": "Password",
+    "forgot_password_q": "Forgot password",
+    "login": "login"
+  }
+}

@@ -1,0 +1,44 @@
+{
+    "common": {
+      "email": "Email"
+    },
+    "login": {
+      "welcome_back": "Welcome Back",
+      "login_to_access": "Login to access",
+      "username": "Username",
+      "password": "Password",
+      "forgot_password_q": "Forgot password",
+      "login": "login"
+    },
+    "forgetPasswordPage": {
+      "forgot_password_q": "Forgot password",
+      "forgot_password_instruction": "You should use valid email",
+      "invalid_email": "Invalid email",
+      "send_reset_link": "Send reset link",
+      "email_sent": "Email Sent",
+      "back_to_login": "Back to login"
+    },
+    "resetPasswordPage": {
+      "reset_password": "Reset Password",
+      "reset_password_instruction": "Fill inputs below",
+      "new_password": "New Password",
+      "confirm_password": "Confirm Password",
+      "reset_password_btn": "Reset Password",
+      "back_to_login": "Back to login",
+      "passwords_dont_match": "Password don't match",
+      "invalid_or_expired_token": "Invalid or expired token",
+      "request_new_link": "Request new link",
+      "request_new_link_btn": "Click to get new link",
+      "password_reset_success": "Password reset success",
+      "redirecting_to_login": "Redirecting to login",
+      "password_strength": "Password strength",
+      "min_8_chars": "Min 8 chars",
+      "uppercase_letter": "Uppercase letter",
+      "number": "Number",
+      "special_char": "Special char",
+      "not_strong_enough": "not strong enough",
+      "strong_enough": "strong enough"
+    }
+
+  }
+  
