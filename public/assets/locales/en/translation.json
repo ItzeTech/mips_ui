@@ -1,6 +1,22 @@
 {
     "common": {
-      "email": "Email"
+      "email": "Email",
+      "cancel": "Cancel",
+      "create": "Create",
+      "creating": "Creating...",
+      "update": "Update",
+      "updating": "Updating...",
+      "close": "Close",
+      "save": "Save",
+      "saving": "Saving...",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "confirm": "Confirm",
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success",
+      "warning": "Warning",
+      "info": "Information"
     },
     "login": {
       "welcome_back": "Welcome Back",
@@ -80,8 +96,57 @@
       "update_successful_message": "Your profile information has been successfully updated.",
       "ok": "Got it",
       "complete": "Complete"
-
+    },
+    "users": {
+      "title": "User Management",
+      "subtitle": "Manage system users, roles, and permissions",
+      "create_new": "Create New User",
+      "edit_user": "Edit User",
+      "user_details": "User Details",
+      "user_details_additional": "Detailed user information",
+      "search_placeholder": "Search by name, email, or national ID...",
+      "all_statuses": "All Statuses",
+      "active": "Active",
+      "disabled": "Disabled",
+      "user": "User",
+      "contact": "Contact",
+      "roles": "Roles",
+      "status": "Status",
+      "actions": "Actions",
+      "view": "View Details",
+      "edit": "Edit User",
+      "no_users": "No users found",
+      "no_users_description": "Get started by creating your first user",
+      "full_name": "Full Name",
+      "email": "Email Address",
+      "national_id": "National ID",
+      "phone_number": "Phone Number",
+      "location": "Location",
+      "contact_information": "Contact Information",
+      "timestamps": "Account Information",
+      "created_at": "Created",
+      "updated_at": "Last Updated",
+      "email_readonly": "Email cannot be changed after account creation",
+      "full_name_placeholder": "Enter full name",
+      "email_placeholder": "Enter email address",
+      "national_id_placeholder": "Enter national ID number",
+      "phone_placeholder": "Enter phone number",
+      "location_placeholder": "Enter location",
+      "create_success": "User created successfully",
+      "update_success": "User updated successfully",
+      "enable_success": "User enabled successfully",
+      "disable_success": "User disabled successfully",
+      "enable_error": "Failed to enable user",
+      "disable_error": "Failed to disable user",
+      "validation": {
+        "full_name_required": "Full name is required",
+        "email_required": "Email address is required",
+        "email_invalid": "Please enter a valid email address",
+        "national_id_required": "National ID is required",
+        "phone_required": "Phone number is required",
+        "roles_required": "At least one role must be selected",
+        "location_required": "Location is required"
+      }
     }
-
   }
   

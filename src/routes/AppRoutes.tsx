@@ -10,6 +10,7 @@ import ResetPasswordPage from '../pages/Auth/ResetPasswordPage';
 import DashboardOverviewPage from '../pages/Dashboard/DashboardOverviewPage';
 import ProfilePage from '../pages/Dashboard/ProfilePage';
 import SettingsPage from '../pages/Dashboard/SettingsPage';
+import UsersPage from '../pages/Dashboard/UsersPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 // Route Protectors
@@ -40,8 +41,11 @@ const AnimatedOutlet: React.FC = () => {
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<MotionPage><DashboardOverviewPage /></MotionPage>} />
             <Route path="profile" element={<MotionPage><ProfilePage /></MotionPage>} />
-            <Route element={<RoleBasedRoute allowedRoles={['Manageri', 'Bossi']} />}>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
               <Route path="settings" element={<MotionPage><SettingsPage /></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
+              <Route path="manage-users" element={<MotionPage><UsersPage /></MotionPage>} />
             </Route>
           </Route>
         </Route>

@@ -32,3 +32,7 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #a0aec0 #f1f1f1;
 }
+
+.cust-translate-y-center {
+  transform: translateY(-50%) !important;
+}
