@@ -11,11 +11,13 @@ import DashboardOverviewPage from '../pages/Dashboard/DashboardOverviewPage';
 import ProfilePage from '../pages/Dashboard/ProfilePage';
 import SettingsPage from '../pages/Dashboard/SettingsPage';
 import UsersPage from '../pages/Dashboard/UsersPage';
+import SuppliersPage from '../pages/Dashboard/SuppliersPage';
+import MixedMineralsPage from '../pages/minerals/MixedMineralsPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 // Route Protectors
 import ProtectedRoute from './ProtectedRoutes';
-import RoleBasedRoute from './RoleBasedRoute'; // Assuming you have this
+import RoleBasedRoute from './RoleBasedRoute';
 import { useAuth } from '../hooks/useAuth';
 import { DashboardLayoutWithOutlet } from '../components/dashboard/layout/DashboardLayout';
 import Unauthorized from '../pages/Unauthorized';
@@ -46,6 +48,12 @@ const AnimatedOutlet: React.FC = () => {
             </Route>
             <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
               <Route path="manage-users" element={<MotionPage><UsersPage /></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
+              <Route path="suppliers" element={<MotionPage><SuppliersPage /></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
+              <Route path="/minerals/mixed" element={<MotionPage><MixedMineralsPage /></MotionPage>} />
             </Route>
           </Route>
         </Route>

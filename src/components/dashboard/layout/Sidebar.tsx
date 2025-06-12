@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+// sidebar.tsx
+import React, { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
-  FiHome, FiPieChart, FiSettings, FiUsers, FiCalendar,
-  FiFolder, FiChevronLeft, FiChevronRight, FiMenu
-} from 'react-icons/fi';
-import IconWrapper from '../../common/IconWrapper';
+  HomeIcon,
+  ChevronLeftIcon,
+  Bars3Icon,
+  UsersIcon,
+  Cog6ToothIcon,
+  ChartBarIcon,
+  CubeIcon,
+  RectangleGroupIcon,
+  Square3Stack3DIcon,
+  CircleStackIcon
+} from '@heroicons/react/24/outline';
+import { useAuth } from '../../../hooks/useAuth';
+
+interface NavItem {
+  icon: any;
+  label: string;
+  path: string;
+  allowedRoles: string[];
+  category?: string;
+  color?: string;
+}
 
 interface SidebarProps {
   expanded: boolean;
@@ -14,83 +32,215 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
-  const { t } = useTranslation();
   const location = useLocation();
-  const [useTextLogo, setUseTextLogo] = useState(false);
+  const { roles } = useAuth();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  const navItems = [
-    { icon: FiHome, label: 'Dashboard', path: '/dashboard' },
-    { icon: FiPieChart, label: 'Analytics', path: '/dashboard/analytics' },
-    { icon: FiFolder, label: 'Projects', path: '/dashboard/projects' },
-    { icon: FiCalendar, label: 'Calendar', path: '/dashboard/calendar' },
-    { icon: FiUsers, label: 'Team', path: '/dashboard/team' },
-    { icon: FiSettings, label: 'Settings', path: '/dashboard/settings' },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const navItems: NavItem[] = [
+    { 
+      icon: HomeIcon, 
+      label: 'Dashboard', 
+      path: '/dashboard', 
+      allowedRoles: ['Manager', 'Boss', 'Lab Technician', 'Finance Officer'],
+      color: 'from-blue-500 to-purple-600'
+    },
+    { 
+      icon: UsersIcon, 
+      label: 'Users', 
+      path: '/users', 
+      allowedRoles: ['Manager', 'Boss'],
+      color: 'from-green-500 to-teal-600'
+    },
+    { 
+      icon: UsersIcon, 
+      label: 'Manage Users', 
+      path: '/manage-users', 
+      allowedRoles: ['Manager', 'Boss'],
+      color: 'from-green-500 to-teal-600'
+    },
+    { 
+      icon: UsersIcon, 
+      label: 'Suppliers', 
+      path: '/suppliers', 
+      allowedRoles: ['Manager', 'Boss'],
+      color: 'from-green-500 to-teal-600'
+    },
+    { 
+      icon: ChartBarIcon, 
+      label: 'Reports', 
+      path: '/reports', 
+      allowedRoles: ['Finance Officer'],
+      color: 'from-orange-500 to-red-600'
+    },
+    // Minerals Category
+    { 
+      icon: Square3Stack3DIcon, 
+      label: 'Mixed Minerals', 
+      path: '/minerals/mixed', 
+      allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+      category: 'Minerals',
+      color: 'from-indigo-500 to-purple-600'
+    },
+    { 
+      icon: CircleStackIcon, 
+      label: 'Tantalum', 
+      path: '/minerals/tantalum', 
+      allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+      category: 'Minerals',
+      color: 'from-cyan-500 to-blue-600'
+    },
+    { 
+      icon: CubeIcon, 
+      label: 'Tin', 
+      path: '/minerals/tin', 
+      allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+      category: 'Minerals',
+      color: 'from-emerald-500 to-green-600'
+    },
+    { 
+      icon: RectangleGroupIcon, 
+      label: 'Tungsten', 
+      path: '/minerals/tungsten', 
+      allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+      category: 'Minerals',
+      color: 'from-yellow-500 to-orange-600'
+    },
+    { 
+      icon: Cog6ToothIcon, 
+      label: 'Settings', 
+      path: '/settings', 
+      allowedRoles: ['Manager', 'Boss'],
+      color: 'from-gray-500 to-slate-600'
+    },
   ];
 
-  const toggleLogoType = () => {
-    setUseTextLogo(!useTextLogo);
+  // Filter nav items based on user roles
+  const visibleNavItems = useMemo(() => {
+    return navItems.filter(item => {
+      return item.allowedRoles.some(role => roles.includes(role));
+    });
+  }, [navItems, roles]);
+
+  // Group items by category
+  const groupedNavItems = useMemo(() => {
+    const grouped: { [key: string]: NavItem[] } = { main: [] };
+    
+    visibleNavItems.forEach(item => {
+      if (item.category) {
+        if (!grouped[item.category]) {
+          grouped[item.category] = [];
+        }
+        grouped[item.category].push(item);
+      } else {
+        grouped.main.push(item);
+      }
+    });
+    
+    return grouped;
+  }, [visibleNavItems]);
+
+  const sidebarVariants = {
+    expanded: {
+      width: 280,
+      transition: {
+        duration: 0.3,
+        ease: [0.4, 0.0, 0.2, 1],
+      },
+    },
+    collapsed: {
+      width: 80,
+      transition: {
+        duration: 0.3,
+        ease: [0.4, 0.0, 0.2, 1],
+      },
+    },
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { x: -20, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+      },
+    },
   };
 
   return (
     <motion.div
-      className="bg-white dark:bg-gray-800 shadow-lg z-30 h-screen"
-      initial={{ width: expanded ? 260 : 80 }}
-      animate={{ width: expanded ? 260 : 80 }}
-      transition={{ duration: 0.3, ease: [0.3, 0.1, 0.3, 1] }}
+      className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-r border-gray-200 dark:border-gray-700 shadow-2xl z-30 h-screen overflow-hidden"
+      variants={sidebarVariants}
+      animate={expanded ? 'expanded' : 'collapsed'}
     >
       <div className="flex flex-col h-full">
         {/* Logo Area */}
-        <div className="p-4 flex items-center h-16 border-b border-gray-200 dark:border-gray-700 relative">
+        <div className="p-6 flex items-center h-20 border-b border-gray-200/50 dark:border-gray-700/50 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5"></div>
+          
           <AnimatePresence mode="wait">
             {expanded ? (
               <motion.div
                 key="expanded-logo"
-                className="flex items-center justify-between w-full"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              > 
-                  <motion.h1
-                    className="text-xl font-bold text-indigo-600 dark:text-indigo-400 cursor-pointer"
-                    onClick={toggleLogoType}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    RwandaMining
-                  </motion.h1>
+                className="flex items-center justify-between w-full relative z-10"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div
+                  className="flex items-center space-x-3"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+                    <Bars3Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                      RwandaMining
+                    </h1>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Management System</p>
+                  </div>
+                </motion.div>
+                
                 <motion.button
                   onClick={toggleSidebar}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none"
-                  whileHover={{ scale: 1.1 }}
+                  className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200"
+                  whileHover={{ scale: 1.1, rotate: 180 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <IconWrapper Icon={FiChevronLeft} className="w-5 h-5" />
+                  <ChevronLeftIcon className="w-4 h-4" />
                 </motion.button>
               </motion.div>
             ) : (
               <motion.div
                 key="collapsed-logo"
-                className="flex items-center justify-center w-full"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                className="flex items-center justify-center w-full relative z-10"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
               >
-                <motion.div
-                  className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center cursor-pointer"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
-                  </svg>
-                </motion.div>
                 <motion.button
-                  onClick={toggleSidebar}
-                  className="absolute -right-3 bg-white dark:bg-gray-700 rounded-full p-1 shadow-md text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none"
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
+                  className="p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                  onClick={toggleSidebar}
                 >
-                  <IconWrapper Icon={FiChevronRight} className="w-4 h-4" />
+                  <Bars3Icon className="w-5 h-5" />
                 </motion.button>
               </motion.div>
             )}
@@ -98,84 +248,192 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
         </div>
 
         {/* Navigation */}
-        <div className="py-4 flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-          <ul className="space-y-1 px-3">
-            {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    className={`relative flex items-center px-3 py-3 rounded-lg transition-colors duration-200 ${
-                      isActive
-                        ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400'
-                        : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50'
-                    }`}
-                  >
+        <motion.div 
+          className="py-6 flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <div className="px-4 space-y-8">
+            {/* Main Navigation */}
+            {groupedNavItems.main.length > 0 && (
+              <motion.div variants={itemVariants}>
+                <ul className="space-y-2">
+                  {groupedNavItems.main.map((item) => (
+                    <NavItemComponent
+                      key={item.path}
+                      item={item}
+                      expanded={expanded}
+                      hoveredItem={hoveredItem}
+                      setHoveredItem={setHoveredItem}
+                      location={location}
+                    />
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+
+            {/* Minerals Section */}
+            {groupedNavItems.Minerals && groupedNavItems.Minerals.length > 0 && (
+              <motion.div variants={itemVariants}>
+                <AnimatePresence>
+                  {expanded && (
                     <motion.div
-                      className="text-xl"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mb-4"
                     >
-                      <IconWrapper Icon={item.icon} />
+                      <div className="flex items-center space-x-2 px-3 py-2">
+                        <div className="w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
+                        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          Minerals
+                        </span>
+                        <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
+                      </div>
                     </motion.div>
-
-                    <AnimatePresence mode="wait">
-                      {expanded && (
-                        <motion.span
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -10 }}
-                          transition={{ duration: 0.2 }}
-                          className="ml-3 font-medium"
-                        >
-                          {t(item.label.toLowerCase())}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-
-                    {isActive && expanded && (
-                      <motion.div
-                        layoutId="activeIndicator"
-                        className="absolute right-2 w-1.5 h-6 bg-indigo-600 dark:bg-indigo-400 rounded-full"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+                  )}
+                </AnimatePresence>
+                
+                <ul className="space-y-2">
+                  {groupedNavItems.Minerals.map((item) => (
+                    <NavItemComponent
+                      key={item.path}
+                      item={item}
+                      expanded={expanded}
+                      hoveredItem={hoveredItem}
+                      setHoveredItem={setHoveredItem}
+                      location={location}
+                    />
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-          <div className={`flex ${expanded ? 'justify-between' : 'justify-center'} items-center`}>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
-              onClick={toggleSidebar}
-            >
-              <IconWrapper Icon={FiMenu} className="w-5 h-5" />
-            </motion.button>
-
-            {expanded && (
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-sm text-gray-500 dark:text-gray-400"
-              >
-                v1.0.2
-              </motion.span>
-            )}
+        <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-900/50">
+          <div className={`flex justify-center items-center`}>
+          
+            <AnimatePresence>
+              {expanded && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="text-center"
+                >
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                    Version 2.0.1
+                  </span>
+                  <div className="text-xs text-gray-400 dark:text-gray-500">
+                    Mining Pro
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
     </motion.div>
+  );
+};
+
+// Navigation Item Component
+const NavItemComponent: React.FC<{
+  item: NavItem;
+  expanded: boolean;
+  hoveredItem: string | null;
+  setHoveredItem: (item: string | null) => void;
+  location: any;
+}> = ({ item, expanded, hoveredItem, setHoveredItem, location }) => {
+  const { t } = useTranslation();
+  const isActive = location.pathname === item.path;
+  const isHovered = hoveredItem === item.path;
+
+  return (
+    <li>
+      <Link
+        to={item.path}
+        onMouseEnter={() => setHoveredItem(item.path)}
+        onMouseLeave={() => setHoveredItem(null)}
+        className="group relative block"
+      >
+        <motion.div
+          className={`relative flex items-center px-4 py-3 rounded-2xl transition-all duration-300 overflow-hidden ${
+            isActive
+              ? 'bg-gradient-to-r ' + (item.color || 'from-blue-500 to-purple-600') + ' text-white shadow-lg'
+              : 'text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
+          }`}
+          whileHover={{ scale: 1.02, x: 4 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          {/* Background Gradient for Hover */}
+          <AnimatePresence>
+            {isHovered && !isActive && (
+              <motion.div
+                className={`absolute inset-0 bg-gradient-to-r ${item.color || 'from-blue-500 to-purple-600'} opacity-10`}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 0.1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.2 }}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Icon */}
+          <motion.div
+            className={`relative z-10 ${isActive ? 'text-white' : ''}`}
+            whileHover={{ rotate: 5, scale: 1.1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <item.icon className="w-5 h-5" />
+          </motion.div>
+
+          {/* Label */}
+          <AnimatePresence mode="wait">
+            {expanded && (
+              <motion.span
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2 }}
+                className={`ml-4 font-medium relative z-10 ${isActive ? 'text-white' : ''}`}
+              >
+                {t(`menu.${item.label.toLowerCase().replace(' ', '_')}`)}
+              </motion.span>
+            )}
+          </AnimatePresence>
+
+          {/* Active Indicator */}
+          {isActive && expanded && (
+            <motion.div
+              layoutId="activeIndicator"
+              className="absolute right-2 w-2 h-4 bg-white/30 rounded-full"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+          )}
+
+          {/* Tooltip for collapsed state */}
+          <AnimatePresence>
+            {!expanded && isHovered && (
+              <motion.div
+                initial={{ opacity: 0, x: -10, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -10, scale: 0.8 }}
+                className="absolute left-full ml-4 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-sm rounded-xl shadow-xl border border-gray-200 dark:border-gray-600 whitespace-nowrap z-50"
+              >
+                {t(item.label.toLowerCase().replace(' ', '_'))}
+                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900 dark:bg-gray-700 rotate-45"></div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </Link>
+    </li>
   );
 };
 

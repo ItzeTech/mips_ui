@@ -47,7 +47,7 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry && originalRequest.url !== '/auth/login') {
-      if (originalRequest.url === '/auth/refresh-token') {
+      if (originalRequest.url === '/auth/token/refresh') {
         storeRef.dispatch(logout());
         return Promise.reject(error);
       }
@@ -65,7 +65,7 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await axios.post(`${API_BASE_URL}/auth/refresh-token`, {}, { withCredentials: true });
+        const { data } = await axios.post(`${API_BASE_URL}/auth/token/refresh`, {}, { withCredentials: true });
 
         const newAccessToken = data.access_token;
         const newRoles = data.roles;
@@ -78,6 +78,7 @@ axiosInstance.interceptors.response.use(
         processQueue(null, newAccessToken);
         return axiosInstance(originalRequest);
       } catch (refreshError: any) {
+        console.log(refreshError)
         processQueue(refreshError, null);
         storeRef.dispatch(logout());
         window.location.href = '/login';
