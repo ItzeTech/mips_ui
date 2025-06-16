@@ -32,49 +32,67 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
         </h3>
         
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {RenderInput(
-            t('tantalum.internal_ta2o5', 'Internal Ta2O5'),
-            labForm.internal_ta2o5,
-            (value) => setLabForm(prev => ({ ...prev, internal_ta2o5: value })),
-            'number',
-            '%'
-            )}
-            {RenderInput(
-            t('tantalum.internal_nb2o5', 'Internal Nb2O5'),
-            labForm.internal_nb2o5,
-            (value) => setLabForm(prev => ({ ...prev, internal_nb2o5: value })),
-            'number',
-            '%'
-            )}
-            {RenderInput(
-            t('tantalum.nb_percentage', 'Nb %'),
-            labForm.nb_percentage,
-            (value) => setLabForm(prev => ({ ...prev, nb_percentage: value })),
-            'number',
-            '%'
-            )}
-            {RenderInput(
-            t('tantalum.sn_percentage', 'Sn %'),
-            labForm.sn_percentage,
-            (value) => setLabForm(prev => ({ ...prev, sn_percentage: value })),
-            'number',
-            '%'
-            )}
-            {RenderInput(
-            t('tantalum.fe_percentage', 'Fe %'),
-            labForm.fe_percentage,
-            (value) => setLabForm(prev => ({ ...prev, fe_percentage: value })),
-            'number',
-            '%'
-            )}
-            {RenderInput(
-            t('tantalum.w_percentage', 'W %'),
-            labForm.w_percentage,
-            (value) => setLabForm(prev => ({ ...prev, w_percentage: value })),
-            'number',
-            '%'
-            )}
-        </div>
+            <RenderInput
+                label={t('tantalum.internal_ta2o5', 'Internal Ta2O5')}
+                value={labForm.internal_ta2o5}
+                onChange={(value) => setLabForm(prev => ({ ...prev, internal_ta2o5: value }))}
+                type="number"
+                suffix="%"
+                field="internal_ta2o5"
+                errors={errors}
+            />
+
+            <RenderInput
+                label={t('tantalum.internal_nb2o5', 'Internal Nb2O5')}
+                value={labForm.internal_nb2o5}
+                onChange={(value) => setLabForm(prev => ({ ...prev, internal_nb2o5: value }))}
+                type="number"
+                suffix="%"
+                field="internal_nb2o5"
+                errors={errors}
+            />
+
+            <RenderInput
+                label={t('tantalum.nb_percentage', 'Nb %')}
+                value={labForm.nb_percentage}
+                onChange={(value) => setLabForm(prev => ({ ...prev, nb_percentage: value }))}
+                type="number"
+                suffix="%"
+                field="nb_percentage"
+                errors={errors}
+            />
+
+            <RenderInput
+                label={t('tantalum.sn_percentage', 'Sn %')}
+                value={labForm.sn_percentage}
+                onChange={(value) => setLabForm(prev => ({ ...prev, sn_percentage: value }))}
+                type="number"
+                suffix="%"
+                field="sn_percentage"
+                errors={errors}
+            />
+
+            <RenderInput
+                label={t('tantalum.fe_percentage', 'Fe %')}
+                value={labForm.fe_percentage}
+                onChange={(value) => setLabForm(prev => ({ ...prev, fe_percentage: value }))}
+                type="number"
+                suffix="%"
+                field="fe_percentage"
+                errors={errors}
+            />
+
+            <RenderInput
+                label={t('tantalum.w_percentage', 'W %')}
+                value={labForm.w_percentage}
+                onChange={(value) => setLabForm(prev => ({ ...prev, w_percentage: value }))}
+                type="number"
+                suffix="%"
+                field="w_percentage"
+                errors={errors}
+            />
+            </div>
+
         </div>
         
         {/* Alex Stewart Analysis */}
@@ -85,21 +103,30 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
         </h3>
         
         <div className="grid grid-cols-2 gap-4">
-            {RenderInput(
-            t('tantalum.alex_stewart_ta2o5', 'Alex Stewart Ta2O5'),
-            labForm.alex_stewart_ta2o5,
-            (value) => setLabForm(prev => ({ ...prev, alex_stewart_ta2o5: value })),
-            'number',
-            '%'
-            )}
-            {RenderInput(
-            t('tantalum.alex_stewart_nb2o5', 'Alex Stewart Nb2O5'),
-            labForm.alex_stewart_nb2o5,
-            (value) => setLabForm(prev => ({ ...prev, alex_stewart_nb2o5: value })),
-            'number',
-            '%'
-            )}
-        </div>
+            <RenderInput
+                label={t('tantalum.alex_stewart_ta2o5', 'Alex Stewart Ta2O5')}
+                value={labForm.alex_stewart_ta2o5}
+                onChange={(value) =>
+                setLabForm((prev) => ({ ...prev, alex_stewart_ta2o5: value }))
+                }
+                type="number"
+                suffix="%"
+                field="alex_stewart_ta2o5"
+                errors={errors}
+            />
+
+            <RenderInput
+                label={t('tantalum.alex_stewart_nb2o5', 'Alex Stewart Nb2O5')}
+                value={labForm.alex_stewart_nb2o5}
+                onChange={(value) =>
+                setLabForm((prev) => ({ ...prev, alex_stewart_nb2o5: value }))
+                }
+                type="number"
+                suffix="%"
+                field="alex_stewart_nb2o5"
+                errors={errors}
+            />
+            </div>
         </div>
     </motion.div>
   )

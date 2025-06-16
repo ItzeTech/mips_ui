@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const STOCK_STATUS_OPTIONS = {
-  'in-stock': { en: 'In Stock', rw: 'ari muri stock' },
-  'withdrawn': { en: 'Withdrawn', rw: 'ayasohowe' },
-  'resampled': { en: 'Resampled', rw: 'ayasubiwemo' }
+  'in-stock': 'stockStatus.in-stock',
+  'withdrawn': 'stockStatus.withdrawn',
+  'resampled': 'stockStatus.resampled'
 };
 
 export const FINANCE_STATUS_OPTIONS = {
-  'paid': { en: 'Paid', rw: 'ayishyuwe' },
-  'unpaid': { en: 'Unpaid', rw: 'atarishyurwa' },
-  'invoiced': { en: 'Invoiced/Finalized', rw: 'ayabariwe' },
-  'advance-given': { en: 'Advance Given', rw: 'ayatangiwe advance' },
-  'exported': { en: 'Exported', rw: 'ayagemuwe' }
+  paid: 'financeStatus.paid',
+  unpaid: 'financeStatus.unpaid',
+  invoiced: 'financeStatus.invoiced',
+  'advance-given': 'financeStatus.advance-given',
+  exported: 'financeStatus.exported'
 };
+
 
 export const formatDate = (dateString: string) => {
     if (!dateString) return '';
-    return dateString.split('T')[0]; // Convert to YYYY-MM-DD format for input
+    return dateString.split('T')[0];
   };
 
 export const contentVariants = {

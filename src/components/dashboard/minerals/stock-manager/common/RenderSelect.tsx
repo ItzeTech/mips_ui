@@ -1,10 +1,28 @@
-const RenderSelect = (
-    label: string,
-    value: string,
-    onChange: (value: any) => void,
-    options: Record<string, { en: string; rw: string }>,
-    disabled = false
-  ) => (
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
+
+interface RenderSelectInterface {
+  label: string;
+  value: string;
+  onChange: (value: any) => void;
+  options: Record<string, string>; // options as key: translationKey
+  disabled?: boolean;
+  field: string;
+  errors?: Record<string, string>;
+}
+
+const RenderSelect = ({
+  label,
+  value,
+  onChange,
+  options = {},
+  disabled = false,
+  field = '',
+  errors = {}
+}: RenderSelectInterface) => {
+  const { t } = useTranslation();
+
+  return (
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
         {label}
@@ -17,14 +35,20 @@ const RenderSelect = (
           disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : 'border-gray-300'
         }`}
       >
-        {Object.entries(options).map(([optionValue, labels]) => (
+        {Object.entries(options).map(([optionValue, translationKey]) => (
           <option key={optionValue} value={optionValue}>
-            {labels.en} ({labels.rw})
+            {t(translationKey)}
           </option>
         ))}
       </select>
+      {errors[field] && (
+        <p className="text-red-500 text-xs mt-1 flex items-center">
+          <ExclamationTriangleIcon className="w-3 h-3 mr-1" />
+          {errors[field]}
+        </p>
+      )}
     </div>
   );
-
+};
 
 export default RenderSelect;

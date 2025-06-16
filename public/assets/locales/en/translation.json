@@ -379,6 +379,18 @@
       "date_of_alex_stewart": "Date of Alex Stewart",
       "date_of_sampling": "Date of Sampling",
       "date_of_delivery": "Delivery Date"
+    },
+    "stockStatus": {
+      "in-stock": "In Stock",
+      "withdrawn": "Withdrawn",
+      "resampled": "Resampled"
+    },
+    "financeStatus": {
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "invoiced": "Invoiced",
+      "advance-given": "Advance given",
+      "exported": "Exported"
     }
   }
   

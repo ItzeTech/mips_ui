@@ -32,34 +32,42 @@ export default function StockTab({stockForm, setStockForm, errors = {}}: StockTa
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {RenderInput(
-            t('tantalum.net_weight', 'Net Weight (kg)'),
-            stockForm.net_weight,
-            (value) => setStockForm(prev => ({ ...prev, net_weight: value })),
-            'number',
-            'kg',
-            )}
-            
-            {RenderInput(
-            t('tantalum.date_of_sampling', 'Date of Sampling'),
-            formatDate(stockForm.date_of_sampling),
-            (value) => setStockForm(prev => ({ ...prev, date_of_sampling: value })),
-            'date'
-            )}
-            
-            {RenderInput(
-            t('tantalum.date_of_delivery', 'Date of Delivery'),
-            formatDate(stockForm.date_of_delivery),
-            (value) => setStockForm(prev => ({ ...prev, date_of_delivery: value })),
-            'date'
-            )}
-            
-            {RenderSelect(
-            t('tantalum.stock_status_label', 'Stock Status'),
-            stockForm.stock_status,
-            (value) => setStockForm(prev => ({ ...prev, stock_status: value })),
-            STOCK_STATUS_OPTIONS
-            )}
+            <RenderInput
+                label={t('tantalum.net_weight', 'Net Weight (kg)')}
+                value={stockForm.net_weight}
+                onChange={(value) => setStockForm((prev) => ({ ...prev, net_weight: value }))}
+                type="number"
+                suffix="kg"
+                field="net_weight"
+                errors={errors}
+            />
+
+            <RenderInput
+                label={t('tantalum.date_of_sampling', 'Date of Sampling')}
+                value={formatDate(stockForm.date_of_sampling)}
+                onChange={(value) => setStockForm((prev) => ({ ...prev, date_of_sampling: value }))}
+                type="date"
+                field="date_of_sampling"
+                errors={errors}
+            />
+
+            <RenderInput
+                label={t('tantalum.date_of_delivery', 'Date of Delivery')}
+                value={formatDate(stockForm.date_of_delivery)}
+                onChange={(value) => setStockForm((prev) => ({ ...prev, date_of_delivery: value }))}
+                type="date"
+                field="date_of_delivery"
+                errors={errors}
+            />
+
+            <RenderSelect
+                label={t('tantalum.stock_status_label', 'Stock Status')}
+                value={stockForm.stock_status}
+                onChange={(value) => setStockForm(prev => ({ ...prev, stock_status: value }))}
+                options={STOCK_STATUS_OPTIONS}
+                field='stock_status_label'
+                errors={errors}
+            />
         </div>
         </div>
     </motion.div>

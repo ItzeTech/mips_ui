@@ -21,7 +21,6 @@ import {
   CalendarDaysIcon,
   ScaleIcon,
   CheckBadgeIcon,
-  ArrowPathIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   SparklesIcon,
@@ -39,7 +38,6 @@ import {
 import CreateTantalumModal from '../../../components/dashboard/minerals/stock-manager/tantalum/CreateTantalumModal';
 import EditTantalumModal from '../../../components/dashboard/minerals/stock-manager/tantalum/EditTantalumModal';
 import ViewTantalumModal from '../../../components/dashboard/minerals/stock-manager/tantalum/ViewTantalumModal';
-import UpdateTantalumStatusModal from '../../../components/dashboard/minerals/stock-manager/tantalum/UpdateTantalumStatusModal';
 import LoadingSkeleton from '../../../components/common/LoadingSkeleton';
 
 const TantalumPage: React.FC = () => {
@@ -59,7 +57,6 @@ const TantalumPage: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
-  const [showStatusModal, setShowStatusModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTantalums({ page: pagination.page, limit: pagination.limit }));
@@ -89,11 +86,6 @@ const TantalumPage: React.FC = () => {
   const handleEditTantalum = (tantalum: Tantalum) => {
     dispatch(setSelectedTantalum(tantalum));
     setShowEditModal(true);
-  };
-  
-  const handleUpdateStatus = (tantalum: Tantalum) => {
-    dispatch(setSelectedTantalum(tantalum));
-    setShowStatusModal(true);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -485,16 +477,6 @@ const getStockStatusColor = (status: StockStatus) => {
                           >
                             <PencilIcon className="w-4 h-4" />
                           </motion.button>
-                          
-                          <motion.button
-                            whileHover={{ scale: 1.2, rotate: 5 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => handleUpdateStatus(tantalum)}
-                            className="p-2 text-amber-600 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300 bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 rounded-xl transition-all duration-200"
-                            title={t('tantalum.update_status', 'Update Status')}
-                          >
-                            <ArrowPathIcon className="w-4 h-4" />
-                          </motion.button>
                         </div>
                       </td>
                     </motion.tr>
@@ -631,11 +613,6 @@ const getStockStatusColor = (status: StockStatus) => {
         <ViewTantalumModal 
             isOpen={showViewModal} 
             onClose={() => setShowViewModal(false)} 
-        />
-        
-        <UpdateTantalumStatusModal
-            isOpen={showStatusModal}
-            onClose={() => setShowStatusModal(false)}
         />
     </motion.div>
   );

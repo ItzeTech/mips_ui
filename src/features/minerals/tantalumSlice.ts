@@ -150,9 +150,7 @@ const initialState: TantalumState = {
   updateStockStatus: 'idle',
   updateLabAnalysisStatus: 'idle',
   updateFinancialsStatus: 'idle',
-  isFetched: false,
-  updateFinanceStatus: 'idle',
-  lastLotSequence: 0
+  isFetched: false
 };
 
 // Async thunks
@@ -359,72 +357,50 @@ export default tantalumSlice.reducer;
 
 // ------------------------------------------------------------------
 
-// features/minerals/tantalumSlice.tsx
-// import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-// import axiosInstance from '../../config/axiosInstance';
-
-// Status enums with multilingual support
-// export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled';
-// export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'advance-given' | 'exported';
-
-export const STOCK_STATUS_LABELS = {
-  'in-stock': { en: 'In Stock', rw: 'ari muri stock' },
-  'withdrawn': { en: 'Withdrawn', rw: 'ayasohowe' },
-  'resampled': { en: 'Resampled', rw: 'ayasubiwemo' }
-} as const;
-
-export const FINANCE_STATUS_LABELS = {
-  'paid': { en: 'Paid', rw: 'ayishyuwe' },
-  'unpaid': { en: 'Unpaid', rw: 'atarishyurwa' },
-  'invoiced': { en: 'Invoiced/Finalized', rw: 'ayabariwe' },
-  'advance-given': { en: 'Advance Given', rw: 'ayatangiwe advance' },
-  'exported': { en: 'Exported', rw: 'ayagemuwe' }
-} as const;
-
-export interface Tantalum {
-  id: string;
-  date_of_delivery: string;
-  date_of_sampling: string;
-  date_of_alex_stewart: string | null;
-  lot_number: string; // Format: TA000010, TA000011
-  supplier_id: string;
-  supplier_name: string;
-  net_weight: number; // after sampling
+// export interface Tantalum {
+//   id: string;
+//   date_of_delivery: string;
+//   date_of_sampling: string;
+//   date_of_alex_stewart: string | null;
+//   lot_number: string; // Format: TA000010, TA000011
+//   supplier_id: string;
+//   supplier_name: string;
+//   net_weight: number; // after sampling
   
-  // Internal lab analysis
-  internal_ta2o5: number | null;
-  internal_nb2o5: number | null;
-  nb_percentage: number | null;
-  sn_percentage: number | null;
-  fe_percentage: number | null;
-  w_percentage: number | null;
+//   // Internal lab analysis
+//   internal_ta2o5: number | null;
+//   internal_nb2o5: number | null;
+//   nb_percentage: number | null;
+//   sn_percentage: number | null;
+//   fe_percentage: number | null;
+//   w_percentage: number | null;
   
-  // Alex Stewart analysis
-  alex_stewart_ta2o5: number | null;
-  alex_stewart_nb2o5: number | null;
+//   // Alex Stewart analysis
+//   alex_stewart_ta2o5: number | null;
+//   alex_stewart_nb2o5: number | null;
   
-  // Financial data
-  price_per_percentage: number | null; // Price per 1%
-  purchase_ta2o5_percentage: number | null;
-  unit_price: number | null; // Calculated: price_per_percentage * purchase_ta2o5_percentage
-  exchange_rate: number | null; // USD to RWF
-  price_of_tag_per_kg_rwf: number | null;
-  total_amount: number | null; // Calculated: unit_price * net_weight
-  rra: number | null; // Calculated: 3% * total_amount
-  rma: number | null; // Calculated: 0.125 * net_weight (USD 125 per 1,000 kg)
-  inkomane_fee: number | null; // Calculated: 40 * net_weight (40 RWF per kg)
-  advance: number | null; // Calculated: price_of_tag_per_kg_rwf * net_weight
-  total_charge: number | null; // Calculated: RRA + RMA + (Inkomane/Exchange rate) + (advance/Exchange rate)
-  net_amount: number | null; // Calculated: total_amount - total_charge
+//   // Financial data
+//   price_per_percentage: number | null; // Price per 1%
+//   purchase_ta2o5_percentage: number | null;
+//   unit_price: number | null; // Calculated: price_per_percentage * purchase_ta2o5_percentage
+//   exchange_rate: number | null; // USD to RWF
+//   price_of_tag_per_kg_rwf: number | null;
+//   total_amount: number | null; // Calculated: unit_price * net_weight
+//   rra: number | null; // Calculated: 3% * total_amount
+//   rma: number | null; // Calculated: 0.125 * net_weight (USD 125 per 1,000 kg)
+//   inkomane_fee: number | null; // Calculated: 40 * net_weight (40 RWF per kg)
+//   advance: number | null; // Calculated: price_of_tag_per_kg_rwf * net_weight
+//   total_charge: number | null; // Calculated: RRA + RMA + (Inkomane/Exchange rate) + (advance/Exchange rate)
+//   net_amount: number | null; // Calculated: total_amount - total_charge
   
-  stock_status: StockStatus;
-  finance_status: FinanceStatus;
-  finance_status_changed_date: string;
-  stock_status_changed_date: string;
-  has_alex_stewart: boolean;
-  created_at: string;
-  updated_at: string;
-}
+//   stock_status: StockStatus;
+//   finance_status: FinanceStatus;
+//   finance_status_changed_date: string;
+//   stock_status_changed_date: string;
+//   has_alex_stewart: boolean;
+//   created_at: string;
+//   updated_at: string;
+// }
 
 // Helper functions for calculations
 export const calculateFinancials = (data: Partial<Tantalum>): Partial<Tantalum> => {
@@ -483,32 +459,7 @@ export const calculateFinancials = (data: Partial<Tantalum>): Partial<Tantalum> 
   return calculatedData;
 };
 
-// Generate lot number
-export const generateLotNumber = (sequence: number): string => {
-  return `TA${sequence.toString().padStart(6, '0')}`;
-};
 
-// Updated interfaces
-export interface CreateTantalumData {
-  supplier_id: string;
-  net_weight: number;
-  date_of_sampling: string;
-}
-
-export interface UpdateFinancialsData {
-  price_per_percentage?: number;
-  purchase_ta2o5_percentage?: number;
-  exchange_rate?: number;
-  price_of_tag_per_kg_rwf?: number;
-}
-
-export interface UpdateStockStatusData {
-  stock_status: StockStatus;
-}
-
-export interface UpdateFinanceStatusData {
-  finance_status: FinanceStatus;
-}
 
 // Role-based permissions
 export const canUpdateStockStatus = (userRole: string): boolean => {
@@ -518,87 +469,3 @@ export const canUpdateStockStatus = (userRole: string): boolean => {
 export const canUpdateFinanceStatus = (userRole: string): boolean => {
   return userRole === 'manager' || userRole === 'admin';
 };
-
-// Rest of the slice remains similar but with enhanced thunks
-// export const updateFinancials = createAsyncThunk(
-//   'tantalums/updateFinancials',
-//   async ({ id, financialData }: { id: string; financialData: UpdateFinancialsData }, { rejectWithValue }) => {
-//     try {
-//       // Calculate derived values before sending
-//       const calculatedData = calculateFinancials(financialData);
-      
-//       const response = await axiosInstance.put(`/tantalum/${id}/financials`, calculatedData);
-//       return response.data.data;
-//     } catch (error: any) {
-//       return rejectWithValue(error.response?.data?.message || 'Failed to update financials');
-//     }
-//   }
-// );
-
-export const resetUpdateFinanceStatus = createAsyncThunk(
-  'tantalums/updateFinancials',
-  async (_, { rejectWithValue }) => {
-    try {
-      // Calculate derived values before sending
-      // const calculatedData = calculateFinancials(financialData);
-      
-      // const response = await axiosInstance.put(`/tantalum/${id}/financials`, calculatedData);
-      // return response.data.data;
-      return "hello"
-    // eslint-disable-next-line no-unreachable
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to update financials');
-    }
-  }
-);
-
-export const updateFinanceStatus = createAsyncThunk(
-  'tantalums/updateFinanceStatus',
-  async ({ id, statusData }: { id: string; statusData: UpdateFinanceStatusData }, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.put(`/tantalum/${id}/finance-status`, statusData);
-      return response.data.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to update finance status');
-    }
-  }
-);
-
-// Additional state for finance status updates
-interface TantalumState {
-  tantalums: Tantalum[];
-  selectedTantalum: Tantalum | null;
-  pagination: {
-    total: number;
-    page: number;
-    limit: number;
-  };
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
-  createStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-  updateStockStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-  updateFinanceStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-  updateLabAnalysisStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-  updateFinancialsStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-  lastLotSequence: number; // For generating lot numbers
-  isFetched: boolean;
-}
-
-// const initialState: TantalumState = {
-//   tantalums: [],
-//   selectedTantalum: null,
-//   pagination: {
-//     total: 0,
-//     page: 1,
-//     limit: 10,
-//   },
-//   status: 'idle',
-//   error: null,
-//   createStatus: 'idle',
-//   updateStockStatus: 'idle',
-//   updateFinanceStatus: 'idle',
-//   updateLabAnalysisStatus: 'idle',
-//   updateFinancialsStatus: 'idle',
-//   lastLotSequence: 0,
-//   isFetched: false
-// };

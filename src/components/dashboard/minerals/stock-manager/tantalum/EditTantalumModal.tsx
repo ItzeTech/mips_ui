@@ -9,31 +9,24 @@ import {
   ScaleIcon, 
   BeakerIcon, 
   CurrencyDollarIcon,
-  ArrowPathIcon,
-  CheckIcon,
   ExclamationTriangleIcon,
   LockClosedIcon,
 } from '@heroicons/react/24/outline';
 import { RootState, AppDispatch } from '../../../../../store/store';
-import { 
-  updateLabAnalysis, 
-  updateFinancials, 
-  updateStockStatus,
-  updateFinanceStatus,
+import {
   resetUpdateLabAnalysisStatus,
   resetUpdateFinancialsStatus,
   resetUpdateStockStatus,
-  resetUpdateFinanceStatus,
   calculateFinancials,
-  type UpdateStockStatusData,
-  type UpdateFinanceStatusData,
-  type FinanceStatus,
   StockFormData,
   LabFormData,
+  FinancialFormData,
 } from '../../../../../features/minerals/tantalumSlice';
 import StockTab from './tabs/StockTab';
 import LabTab from './tabs/LabTab';
 import FinancialTab from './tabs/FinancialTab';
+import SaveFormButton from '../common/SaveFormButton';
+import TabButton from '../common/TabButton';
 
 type UserRole = "Stock Manager" | "Boss" | "Manager" | "Lab Technician" | "Finance Officer";
 
@@ -43,15 +36,6 @@ interface EditTantalumModalProps {
   userRole: UserRole;
 }
 
-interface FinancialFormData {
-  price_per_percentage: number | null;
-  purchase_ta2o5_percentage: number | null;
-  exchange_rate: number | null;
-  price_of_tag_per_kg_rwf: number | null;
-  finance_status: FinanceStatus;
-}
-
-
 const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, userRole }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
@@ -60,7 +44,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
     updateLabAnalysisStatus,
     updateFinancialsStatus,
     updateStockStatus: stockUpdateStatus,
-    updateFinanceStatus: financeUpdateStatus,
+    updateFinancialsStatus: financeUpdateStatus,
     error 
   } = useSelector((state: RootState) => state.tantalums);
   
@@ -205,7 +189,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
       setHasStockChanges(JSON.stringify(originalStock) !== JSON.stringify(stockForm));
     }
   }, [stockForm, selectedTantalum]);
-
+ 
   useEffect(() => {
     if (selectedTantalum) {
       const originalLab = {
@@ -236,86 +220,173 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
   }, [financialForm, selectedTantalum]);
 
   const handleStockSubmit = async () => {
-    if (!selectedTantalum || !hasStockChanges) return;
-
+    if (!selectedTantalum) return;
+  
     try {
-      // Update stock status if changed
-      if (stockForm.stock_status !== selectedTantalum.stock_status) {
-        const statusData: UpdateStockStatusData = {
-          stock_status: stockForm.stock_status
-        };
-        await dispatch(updateStockStatus({ 
-          id: selectedTantalum.id, 
-          statusData 
-        })).unwrap();
+      const formDataToSubmit: any = { ...stockForm };
+      const newErrors: Record<string, string> = {};
+  
+      // Validate required fields except date_of_delivery
+      if (formDataToSubmit.net_weight == null || formDataToSubmit.net_weight === '') {
+        newErrors.net_weight = t('stock.net_weight_required', 'Net Weight is required');
       }
-
-      // Note: In a real implementation, you'd also update other stock fields
-      // This would require additional API endpoints for updating basic tantalum data
-      console.log('Stock form submitted:', stockForm);
-      
+      if (!formDataToSubmit.date_of_sampling) {
+        newErrors.date_of_sampling = t('stock.date_of_sampling_required', 'Date of Sampling is required');
+      }
+      if (!formDataToSubmit.stock_status) {
+        newErrors.stock_status = t('stock.stock_status_required', 'Stock Status is required');
+      }
+  
+      // Remove date_of_delivery if empty
+      if (!formDataToSubmit.date_of_delivery) {
+        delete formDataToSubmit.date_of_delivery;
+      }
+  
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return; // stop submission
+      }
+  
+      setErrors({}); // clear previous errors
+  
+      // Submit the form data now
+      console.log('Submitting:', formDataToSubmit);
+  
+      // Call your API or dispatch action here
+      // await dispatch(updateStock({ id: selectedTantalan.id, stockData: formDataToSubmit })).unwrap();
+  
     } catch (error) {
       console.error('Stock update failed:', error);
     }
   };
+  
 
   const handleLabSubmit = async () => {
-    if (!selectedTantalum || !hasLabChanges) return;
-
+    if (!selectedTantalum) return;
+  
     try {
       const labData: any = { ...labForm };
-      await dispatch(updateLabAnalysis({ 
-        id: selectedTantalum.id, 
-        labData 
-      })).unwrap();
-      
+      const newErrors: Record<string, string> = {};
+  
+      // Check required fields - must not be null or empty
+      if (labData.internal_ta2o5 == null || labData.internal_ta2o5 === '') {
+        newErrors.internal_ta2o5 = t('tantalum.internal_ta2o5_required', 'Internal Ta2O5 is required');
+      }
+      if (labData.internal_nb2o5 == null || labData.internal_nb2o5 === '') {
+        newErrors.internal_nb2o5 = t('tantalum.internal_nb2o5_required', 'Internal Nb2O5 is required');
+      }
+      if (labData.nb_percentage == null || labData.nb_percentage === '') {
+        newErrors.nb_percentage = t('tantalum.nb_percentage_required', 'Nb % is required');
+      }
+      if (labData.sn_percentage == null || labData.sn_percentage === '') {
+        newErrors.sn_percentage = t('tantalum.sn_percentage_required', 'Sn % is required');
+      }
+      if (labData.fe_percentage == null || labData.fe_percentage === '') {
+        newErrors.fe_percentage = t('tantalum.fe_percentage_required', 'Fe % is required');
+      }
+      if (labData.w_percentage == null || labData.w_percentage === '') {
+        newErrors.w_percentage = t('tantalum.w_percentage_required', 'W % is required');
+      }
+  
+      // Validate Alex Stewart fields: both must be present if one is present
+      const hasAlexTa2O5 = labData.alex_stewart_ta2o5 != null && labData.alex_stewart_ta2o5 !== '';
+      const hasAlexNb2O5 = labData.alex_stewart_nb2o5 != null && labData.alex_stewart_nb2o5 !== '';
+  
+      if (hasAlexTa2O5 !== hasAlexNb2O5) {
+        if (!hasAlexTa2O5) {
+          newErrors.alex_stewart_ta2o5 = t(
+            'tantalum.alex_stewart_ta2o5_required_if_nb2o5',
+            'Alex Stewart Ta2O5 must be filled if Nb2O5 is filled'
+          );
+        }
+        if (!hasAlexNb2O5) {
+          newErrors.alex_stewart_nb2o5 = t(
+            'tantalum.alex_stewart_nb2o5_required_if_ta2o5',
+            'Alex Stewart Nb2O5 must be filled if Ta2O5 is filled'
+          );
+        }
+      }
+  
+      // If both Alex Stewart fields are empty, remove them from payload
+      if (!hasAlexTa2O5 && !hasAlexNb2O5) {
+        delete labData.alex_stewart_ta2o5;
+        delete labData.alex_stewart_nb2o5;
+      }
+  
+      // If there are validation errors, set errors and abort submit
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
+  
+      setErrors({}); // Clear previous errors
+  
+      // Submit the validated data
+      console.log('Lab data ready to submit:', labData);
+  
+      // Your dispatch or API call here
+      // await dispatch(updateLab({ id: selectedTantalum.id, labData })).unwrap();
+  
     } catch (error) {
       console.error('Lab update failed:', error);
     }
   };
+  
 
   const handleFinancialSubmit = async () => {
     if (!selectedTantalum || !hasFinancialChanges) return;
-
+  
+    // 1. Validate required fields
+    const newErrors: Record<string, string> = {};
+    if (financialForm.price_per_percentage == null) {
+      newErrors.price_per_percentage = t('tantalum.price_per_percentage_required', 'Price per percentage is required');
+    }
+    if (financialForm.purchase_ta2o5_percentage == null) {
+      newErrors.purchase_ta2o5_percentage = t('tantalum.purchase_ta2o5_percentage_required', 'Purchase Ta2O5% is required');
+    }
+    if (financialForm.exchange_rate == null) {
+      newErrors.exchange_rate = t('tantalum.exchange_rate_required', 'Exchange rate is required');
+    }
+    if (financialForm.price_of_tag_per_kg_rwf == null) {
+      newErrors.price_of_tag_per_kg_rwf = t('tantalum.price_of_tag_per_kg_rwf_required', 'Price of tag per kg is required');
+    }
+  
+    // 2. If there are errors, set them and stop submission
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+  
     try {
-      // Update financial data
-      const financialData: any = {
+      // 3. Clear previous errors
+      setErrors({});
+  
+      // 4. Construct and send data
+      const financialData = {
         price_per_percentage: financialForm.price_per_percentage,
         purchase_ta2o5_percentage: financialForm.purchase_ta2o5_percentage,
         exchange_rate: financialForm.exchange_rate,
         price_of_tag_per_kg_rwf: financialForm.price_of_tag_per_kg_rwf
       };
-      
-      await dispatch(updateFinancials({ 
-        id: selectedTantalum.id, 
-        financialData 
-      })).unwrap();
 
-      // Update finance status if changed
-      if (financialForm.finance_status !== selectedTantalum.finance_status) {
-        const statusData: UpdateFinanceStatusData = {
-          finance_status: financialForm.finance_status
-        };
-        await dispatch(updateFinanceStatus({ 
-          id: selectedTantalum.id, 
-          statusData 
-        })).unwrap();
-      }
-      
+      console.log(financialData)
+  
+      // await dispatch(updateFinancials({
+      //   id: selectedTantalum.id,
+      //   financialData
+      // })).unwrap();
     } catch (error) {
       console.error('Financial update failed:', error);
     }
   };
+  
 
   const handleClose = () => {
     dispatch(resetUpdateLabAnalysisStatus());
     dispatch(resetUpdateFinancialsStatus());
     dispatch(resetUpdateStockStatus());
-    dispatch(resetUpdateFinanceStatus());
     onClose();
   };
-
-
 
 
 
@@ -418,9 +489,6 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                       <span className="text-sm text-gray-500 dark:text-gray-400 mr-3">
                         {selectedTantalum.lot_number}
                       </span>
-                      <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-0.5 rounded-full">
-                        {userRole}
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -440,60 +508,33 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                 variants={itemVariants}
               >
                 {canAccessStock() && (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <TabButton
+                    isActive={activeTab === 'stock'}
                     onClick={() => setActiveTab('stock')}
-                    className={`px-4 py-2.5 rounded-xl flex items-center transition-all duration-200 ${
-                      activeTab === 'stock' 
-                        ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 font-medium shadow-md' 
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    <ScaleIcon className="w-5 h-5 mr-2" />
-                    {t('tantalum.stock', 'Stock')}
-                    {hasStockChanges && (
-                      <span className="ml-2 w-2 h-2 bg-amber-500 rounded-full"></span>
-                    )}
-                  </motion.button>
+                    icon={<ScaleIcon className="w-5 h-5 mr-2" />}
+                    label={t('tantalum.stock', 'Stock')}
+                    hasChanges={hasStockChanges}
+                  />
                 )}
-                
+
                 {canAccessLab() && (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <TabButton
+                    isActive={activeTab === 'lab'}
                     onClick={() => setActiveTab('lab')}
-                    className={`px-4 py-2.5 rounded-xl flex items-center transition-all duration-200 ${
-                      activeTab === 'lab' 
-                        ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 font-medium shadow-md' 
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    <BeakerIcon className="w-5 h-5 mr-2" />
-                    {t('tantalum.lab_analysis', 'Lab Analysis')}
-                    {hasLabChanges && (
-                      <span className="ml-2 w-2 h-2 bg-amber-500 rounded-full"></span>
-                    )}
-                  </motion.button>
+                    icon={<BeakerIcon className="w-5 h-5 mr-2" />}
+                    label={t('tantalum.lab_analysis', 'Lab Analysis')}
+                    hasChanges={hasLabChanges}
+                  />
                 )}
-                
+
                 {canAccessFinancial() && (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <TabButton
+                    isActive={activeTab === 'financial'}
                     onClick={() => setActiveTab('financial')}
-                    className={`px-4 py-2.5 rounded-xl flex items-center transition-all duration-200 ${
-                      activeTab === 'financial' 
-                        ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 font-medium shadow-md' 
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    <CurrencyDollarIcon className="w-5 h-5 mr-2" />
-                    {t('tantalum.financial_details', 'Financial')}
-                    {hasFinancialChanges && (
-                      <span className="ml-2 w-2 h-2 bg-amber-500 rounded-full"></span>
-                    )}
-                  </motion.button>
+                    icon={<CurrencyDollarIcon className="w-5 h-5 mr-2" />}
+                    label={t('tantalum.financial_details', 'Financial')}
+                    hasChanges={hasFinancialChanges}
+                  />
                 )}
               </motion.div>
 
@@ -522,6 +563,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                     <StockTab 
                       stockForm={stockForm}
                       setStockForm={setStockForm}
+                      errors={errors}
                     />
                   )}
                   
@@ -530,6 +572,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                     <LabTab 
                       labForm={labForm}
                       setLabForm={setLabForm}
+                      errors={errors}
                     />
                   )}
                   
@@ -540,6 +583,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                       setFinancialForm={setFinancialForm}
                       labForm={labForm}
                       calculatedValues={calculatedValues}
+                      errors={errors}
                     />
                   )}
                 </AnimatePresence>
@@ -571,66 +615,33 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                   
                   {/* Dynamic save button based on active tab */}
                   {activeTab === 'stock' && canAccessStock() && (
-                    <motion.button
-                      whileHover={{ scale: hasStockChanges ? 1.05 : 1 }}
-                      whileTap={{ scale: hasStockChanges ? 0.95 : 1 }}
+                    <SaveFormButton
                       onClick={handleStockSubmit}
                       disabled={!hasStockChanges || isLoading}
-                      className={`px-6 py-2.5 font-medium rounded-xl shadow-md transition-all duration-200 flex items-center ${
-                        hasStockChanges && !isLoading
-                          ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white hover:shadow-lg'
-                          : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                      }`}
-                    >
-                      {isLoading ? (
-                        <ArrowPathIcon className="w-4 h-4 mr-2 animate-spin" />
-                      ) : (
-                        <CheckIcon className="w-4 h-4 mr-2" />
-                      )}
-                      {t('tantalum.save_stock', 'Save Stock')}
-                    </motion.button>
+                      isLoading={isLoading}
+                      hasChanges={hasStockChanges}
+                      label={t('tantalum.save_stock', 'Save Stock')}
+                    />
                   )}
 
                   {activeTab === 'lab' && canAccessLab() && (
-                    <motion.button
-                      whileHover={{ scale: hasLabChanges ? 1.05 : 1 }}
-                      whileTap={{ scale: hasLabChanges ? 0.95 : 1 }}
+                    <SaveFormButton
                       onClick={handleLabSubmit}
                       disabled={!hasLabChanges || isLoading}
-                      className={`px-6 py-2.5 font-medium rounded-xl shadow-md transition-all duration-200 flex items-center ${
-                        hasLabChanges && !isLoading
-                          ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white hover:shadow-lg'
-                          : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                      }`}
-                    >
-                      {isLoading ? (
-                        <ArrowPathIcon className="w-4 h-4 mr-2 animate-spin" />
-                      ) : (
-                        <CheckIcon className="w-4 h-4 mr-2" />
-                      )}
-                      {t('tantalum.save_lab', 'Save Lab Data')}
-                    </motion.button>
+                      isLoading={isLoading}
+                      hasChanges={hasLabChanges}
+                      label={t('tantalum.save_lab', 'Save Lab Data')}
+                    />
                   )}
 
                   {activeTab === 'financial' && canAccessFinancial() && (
-                    <motion.button
-                      whileHover={{ scale: hasFinancialChanges ? 1.05 : 1 }}
-                      whileTap={{ scale: hasFinancialChanges ? 0.95 : 1 }}
+                    <SaveFormButton
                       onClick={handleFinancialSubmit}
                       disabled={!hasFinancialChanges || isLoading}
-                      className={`px-6 py-2.5 font-medium rounded-xl shadow-md transition-all duration-200 flex items-center ${
-                        hasFinancialChanges && !isLoading
-                          ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white hover:shadow-lg'
-                          : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                      }`}
-                    >
-                      {isLoading ? (
-                        <ArrowPathIcon className="w-4 h-4 mr-2 animate-spin" />
-                      ) : (
-                        <CheckIcon className="w-4 h-4 mr-2" />
-                      )}
-                      {t('tantalum.save_financial', 'Save Financial')}
-                    </motion.button>
+                      isLoading={isLoading}
+                      hasChanges={hasFinancialChanges}
+                      label={t('tantalum.save_financial', 'Save Financial')}
+                    />
                   )}
                 </div>
               </motion.div>

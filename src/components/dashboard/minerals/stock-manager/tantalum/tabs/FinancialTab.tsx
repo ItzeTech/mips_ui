@@ -6,6 +6,7 @@ import { contentVariants, FINANCE_STATUS_OPTIONS, formatNumber } from '../../../
 import RenderInput from '../../common/RenderInput';
 import RenderSelect from '../../common/RenderSelect';
 import { useTranslation } from 'react-i18next';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 
 interface FinancialTabInterface {
@@ -19,7 +20,7 @@ interface FinancialTabInterface {
 export default function FinancialTab({financialForm, setFinancialForm, errors={}, labForm, calculatedValues}: FinancialTabInterface) {
 
     const { t } = useTranslation();
-    const renderPurchaseTa2O5Input = () => {
+    const renderPurchaseTa2O5Input = (errors: Record<string, string>, field: string) => {
         const availableValues = [];
         if (labForm.internal_ta2o5) {
           availableValues.push({ 
@@ -123,6 +124,12 @@ export default function FinancialTab({financialForm, setFinancialForm, errors={}
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {t('tantalum.purchase_ta2o5_hint', 'You can use one of the available lab values or enter a custom percentage')}
             </p>
+            {errors[field] && (
+              <p className="text-red-500 text-xs mt-1 flex items-center">
+                <ExclamationTriangleIcon className="w-3 h-3 mr-1" />
+                {errors[field]}
+              </p>
+            )}
           </div>
         );
       };
@@ -138,57 +145,64 @@ export default function FinancialTab({financialForm, setFinancialForm, errors={}
     >
         {/* Input Fields */}
         <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <CurrencyDollarIcon className="w-5 h-5 mr-2 text-indigo-500" />
-            {t('tantalum.pricing_inputs', 'Pricing Inputs')}
-        </h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {RenderInput(
-            t('tantalum.price_per_percentage', 'Price Per 1%'),
-            financialForm.price_per_percentage,
-            (value) => setFinancialForm(prev => ({ ...prev, price_per_percentage: value })),
-            'number',
-            '$'
-            )}
-            
-            {RenderInput(
-            t('tantalum.exchange_rate', 'Exchange Rate (USD to RWF)'),
-            financialForm.exchange_rate,
-            (value) => setFinancialForm(prev => ({ ...prev, exchange_rate: value })),
-            'number'
-            )}
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+              <CurrencyDollarIcon className="w-5 h-5 mr-2 text-indigo-500" />
+              {t('tantalum.pricing_inputs', 'Pricing Inputs')}
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <RenderInput
+              label={t('tantalum.price_per_percentage', 'Price Per 1%')}
+              value={financialForm.price_per_percentage}
+              onChange={(value) => setFinancialForm(prev => ({ ...prev, price_per_percentage: value }))}
+              type="number"
+              suffix="$"
+              field="price_per_percentage"
+              errors={errors}
+            />
+
+            <RenderInput
+              label={t('tantalum.exchange_rate', 'Exchange Rate (USD to RWF)')}
+              value={financialForm.exchange_rate}
+              onChange={(value) => setFinancialForm(prev => ({ ...prev, exchange_rate: value }))}
+              type="number"
+              field="exchange_rate"
+              errors={errors}
+            />
 
             {/* Special Purchase Ta2O5% input */}
             <div className="space-y-2">
-            {renderPurchaseTa2O5Input()}
+              {renderPurchaseTa2O5Input(errors, 'purchase_ta2o5_percentage')}
             </div>
-            
-            {RenderInput(
-            t('tantalum.price_of_tag', 'Price of Tag per Kg (RWF)'),
-            financialForm.price_of_tag_per_kg_rwf,
-            (value) => setFinancialForm(prev => ({ ...prev, price_of_tag_per_kg_rwf: value })),
-            'number',
-            ' RWF'
-            )}
-        </div>
+
+            <RenderInput
+              label={t('tantalum.price_of_tag', 'Price of Tag per Kg (RWF)')}
+              value={financialForm.price_of_tag_per_kg_rwf}
+              onChange={(value) => setFinancialForm(prev => ({ ...prev, price_of_tag_per_kg_rwf: value }))}
+              type="number"
+              suffix="RWF"
+              field="price_of_tag_per_kg_rwf"
+              errors={errors}
+            />
+          </div>
         </div>
 
         {/* Finance Status */}
         <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <CheckBadgeIcon className="w-5 h-5 mr-2 text-indigo-500" />
-            {t('tantalum.finance_status_management', 'Finance Status')}
-        </h3>
-        
-        <div className="max-w-md">
-            {RenderSelect(
-            t('tantalum.finance_status_label', 'Finance Status'),
-            financialForm.finance_status,
-            (value) => setFinancialForm(prev => ({ ...prev, finance_status: value })),
-            FINANCE_STATUS_OPTIONS
-            )}
-        </div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+              <CheckBadgeIcon className="w-5 h-5 mr-2 text-indigo-500" />
+              {t('tantalum.finance_status_management', 'Finance Status')}
+          </h3>
+          <div className="max-w-md">
+            <RenderSelect
+              label={t('tantalum.finance_status_label', 'Finance Status')}
+              value={financialForm.finance_status}
+              onChange={(value) => setFinancialForm(prev => ({ ...prev, finance_status: value }))}
+              options={FINANCE_STATUS_OPTIONS}
+              field='finance_status_label'
+              errors={errors}
+            />
+          </div>
         </div>
 
         {/* Calculated Values */}
