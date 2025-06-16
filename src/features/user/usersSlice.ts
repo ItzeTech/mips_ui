@@ -39,6 +39,7 @@ interface UsersState {
   error: string | null;
   createStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   updateStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  isFetched: boolean;
 }
 
 const initialState: UsersState = {
@@ -48,6 +49,7 @@ const initialState: UsersState = {
   error: null,
   createStatus: 'idle',
   updateStatus: 'idle',
+  isFetched: false
 };
 
 // Async thunks
@@ -126,6 +128,7 @@ const usersSlice = createSlice({
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.users = action.payload;
+        state.isFetched = true;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.status = 'failed';

@@ -312,6 +312,73 @@
     "notifications": {
       "title": "Notifications",
       "mark_all_read": "Mark all read"
+    },
+    "tantalum": {
+      "title": "Tantalum Management",
+      "subtitle": "Manage your tantalum minerals inventory",
+      "create_new": "Add New Tantalum",
+      "create_first": "Add Your First Tantalum",
+      "search_placeholder": "Search by lot number, supplier or weight...",
+      
+      "total_minerals": "Total Tantalums",
+      "in_stock": "In Stock",
+      "resampled": "Resampled",
+      "withdrawn": "Withdrawn",
+      "finance_status": "Finance Status",
+      
+      "lot_info": "Lot Information",
+      "dates": "Dates",
+      "supplier": "Supplier",
+      "status": "Status",
+      "actions": "Actions",
+      
+      "delivery": "Delivery",
+      "sampling": "Sampling",
+      "alex_stewart": "Alex Stewart",
+      "no_supplier_info": "No supplier information",
+      
+      "status_all": "All Status",
+      "status_in-stock": "In Stock",
+      "status_withdrawn": "Withdrawn",
+      "status_resampled": "Resampled",
+      
+      "finance_paid": "Paid",
+      "finance_unpaid": "Unpaid",
+      "finance_invoiced": "Invoiced",
+      "finance_advance given": "Advance Given",
+      "finance_exported": "Exported",
+      
+      "view": "View Details",
+      "edit": "Edit",
+      "update_status": "Update Status",
+      
+      "no_tantalums_found": "No tantalums found",
+      "no_tantalums": "No tantalums yet",
+      "try_different_search": "Try adjusting your search or filter to find what you're looking for.",
+      "no_tantalums_description": "Start adding tantalum minerals to your inventory.",
+      
+      "showing": "Showing",
+      "of": "of",
+      
+      "add_success": "Tantalum added successfully",
+      "update_success": "Tantalum updated successfully",
+      "status_update_success": "Status updated successfully",
+      "lab_update_success": "Lab analysis updated successfully",
+      "financials_update_success": "Financial details updated successfully",
+      
+      "net_weight": "Net Weight",
+      "lot_number": "Lot Number",
+      "internal_analysis": "Internal Analysis",
+      "external_analysis": "Alex Stewart Analysis",
+      "financial_details": "Financial Details",
+      "stock_status_label": "Stock Status",
+      "finance_status_label": "Finance Status",
+      "stock_status_changed": "Stock Status Changed At",
+      "finance_status_changed": "Finance Status Changed At",
+      "has_alex_stewart": "Has Alex Stewart",
+      "date_of_alex_stewart": "Date of Alex Stewart",
+      "date_of_sampling": "Date of Sampling",
+      "date_of_delivery": "Delivery Date"
     }
   }
   

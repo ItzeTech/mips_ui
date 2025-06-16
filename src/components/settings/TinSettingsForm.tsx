@@ -23,7 +23,7 @@ import toast from 'react-hot-toast';
 const TinSettingsForm: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { settings, status, error, saveStatus } = useSelector((state: RootState) => state.tinSettings);
+  const { settings, status, error, saveStatus, isFetched } = useSelector((state: RootState) => state.tinSettings);
 
   const [formData, setFormData] = useState<TinSettingsData>({
     government_treatment_charge_usd: 0,
@@ -35,8 +35,10 @@ const TinSettingsForm: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    dispatch(fetchTinSettings());
-  }, [dispatch]);
+    if(!isFetched){
+      dispatch(fetchTinSettings());
+    }
+  }, [dispatch, isFetched]);
 
   useEffect(() => {
     if (settings) {

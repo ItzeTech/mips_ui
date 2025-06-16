@@ -36,7 +36,7 @@ const UsersPage: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   
-  const { users, status } = useSelector((state: RootState) => state.users);
+  const { users, status, isFetched } = useSelector((state: RootState) => state.users);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'disabled'>('all');
@@ -50,8 +50,10 @@ const UsersPage: React.FC = () => {
   const controls = useAnimation();
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    if(!isFetched){
+      dispatch(fetchUsers());
+    }
+  }, [dispatch, isFetched]);
 
   // Get unique roles for filter
   const availableRoles = useMemo(() => {

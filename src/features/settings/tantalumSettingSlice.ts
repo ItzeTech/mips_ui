@@ -20,6 +20,7 @@ interface TantalumSettingsState {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   saveStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  isFetched: boolean;
 }
 
 const initialState: TantalumSettingsState = {
@@ -27,6 +28,7 @@ const initialState: TantalumSettingsState = {
   status: 'idle',
   error: null,
   saveStatus: 'idle',
+  isFetched: false
 };
 
 // Async thunks
@@ -85,6 +87,7 @@ const tantalumSettingsSlice = createSlice({
       .addCase(fetchTantalumSettings.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.settings = action.payload;
+        state.isFetched = true;
       })
       .addCase(fetchTantalumSettings.rejected, (state, action) => {
         state.status = 'failed';

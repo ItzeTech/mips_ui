@@ -1,107 +1,3 @@
-// // components/minerals/CreateMixedMineralModal.tsx
-// import React, { useState, useEffect } from 'react';
-// import { useTranslation } from 'react-i18next';
-// import { motion, AnimatePresence } from 'framer-motion';
-// import { Dialog } from '@headlessui/react';
-// import { XMarkIcon, CalendarDaysIcon, ScaleIcon, UserGroupIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { RootState, AppDispatch } from '../../../store/store';
-// import { createMixedMineral, resetAllStatuses, CreateMixedMineralData } from '../../features/minerals/mixedMineralsSlice';
-// import toast from 'react-hot-toast';
-
-// interface CreateMixedMineralModalProps {
-//   isOpen: boolean;
-//   onClose: () => void;
-// }
-
-// const CreateMixedMineralModal: React.FC<CreateMixedMineralModalProps> = ({ isOpen, onClose }) => {
-//   const { t } = useTranslation();
-//   const dispatch = useDispatch<AppDispatch>();
-//   const { createStatus, error } = useSelector((state: RootState) => state.mixedMinerals);
-//   const { suppliersForSelection } = useSelector((state: RootState) => state.mixedMinerals);
-
-//   const [formData, setFormData] = useState<CreateMixedMineralData>({
-//     date_of_delivery: '',
-//     supplier_id: '',
-//     weight_kg: 0
-//   });
-
-//   useEffect(() => {
-//     if (createStatus === 'succeeded') {
-//       toast.success(t('mixedMinerals.create_success'));
-//       onClose();
-//       dispatch(resetAllStatuses());
-//     } else if (createStatus === 'failed' && error) {
-//       toast.error(error);
-//       dispatch(resetAllStatuses());
-//     }
-//   }, [createStatus, error, onClose, dispatch, t]);
-
-//   // Form handling and validation would go here...
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     // Add validation logic
-//     dispatch(createMixedMineral(formData));
-//   };
-  
-//   return (
-//     <AnimatePresence>
-//       {isOpen && (
-//         <Dialog static as={motion.div} open={isOpen} onClose={onClose} className="fixed inset-0 z-50">
-//           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-//           <div className="fixed inset-0 overflow-y-auto">
-//             <div className="flex min-h-full items-center justify-center p-4">
-//               <Dialog.Panel as={motion.div} initial={{scale:0.9, opacity:0}} animate={{scale:1, opacity:1}} exit={{scale:0.9, opacity:0}} className="w-full max-w-lg p-8 space-y-6 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl">
-//                 <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white">{t('mixedMinerals.add_new_lot')}</Dialog.Title>
-//                 <form onSubmit={handleSubmit} className="space-y-6">
-//                     {/* Supplier Dropdown */}
-//                     <div>
-//                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('mixedMinerals.supplier')}</label>
-//                         <select
-//                             value={formData.supplier_id}
-//                             onChange={(e) => setFormData(f => ({ ...f, supplier_id: e.target.value }))}
-//                             className="mt-1 block w-full pl-3 pr-10 py-3 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md bg-white dark:bg-gray-700"
-//                             required
-//                         >
-//                             <option value="" disabled>{t('mixedMinerals.select_supplier')}</option>
-//                             {suppliersForSelection.map(supplier => (
-//                                 <option key={supplier.id} value={supplier.id}>{supplier.name}</option>
-//                             ))}
-//                         </select>
-//                     </div>
-
-//                     {/* Other fields: Date of Delivery, Weight */}
-//                     <div>
-//                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('mixedMinerals.delivery_date')}</label>
-//                          <input type="date" value={formData.date_of_delivery} onChange={(e) => setFormData(f => ({...f, date_of_delivery: e.target.value}))} required className="mt-1 block w-full pl-3 pr-4 py-3 border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700"/>
-//                     </div>
-//                      <div>
-//                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('mixedMinerals.weight_kg')}</label>
-//                          <input type="number" step="0.01" value={formData.weight_kg} onChange={(e) => setFormData(f => ({...f, weight_kg: parseFloat(e.target.value)}))} required className="mt-1 block w-full pl-3 pr-4 py-3 border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700"/>
-//                     </div>
-
-//                   <div className="flex justify-end space-x-4 pt-4">
-//                     <button type="button" onClick={onClose} className="px-5 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition">
-//                       {t('common.cancel')}
-//                     </button>
-//                     <motion.button type="submit" disabled={createStatus === 'loading'} whileHover={{scale:1.05}} whileTap={{scale:0.95}} className="flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 disabled:bg-gray-400 transition">
-//                       {createStatus === 'loading' ? '...' : t('common.create')}
-//                     </motion.button>
-//                   </div>
-//                 </form>
-//               </Dialog.Panel>
-//             </div>
-//           </div>
-//         </Dialog>
-//       )}
-//     </AnimatePresence>
-//   );
-// };
-
-// export default CreateMixedMineralModal;
-
-
 // components/minerals/CreateMixedMineralModal.tsx
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -119,7 +15,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../../store/store';
 import { createMixedMineral, resetCreateStatus, CreateMixedMineralData } from '../../../features/minerals/mixedMineralsSlice';
-import { fetchSuppliers } from '../../../features/user/suppliersSlice';
+import { fetchSuppliers_all } from '../../../features/user/suppliersSlice';
 import toast from 'react-hot-toast';
 
 interface CreateMixedMineralModalProps {
@@ -131,7 +27,7 @@ const CreateMixedMineralModal: React.FC<CreateMixedMineralModalProps> = ({ isOpe
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { createStatus, error } = useSelector((state: RootState) => state.mixedMinerals);
-  const { suppliers } = useSelector((state: RootState) => state.suppliers);
+  const { suppliers_all, isFetched } = useSelector((state: RootState) => state.suppliers);
 
   const [formData, setFormData] = useState<CreateMixedMineralData>({
     date_of_delivery: new Date().toISOString().split('T')[0],
@@ -142,10 +38,10 @@ const CreateMixedMineralModal: React.FC<CreateMixedMineralModalProps> = ({ isOpe
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (isOpen) {
-      dispatch(fetchSuppliers({ page: 1, size: 100 }));
+    if (isOpen && !isFetched) {
+      dispatch(fetchSuppliers_all());
     }
-  }, [isOpen, dispatch]);
+  }, [isOpen, dispatch, isFetched]);
 
   useEffect(() => {
     if (createStatus === 'succeeded') {
@@ -295,7 +191,7 @@ const CreateMixedMineralModal: React.FC<CreateMixedMineralModalProps> = ({ isOpe
                         }`}
                       >
                         <option value="">{t('mixedMinerals.select_supplier')}</option>
-                        {suppliers.map(supplier => (
+                        {suppliers_all.map(supplier => (
                           <option key={supplier.id} value={supplier.id}>
                             {supplier.name} - {supplier.phone_number}
                           </option>

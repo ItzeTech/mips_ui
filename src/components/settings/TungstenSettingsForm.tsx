@@ -22,7 +22,7 @@ import toast from 'react-hot-toast';
 const TungstenSettingsForm: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { settings, status, error, saveStatus } = useSelector((state: RootState) => state.tungstenSettings);
+  const { settings, status, error, saveStatus, isFetched } = useSelector((state: RootState) => state.tungstenSettings);
 
   const [formData, setFormData] = useState<TungstenSettingsData>({
     rra_percentage: 0,
@@ -33,8 +33,10 @@ const TungstenSettingsForm: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    dispatch(fetchTungstenSettings());
-  }, [dispatch]);
+    if(!isFetched){
+      dispatch(fetchTungstenSettings());
+    }
+  }, [dispatch, isFetched]);
 
   useEffect(() => {
     if (settings) {

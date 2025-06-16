@@ -20,6 +20,7 @@ interface TungstenSettingsState {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   saveStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  isFetched: boolean;
 }
 
 const initialState: TungstenSettingsState = {
@@ -27,6 +28,7 @@ const initialState: TungstenSettingsState = {
   status: 'idle',
   error: null,
   saveStatus: 'idle',
+  isFetched: false
 };
 
 // Async thunks
@@ -85,6 +87,7 @@ const tungstenSettingsSlice = createSlice({
       .addCase(fetchTungstenSettings.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.settings = action.payload;
+        state.isFetched = true;
       })
       .addCase(fetchTungstenSettings.rejected, (state, action) => {
         state.status = 'failed';

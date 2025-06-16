@@ -13,6 +13,7 @@ import SettingsPage from '../pages/Dashboard/SettingsPage';
 import UsersPage from '../pages/Dashboard/UsersPage';
 import SuppliersPage from '../pages/Dashboard/SuppliersPage';
 import MixedMineralsPage from '../pages/minerals/MixedMineralsPage';
+import TantalumPage from '../pages/minerals/stock-manager/TantalumPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 // Route Protectors
@@ -54,6 +55,9 @@ const AnimatedOutlet: React.FC = () => {
             </Route>
             <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
               <Route path="/minerals/mixed" element={<MotionPage><MixedMineralsPage /></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
+              <Route path="/minerals/tantalum" element={<MotionPage><TantalumPage/></MotionPage>} />
             </Route>
           </Route>
         </Route>

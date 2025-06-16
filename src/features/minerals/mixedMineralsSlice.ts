@@ -55,6 +55,7 @@ interface MixedMineralsState {
   createStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   updateStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   updateStatusStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  isFetched: boolean;
 }
 
 const initialState: MixedMineralsState = {
@@ -70,6 +71,7 @@ const initialState: MixedMineralsState = {
   createStatus: 'idle',
   updateStatus: 'idle',
   updateStatusStatus: 'idle',
+  isFetched: false
 };
 
 // Async thunks
@@ -160,6 +162,7 @@ const mixedMineralsSlice = createSlice({
       .addCase(fetchMixedMinerals.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.minerals = action.payload.items;
+        state.isFetched = true;
         state.pagination = {
           total: action.payload.total,
           page: action.payload.page,

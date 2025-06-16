@@ -22,6 +22,8 @@ interface TinSettingsState {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   saveStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  isFetched: boolean;
+
 }
 
 const initialState: TinSettingsState = {
@@ -29,6 +31,7 @@ const initialState: TinSettingsState = {
   status: 'idle',
   error: null,
   saveStatus: 'idle',
+  isFetched: false
 };
 
 // Async thunks
@@ -87,6 +90,7 @@ const tinSettingsSlice = createSlice({
       .addCase(fetchTinSettings.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.settings = action.payload;
+        state.isFetched = true;
       })
       .addCase(fetchTinSettings.rejected, (state, action) => {
         state.status = 'failed';

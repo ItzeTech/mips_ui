@@ -36,3 +36,7 @@ body {
 .cust-translate-y-center {
   transform: translateY(-50%) !important;
 }
+
+.react-datepicker-wrapper {
+  width: 100%!important;
+}

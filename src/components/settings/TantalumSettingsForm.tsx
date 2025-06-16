@@ -22,7 +22,7 @@ import toast from 'react-hot-toast';
 const TantalumSettingsForm: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { settings, status, error, saveStatus } = useSelector((state: RootState) => state.tantalumSettings);
+  const { settings, status, error, saveStatus, isFetched } = useSelector((state: RootState) => state.tantalumSettings);
 
   const [formData, setFormData] = useState<TantalumSettingsData>({
     rra_percentage: 0,
@@ -33,8 +33,10 @@ const TantalumSettingsForm: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    dispatch(fetchTantalumSettings());
-  }, [dispatch]);
+    if(!isFetched){
+      dispatch(fetchTantalumSettings());
+    }
+  }, [dispatch, isFetched]);
 
   useEffect(() => {
     if (settings) {

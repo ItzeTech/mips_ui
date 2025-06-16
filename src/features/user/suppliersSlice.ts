@@ -44,6 +44,7 @@ export interface SuppliersResponse {
 
 interface SuppliersState {
   suppliers: Supplier[];
+  suppliers_all: Supplier[];
   selectedSupplier: Supplier | null;
   pagination: {
     total: number;
@@ -54,10 +55,12 @@ interface SuppliersState {
   error: string | null;
   createStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   updateStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  isFetched: boolean;
 }
 
 const initialState: SuppliersState = {
   suppliers: [],
+  suppliers_all: [],
   selectedSupplier: null,
   pagination: {
     total: 0,
@@ -68,9 +71,22 @@ const initialState: SuppliersState = {
   error: null,
   createStatus: 'idle',
   updateStatus: 'idle',
+  isFetched: false,
 };
 
 // Async thunks
+export const fetchSuppliers_all = createAsyncThunk(
+  'suppliers/fetchSuppliers_all',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/suppliers/get/all');
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch suppliers');
+    }
+  }
+);
+
 export const fetchSuppliers = createAsyncThunk(
   'suppliers/fetchSuppliers',
   async (params: PaginationParams, { rejectWithValue }) => {
@@ -152,6 +168,24 @@ const suppliersSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload as string;
       })
+
+      // Fetch All
+      .addCase(fetchSuppliers_all.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(fetchSuppliers_all.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.suppliers_all = action.payload.items;
+        state.isFetched = true;
+      })
+      .addCase(fetchSuppliers_all.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+        state.isFetched = false;
+      })
+
+
       // Create supplier
       .addCase(createSupplier.pending, (state) => {
         state.createStatus = 'loading';
@@ -161,6 +195,7 @@ const suppliersSlice = createSlice({
         state.createStatus = 'succeeded';
         // Add to the beginning of the list
         state.suppliers.unshift(action.payload);
+        state.suppliers_all.unshift(action.payload);
         state.pagination.total += 1;
       })
       .addCase(createSupplier.rejected, (state, action) => {
@@ -175,8 +210,12 @@ const suppliersSlice = createSlice({
       .addCase(updateSupplier.fulfilled, (state, action) => {
         state.updateStatus = 'succeeded';
         const index = state.suppliers.findIndex(supplier => supplier.id === action.payload.id);
+        const index_all = state.suppliers_all.findIndex(supplier => supplier.id === action.payload.id);
         if (index !== -1) {
           state.suppliers[index] = action.payload;
+        }
+        if (index_all !== -1) {
+          state.suppliers_all[index] = action.payload;
         }
         if (state.selectedSupplier?.id === action.payload.id) {
           state.selectedSupplier = action.payload;

@@ -17,6 +17,7 @@ export interface UserState {
   updated_at: string;
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
+  isFetched: boolean;
 }
 
 const persistedUserState = loadState<UserState>(USER_STATE_KEY);
@@ -34,6 +35,7 @@ const initialState: UserState = persistedUserState || {
   updated_at: '',
   loading: 'idle',
   error: null,
+  isFetched: false
 };
 
 // Async thunk: fetch user from API
@@ -94,6 +96,7 @@ const userSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action: PayloadAction<UserState>) => {
         Object.assign(state, action.payload, { loading: 'succeeded', error: null });
         saveState(USER_STATE_KEY, state);
+        state.isFetched = true;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = 'failed';

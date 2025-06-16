@@ -20,6 +20,9 @@ module.exports = {
           '0%': { transform: 'translateX(-100%)', opacity: 0 },
           '100%': { transform: 'translateX(0)', opacity: 1 },
         }
+      },
+      zIndex: {
+        '52': '52',
       }
     },
   },
