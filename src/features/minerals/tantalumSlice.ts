@@ -1,6 +1,7 @@
 // features/minerals/tantalumSlice.tsx
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../config/axiosInstance';
+import { TantalumSettingsData } from '../settings/tantalumSettingSlice';
 
 export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled';
 export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'advance given' | 'exported';
@@ -403,13 +404,13 @@ export default tantalumSlice.reducer;
 // }
 
 // Helper functions for calculations
-export const calculateFinancials = (data: Partial<Tantalum>): Partial<Tantalum> => {
+export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage = 0.03, inkomane_fee_per_kg_rwf = 40, rma_usd_per_ton = 0.125}: TantalumSettingsData): Partial<Tantalum> => {
   const {
     price_per_percentage,
     purchase_ta2o5_percentage,
     net_weight,
     exchange_rate,
-    price_of_tag_per_kg_rwf
+    price_of_tag_per_kg_rwf,
   } = data;
 
   let calculatedData: Partial<Tantalum> = { ...data };
@@ -426,17 +427,17 @@ export const calculateFinancials = (data: Partial<Tantalum>): Partial<Tantalum> 
 
   // Calculate RRA (3% of total amount)
   if (calculatedData.total_amount) {
-    calculatedData.rra = calculatedData.total_amount * 0.03;
+    calculatedData.rra = calculatedData.total_amount * rra_percentage;
   }
 
   // Calculate RMA (USD 125 per 1,000 kg)
   if (net_weight) {
-    calculatedData.rma = 0.125 * net_weight;
+    calculatedData.rma = rma_usd_per_ton * net_weight;
   }
 
   // Calculate Inkomane Fee (40 RWF per kg)
   if (net_weight) {
-    calculatedData.inkomane_fee = 40 * net_weight;
+    calculatedData.inkomane_fee = inkomane_fee_per_kg_rwf * net_weight;
   }
 
   // Calculate Advance (price of tag/kg * net weight)

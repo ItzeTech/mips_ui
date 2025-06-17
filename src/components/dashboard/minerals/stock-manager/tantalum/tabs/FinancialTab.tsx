@@ -8,18 +8,39 @@ import RenderSelect from '../../common/RenderSelect';
 import { useTranslation } from 'react-i18next';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
+import { NumericFormat } from 'react-number-format';
+import { TantalumSettingsData } from '../../../../../../features/settings/tantalumSettingSlice';
+import HoverInfoCard from '../../common/HoverInfoCard';
+
+
 
 interface FinancialTabInterface {
     financialForm: FinancialFormData;
+    net_weight: number | null;
     setFinancialForm: React.Dispatch<React.SetStateAction<FinancialFormData>>;
     errors?: Record<string, string>
     labForm: LabFormData;
     calculatedValues: any;
+    TantalumSettingsData?: TantalumSettingsData | null;
 }
 
-export default function FinancialTab({financialForm, setFinancialForm, errors={}, labForm, calculatedValues}: FinancialTabInterface) {
+export default function FinancialTab({
+  financialForm,
+  net_weight,
+  setFinancialForm,
+  errors = {},
+  labForm,
+  calculatedValues,
+  TantalumSettingsData = {
+    rra_percentage: 3,
+    inkomane_fee_per_kg_rwf: 40,
+    rma_usd_per_ton: 125
+  }
+}: FinancialTabInterface) {
 
     const { t } = useTranslation();
+
+    
     const renderPurchaseTa2O5Input = (errors: Record<string, string>, field: string) => {
         const availableValues = [];
         if (labForm.internal_ta2o5) {
@@ -105,22 +126,28 @@ export default function FinancialTab({financialForm, setFinancialForm, errors={}
       
             {/* Input field - UNCHANGED from original */}
             <div className="relative">
-              <input
-                type="number"
-                step="any"
-                value={financialForm.purchase_ta2o5_percentage || ''}
-                onChange={(e) => setFinancialForm(prev => ({ 
-                  ...prev, 
-                  purchase_ta2o5_percentage: parseFloat(e.target.value) || null 
-                }))}
+
+              <NumericFormat
+                value={financialForm.purchase_ta2o5_percentage || null}
+                decimalScale={3}
+                allowNegative={false}
+                allowLeadingZeros={true}
+                onValueChange={(values) => {
+                  setFinancialForm(prev => ({ 
+                    ...prev, 
+                    purchase_ta2o5_percentage: values.floatValue || null 
+                  }))
+                  console.log(values);
+                }}
+                suffix=""  
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
-                placeholder="Enter purchase Ta2O5 percentage"
+                placeholder="Enter purchase Ta2O5 percentage"       
               />
+
               <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 text-sm">
                 %
               </span>
-            </div>
-            
+            </div>            
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {t('tantalum.purchase_ta2o5_hint', 'You can use one of the available lab values or enter a custom percentage')}
             </p>
@@ -211,80 +238,115 @@ export default function FinancialTab({financialForm, setFinancialForm, errors={}
             <DocumentTextIcon className="w-5 h-5 mr-2 text-green-600" />
             {t('tantalum.calculated_values', 'Calculated Values')}
         </h3>
-        
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {t('tantalum.unit_price', 'Unit Price')}
-            </div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                ${formatNumber(calculatedValues.unit_price)}
-            </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {t('tantalum.total_amount', 'Total Amount')}
-            </div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                ${formatNumber(calculatedValues.total_amount)}
-            </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {t('tantalum.rra', 'RRA (3%)')}
-            </div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                ${formatNumber(calculatedValues.rra)}
-            </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {t('tantalum.rma', 'RMA')}
-            </div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                ${formatNumber(calculatedValues.rma)}
-            </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {t('tantalum.inkomane_fee', 'Inkomane Fee')}
-            </div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                {formatNumber(calculatedValues.inkomane_fee)} RWF
-            </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {t('tantalum.advance', 'Advance')}
-            </div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                {formatNumber(calculatedValues.advance)} RWF
-            </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {t('tantalum.total_charge', 'Total Charge')}
-            </div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                ${formatNumber(calculatedValues.total_charge)}
-            </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm border-2 border-green-200 dark:border-green-700">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {t('tantalum.net_amount', 'Net Amount')}
-            </div>
-            <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                ${formatNumber(calculatedValues.net_amount)}
-            </div>
-            </div>
-        </div>
+            <HoverInfoCard
+              title={t('tantalum.unit_price', 'Unit Price')}
+              value={`$${formatNumber(calculatedValues.unit_price)}`}
+              color="gray"
+              formula="price per 1% * purchase TA2O5 %"
+              data={[
+                { label: "Price per 1%", value: formatNumber(financialForm.price_per_percentage) },
+                { label: "Purchase TA2O5 %", value: formatNumber(financialForm.purchase_ta2o5_percentage) },
+              ]}
+              outputLabel="Unit Price"
+              outputValue={`$${formatNumber(calculatedValues.unit_price)}`}
+            />
+
+            <HoverInfoCard
+              title={t('tantalum.total_amount', 'Total Amount')}
+              value={`$${formatNumber(calculatedValues.total_amount)}`}
+              color="gray"
+              formula="unit price * net weight"
+              data={[
+                { label: "Unit Price", value: `$${formatNumber(calculatedValues.unit_price)}` },
+                { label: "Net Weight", value: formatNumber(net_weight) },
+              ]}
+              outputLabel="Total Amount"
+              outputValue={`$${formatNumber(calculatedValues.total_amount)}`}
+            />
+
+            <HoverInfoCard
+              title={`${t('tantalum.rra', 'RRA')} (${TantalumSettingsData?.rra_percentage}%)`}
+              value={`$${formatNumber(calculatedValues.rra)}`}
+              color="gray"
+              formula="RRA percentage * total amount"
+              data={[
+                { label: "RRA Percentage", value: `${TantalumSettingsData?.rra_percentage ? TantalumSettingsData?.rra_percentage/100 : TantalumSettingsData?.rra_percentage}` },
+                { label: "Total Amount", value: `$${formatNumber(calculatedValues.total_amount)}` },
+              ]}
+              outputLabel="RRA"
+              outputValue={`$${formatNumber(calculatedValues.rra)}`}
+            />
+
+            <HoverInfoCard
+              title={`${t('tantalum.rma', 'RMA')} ($${TantalumSettingsData?.rma_usd_per_ton})`}
+              value={`$${formatNumber(calculatedValues.rma)}`}
+              color="gray"
+              formula="RMA USD per ton * net weight"
+              data={[
+                { label: "RMA USD per Ton", value: `$${TantalumSettingsData?.rma_usd_per_ton ? TantalumSettingsData?.rma_usd_per_ton / 1000 : TantalumSettingsData?.rma_usd_per_ton}` },
+                { label: "Net Weight", value: formatNumber(net_weight) },
+              ]}
+              outputLabel="RMA"
+              outputValue={`$${formatNumber(calculatedValues.rma)}`}
+            />
+
+            <HoverInfoCard
+              title={`${t('tantalum.inkomane_fee', 'Inkomane Fee')} (${TantalumSettingsData?.inkomane_fee_per_kg_rwf} RWF)`}
+              value={`${formatNumber(calculatedValues.inkomane_fee)} RWF`}
+              color="gray"
+              formula="inkomane fee * net weight"
+              data={[
+                { label: "Inkomane fee", value: `${TantalumSettingsData?.inkomane_fee_per_kg_rwf} RWF` },
+                { label: "Net Weight", value: formatNumber(net_weight) },
+              ]}
+              outputLabel="Inkomane Fee"
+              outputValue={`${formatNumber(calculatedValues.inkomane_fee)} RWF`}
+            />
+
+            <HoverInfoCard
+              title={t('tantalum.advance', 'Advance')}
+              value={`${formatNumber(calculatedValues.advance)} RWF`}
+              color="gray"
+              formula="price of tag per kg * net weight"
+              data={[
+                { label: "Price of Tag per Kg", value: formatNumber(financialForm.price_of_tag_per_kg_rwf) },
+                { label: "Net Weight", value: formatNumber(net_weight) },
+              ]}
+              outputLabel="Advance"
+              outputValue={`${formatNumber(calculatedValues.advance)} RWF`}
+            />
+
+            <HoverInfoCard
+              title={t('tantalum.total_charge', 'Total Charge')}
+              value={`$${formatNumber(calculatedValues.total_charge)}`}
+              color="gray"
+              formula="RRA + RMA + (Inkomane / Exchange Rate) + (Advance / Exchange Rate)"
+              data={[
+                { label: "RRA", value: `$${formatNumber(calculatedValues.rra)}` },
+                { label: "RMA", value: `$${formatNumber(calculatedValues.rma)}` },
+                { label: "Inkomane / Exchange Rate", value: `(${calculatedValues.inkomane_fee} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? calculatedValues.inkomane_fee / financialForm?.exchange_rate: '...'}` },
+                { label: "Advance / Exchange Rate", value: `(${calculatedValues.advance} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? calculatedValues.advance / financialForm?.exchange_rate: '...'}` },
+              ]}
+              outputLabel="Total Charge"
+              outputValue={`$${formatNumber(calculatedValues.total_charge)}`}
+            />
+
+            <HoverInfoCard
+              title={t('tantalum.net_amount', 'Net Amount')}
+              value={`$${formatNumber(calculatedValues.net_amount)}`}
+              color="green"
+              formula="total amount - total charge"
+              data={[
+                { label: "Total Amount", value: `$${formatNumber(calculatedValues.total_amount)}` },
+                { label: "Total Charge", value: `$${formatNumber(calculatedValues.total_charge)}` },
+              ]}
+              outputLabel="Net Amount"
+              outputValue={`$${formatNumber(calculatedValues.net_amount)}`}
+            />
+          </div>
+
         </div>
     </motion.div>
   )

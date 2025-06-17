@@ -27,6 +27,7 @@ import LabTab from './tabs/LabTab';
 import FinancialTab from './tabs/FinancialTab';
 import SaveFormButton from '../common/SaveFormButton';
 import TabButton from '../common/TabButton';
+import { fetchTantalumSettings, TantalumSettingsData } from '../../../../../features/settings/tantalumSettingSlice';
 
 type UserRole = "Stock Manager" | "Boss" | "Manager" | "Lab Technician" | "Finance Officer";
 
@@ -38,7 +39,32 @@ interface EditTantalumModalProps {
 
 const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, userRole }) => {
   const { t } = useTranslation();
+  const { settings, isFetched } = useSelector((state: RootState) => state.tantalumSettings);
   const dispatch = useDispatch<AppDispatch>();
+
+  const [tantalumSetting, setTantalumSetting] = useState<TantalumSettingsData>({
+      rra_percentage: 0,
+      rma_usd_per_ton: 0,
+      inkomane_fee_per_kg_rwf: 0
+    });
+  
+
+  useEffect(() => {
+      if(!isFetched){
+        dispatch(fetchTantalumSettings());
+      }
+    }, [dispatch, isFetched]);
+  
+    useEffect(() => {
+      if (settings) {
+        setTantalumSetting({
+          rra_percentage: settings.rra_percentage / 100,
+          rma_usd_per_ton: settings.rma_usd_per_ton / 1000,
+          inkomane_fee_per_kg_rwf: settings.inkomane_fee_per_kg_rwf
+        });
+      }
+    }, [settings]);
+
   const { 
     selectedTantalum, 
     updateLabAnalysisStatus,
@@ -155,7 +181,9 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
       const calculated = calculateFinancials({
         ...financialForm,
         net_weight: stockForm.net_weight
-      });
+      },
+      tantalumSetting
+    );
 
       setCalculatedValues({
         unit_price: calculated.unit_price || null,
@@ -167,14 +195,28 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         total_charge: calculated.total_charge || null,
         net_amount: calculated.net_amount || null
       });
+    }else{
+      setCalculatedValues({
+        unit_price: null,
+        total_amount: null,
+        rra: null,
+        rma: null,
+        inkomane_fee: null,
+        advance: null,
+        total_charge: null,
+        net_amount: null
+      });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     financialForm.price_per_percentage,
     financialForm.purchase_ta2o5_percentage,
     financialForm.exchange_rate,
     financialForm.price_of_tag_per_kg_rwf,
-    stockForm.net_weight
+    stockForm.net_weight,
+    selectedTantalum,
+    stockForm,
+    financialForm,
+    tantalumSetting
   ]);
 
   // Track changes for each form
@@ -580,10 +622,13 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                   {activeTab === 'financial' && canAccessFinancial() && (
                     <FinancialTab
                       financialForm={financialForm}
+                      net_weight={stockForm.net_weight}
                       setFinancialForm={setFinancialForm}
                       labForm={labForm}
                       calculatedValues={calculatedValues}
                       errors={errors}
+                      TantalumSettingsData={settings}
+
                     />
                   )}
                 </AnimatePresence>

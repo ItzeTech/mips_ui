@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { NumericFormat } from 'react-number-format';
 
 interface RenderInputProps {
   label: string;
@@ -11,6 +12,9 @@ interface RenderInputProps {
   step?: string;
   field?: string;
   errors?: Record<string, string>;
+  allowNegative?: boolean;
+  allowLeadingZeros?: boolean;
+  decimalScale?: number;
 }
 
 const RenderInput: React.FC<RenderInputProps> = ({
@@ -22,30 +26,46 @@ const RenderInput: React.FC<RenderInputProps> = ({
   disabled = false,
   step = 'any',
   field = '',
-  errors = {}
+  errors = {},
+  allowNegative = false,
+  allowLeadingZeros = false,
+  decimalScale = 2
 }) => (
   <div className="space-y-2">
     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
       {label}
     </label>
     <div className="relative">
-      <input
-        type={type}
-        step={step}
-        value={value || ''}
-        onChange={(e) =>
-          onChange(
-            type === 'number'
-              ? parseFloat(e.target.value) || null
-              : e.target.value
-          )
-        }
-        disabled={disabled}
-        className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors ${
-          errors[field] ? 'border-red-500' : 'border-gray-300'
-        } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
-        placeholder={`Enter ${label.toLowerCase()}`}
-      />
+    {
+        type === 'number' ?
+        <NumericFormat
+            value={value}
+            decimalScale={decimalScale}
+            allowNegative={allowNegative}
+            allowLeadingZeros={allowLeadingZeros}
+            onValueChange={(values) => {
+                onChange(values.floatValue || null)
+            }}
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
+            placeholder={`Enter ${label.toLowerCase()}`}    
+        />
+        :
+
+        <input
+            type={type}
+            step={step}
+            value={value || ''}
+            onChange={(e) =>
+                onChange(e.target.value)
+            }
+            disabled={disabled}
+            className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors ${
+            errors[field] ? 'border-red-500' : 'border-gray-300'
+            } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+            placeholder={`Enter ${label.toLowerCase()}`}
+        />
+
+    }
       {suffix && (
         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 text-sm">
           {suffix}
