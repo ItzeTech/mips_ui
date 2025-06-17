@@ -9,7 +9,7 @@ export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'advance given' | '
 export interface StockFormData {
   net_weight: number | null;
   date_of_sampling: string;
-  date_of_delivery: string;
+  date_of_delivery?: string;
   stock_status: StockStatus;
 }
 
@@ -20,8 +20,8 @@ export interface LabFormData {
   sn_percentage: number | null;
   fe_percentage: number | null;
   w_percentage: number | null;
-  alex_stewart_ta2o5: number | null;
-  alex_stewart_nb2o5: number | null;
+  alex_stewart_ta2o5?: number | null;
+  alex_stewart_nb2o5?: number | null;
 }
 
 export interface FinancialFormData {
@@ -76,10 +76,6 @@ export interface CreateTantalumData {
   date_of_sampling: string;
 }
 
-export interface UpdateStockStatusData {
-  stock_status: 'in-stock' | 'resampled' | 'withdrawn';
-}
-
 export interface UpdateLabAnalysisData {
   internal_ta2o5?: number;
   internal_nb2o5?: number;
@@ -92,18 +88,19 @@ export interface UpdateLabAnalysisData {
 }
 
 export interface UpdateFinancialsData {
-  price_per_percentage?: number;
-  purchase_ta2o5_percentage?: number;
-  unit_price?: number;
-  exchange_rate?: number;
-  price_of_tag_per_kg?: number;
-  total_amount?: number;
-  rra?: number;
-  rma?: number;
-  inkomane_fee?: number;
-  advance?: number;
-  total_charge?: number;
-  net_amount?: number;
+  price_per_percentage?: number | null;
+  purchase_ta2o5_percentage?: number | null;
+  unit_price?: number | null;
+  exchange_rate?: number | null;
+  price_of_tag_per_kg?: number | null;
+  total_amount?: number | null;
+  rra?: number | null;
+  rma?: number | null;
+  inkomane_fee?: number | null;
+  advance?: number | null;
+  total_charge?: number | null;
+  net_amount?: number | null;
+  finance_status?: FinanceStatus
 }
 
 export interface PaginationParams {
@@ -184,11 +181,11 @@ export const createTantalum = createAsyncThunk(
   }
 );
 
-export const updateStockStatus = createAsyncThunk(
-  'tantalums/updateStockStatus',
-  async ({ id, statusData }: { id: string; statusData: UpdateStockStatusData }, { rejectWithValue }) => {
+export const updateStock = createAsyncThunk(
+  'tantalums/updateStock',
+  async ({ id, stockData }: { id: string; stockData: StockFormData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/tantalum/${id}/stock-status`, statusData);
+      const response = await axiosInstance.put(`/tantalum/${id}`, stockData);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update stock status');
@@ -200,7 +197,7 @@ export const updateLabAnalysis = createAsyncThunk(
   'tantalums/updateLabAnalysis',
   async ({ id, labData }: { id: string; labData: UpdateLabAnalysisData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/tantalum/${id}/lab-analysis`, labData);
+      const response = await axiosInstance.patch(`/tantalum/${id}/lab-analysis`, labData);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update lab analysis');
@@ -212,7 +209,7 @@ export const updateFinancials = createAsyncThunk(
   'tantalums/updateFinancials',
   async ({ id, financialData }: { id: string; financialData: UpdateFinancialsData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/tantalum/${id}/financials`, financialData);
+      const response = await axiosInstance.patch(`/tantalum/${id}/financials`, financialData);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update financials');
@@ -284,12 +281,12 @@ const tantalumSlice = createSlice({
         state.createStatus = 'failed';
         state.error = action.payload as string;
       })
-      // Update stock status
-      .addCase(updateStockStatus.pending, (state) => {
+      // Update stock
+      .addCase(updateStock.pending, (state) => {
         state.updateStockStatus = 'loading';
         state.error = null;
       })
-      .addCase(updateStockStatus.fulfilled, (state, action) => {
+      .addCase(updateStock.fulfilled, (state, action) => {
         state.updateStockStatus = 'succeeded';
         const index = state.tantalums.findIndex(tantalum => tantalum.id === action.payload.id);
         if (index !== -1) {
@@ -299,7 +296,7 @@ const tantalumSlice = createSlice({
           state.selectedTantalum = action.payload;
         }
       })
-      .addCase(updateStockStatus.rejected, (state, action) => {
+      .addCase(updateStock.rejected, (state, action) => {
         state.updateStockStatus = 'failed';
         state.error = action.payload as string;
       })
@@ -355,53 +352,6 @@ export const {
   setPagination
 } = tantalumSlice.actions;
 export default tantalumSlice.reducer;
-
-// ------------------------------------------------------------------
-
-// export interface Tantalum {
-//   id: string;
-//   date_of_delivery: string;
-//   date_of_sampling: string;
-//   date_of_alex_stewart: string | null;
-//   lot_number: string; // Format: TA000010, TA000011
-//   supplier_id: string;
-//   supplier_name: string;
-//   net_weight: number; // after sampling
-  
-//   // Internal lab analysis
-//   internal_ta2o5: number | null;
-//   internal_nb2o5: number | null;
-//   nb_percentage: number | null;
-//   sn_percentage: number | null;
-//   fe_percentage: number | null;
-//   w_percentage: number | null;
-  
-//   // Alex Stewart analysis
-//   alex_stewart_ta2o5: number | null;
-//   alex_stewart_nb2o5: number | null;
-  
-//   // Financial data
-//   price_per_percentage: number | null; // Price per 1%
-//   purchase_ta2o5_percentage: number | null;
-//   unit_price: number | null; // Calculated: price_per_percentage * purchase_ta2o5_percentage
-//   exchange_rate: number | null; // USD to RWF
-//   price_of_tag_per_kg_rwf: number | null;
-//   total_amount: number | null; // Calculated: unit_price * net_weight
-//   rra: number | null; // Calculated: 3% * total_amount
-//   rma: number | null; // Calculated: 0.125 * net_weight (USD 125 per 1,000 kg)
-//   inkomane_fee: number | null; // Calculated: 40 * net_weight (40 RWF per kg)
-//   advance: number | null; // Calculated: price_of_tag_per_kg_rwf * net_weight
-//   total_charge: number | null; // Calculated: RRA + RMA + (Inkomane/Exchange rate) + (advance/Exchange rate)
-//   net_amount: number | null; // Calculated: total_amount - total_charge
-  
-//   stock_status: StockStatus;
-//   finance_status: FinanceStatus;
-//   finance_status_changed_date: string;
-//   stock_status_changed_date: string;
-//   has_alex_stewart: boolean;
-//   created_at: string;
-//   updated_at: string;
-// }
 
 // Helper functions for calculations
 export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage = 0.03, inkomane_fee_per_kg_rwf = 40, rma_usd_per_ton = 0.125}: TantalumSettingsData): Partial<Tantalum> => {

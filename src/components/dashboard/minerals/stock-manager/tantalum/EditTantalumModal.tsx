@@ -21,6 +21,10 @@ import {
   StockFormData,
   LabFormData,
   FinancialFormData,
+  updateStock,
+  updateFinancials,
+  UpdateFinancialsData,
+  updateLabAnalysis,
 } from '../../../../../features/minerals/tantalumSlice';
 import StockTab from './tabs/StockTab';
 import LabTab from './tabs/LabTab';
@@ -28,6 +32,8 @@ import FinancialTab from './tabs/FinancialTab';
 import SaveFormButton from '../common/SaveFormButton';
 import TabButton from '../common/TabButton';
 import { fetchTantalumSettings, TantalumSettingsData } from '../../../../../features/settings/tantalumSettingSlice';
+import ConfirmationDialog from '../common/ConfirmationDialog';
+import toast from 'react-hot-toast';
 
 type UserRole = "Stock Manager" | "Boss" | "Manager" | "Lab Technician" | "Finance Officer";
 
@@ -35,6 +41,14 @@ interface EditTantalumModalProps {
   isOpen: boolean;
   onClose: () => void;
   userRole: UserRole;
+}
+
+interface ConfirmationState {
+  isOpen: boolean;
+  type: 'stock' | 'lab' | 'financial' | null;
+  title: string;
+  message: string;
+  changes: Array<{ field: string; oldValue: any; newValue: any }>;
 }
 
 const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, userRole }) => {
@@ -47,6 +61,15 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
       rma_usd_per_ton: 0,
       inkomane_fee_per_kg_rwf: 0
     });
+
+    // Confirmation dialog state
+  const [confirmation, setConfirmation] = useState<ConfirmationState>({
+    isOpen: false,
+    type: null,
+    title: '',
+    message: '',
+    changes: []
+  });
   
 
   useEffect(() => {
@@ -219,6 +242,43 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
     tantalumSetting
   ]);
 
+  const getFieldDisplayName = (fieldName: string): string => {
+    const fieldNames: Record<string, string> = {
+      net_weight: t('stock.net_weight', 'Net Weight'),
+      date_of_sampling: t('stock.date_of_sampling', 'Date of Sampling'),
+      date_of_delivery: t('stock.date_of_delivery', 'Date of Delivery'),
+      stock_status: t('stock.status', 'Stock Status'),
+      internal_ta2o5: t('lab.internal_ta2o5', 'Internal Ta2O5'),
+      internal_nb2o5: t('lab.internal_nb2o5', 'Internal Nb2O5'),
+      nb_percentage: t('lab.nb_percentage', 'Nb %'),
+      sn_percentage: t('lab.sn_percentage', 'Sn %'),
+      fe_percentage: t('lab.fe_percentage', 'Fe %'),
+      w_percentage: t('lab.w_percentage', 'W %'),
+      alex_stewart_ta2o5: t('lab.alex_stewart_ta2o5', 'Alex Stewart Ta2O5'),
+      alex_stewart_nb2o5: t('lab.alex_stewart_nb2o5', 'Alex Stewart Nb2O5'),
+      price_per_percentage: t('financial.price_per_percentage', 'Price per Percentage'),
+      purchase_ta2o5_percentage: t('financial.purchase_ta2o5_percentage', 'Purchase Ta2O5 %'),
+      exchange_rate: t('financial.exchange_rate', 'Exchange Rate'),
+      price_of_tag_per_kg_rwf: t('financial.price_of_tag_per_kg_rwf', 'Price of Tag per kg (RWF)'),
+      finance_status: t('financial.status', 'Finance Status'),
+    };
+    return fieldNames[fieldName] || fieldName;
+  };
+
+  const formatValueForDisplay = (value: any): string => {
+    if (value === null || value === undefined || value === '') {
+      return t('common.empty', 'Empty');
+    }
+    if (typeof value === 'number') {
+      return value.toString();
+    }
+    if (typeof value === 'string' && value.includes('T')) {
+      // Format date
+      return new Date(value).toLocaleDateString();
+    }
+    return value.toString();
+  };
+
   // Track changes for each form
   useEffect(() => {
     if (selectedTantalum) {
@@ -261,6 +321,24 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
     }
   }, [financialForm, selectedTantalum]);
 
+  // Function to get changes between original and current form data
+  const getChanges = (original: any, current: any): Array<{ field: string; oldValue: any; newValue: any }> => {
+    const changes: Array<{ field: string; oldValue: any; newValue: any }> = [];
+    
+    Object.keys(current).forEach(key => {
+      if (JSON.stringify(original[key]) !== JSON.stringify(current[key])) {
+        changes.push({
+          field: getFieldDisplayName(key),
+          oldValue: formatValueForDisplay(original[key]),
+          newValue: formatValueForDisplay(current[key])
+        });
+      }
+    });
+    
+    return changes;
+  };
+
+
   const handleStockSubmit = async () => {
     if (!selectedTantalum) return;
   
@@ -291,11 +369,23 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
   
       setErrors({}); // clear previous errors
   
-      // Submit the form data now
-      console.log('Submitting:', formDataToSubmit);
-  
-      // Call your API or dispatch action here
-      // await dispatch(updateStock({ id: selectedTantalan.id, stockData: formDataToSubmit })).unwrap();
+      // Get changes and show confirmation
+      const originalStock = {
+        net_weight: selectedTantalum.net_weight,
+        date_of_sampling: selectedTantalum.date_of_sampling,
+        date_of_delivery: selectedTantalum.date_of_delivery,
+        stock_status: selectedTantalum.stock_status
+      };
+
+      const changes = getChanges(originalStock, stockForm);
+
+      setConfirmation({
+        isOpen: true,
+        type: 'stock',
+        title: t('stock.confirm_update', 'Confirm Stock Update'),
+        message: t('stock.confirm_update_message', 'Are you sure you want to update the stock information for this tantalum batch?'),
+        changes
+      });
   
     } catch (error) {
       console.error('Stock update failed:', error);
@@ -361,13 +451,29 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         return;
       }
   
-      setErrors({}); // Clear previous errors
-  
-      // Submit the validated data
-      console.log('Lab data ready to submit:', labData);
-  
-      // Your dispatch or API call here
-      // await dispatch(updateLab({ id: selectedTantalum.id, labData })).unwrap();
+      setErrors({});
+
+      // Get changes and show confirmation
+      const originalLab = {
+        internal_ta2o5: selectedTantalum.internal_ta2o5,
+        internal_nb2o5: selectedTantalum.internal_nb2o5,
+        nb_percentage: selectedTantalum.nb_percentage,
+        sn_percentage: selectedTantalum.sn_percentage,
+        fe_percentage: selectedTantalum.fe_percentage,
+        w_percentage: selectedTantalum.w_percentage,
+        alex_stewart_ta2o5: selectedTantalum.alex_stewart_ta2o5,
+        alex_stewart_nb2o5: selectedTantalum.alex_stewart_nb2o5
+      };
+
+      const changes = getChanges(originalLab, labForm);
+
+      setConfirmation({
+        isOpen: true,
+        type: 'lab',
+        title: t('lab.confirm_update', 'Confirm Lab Analysis Update'),
+        message: t('lab.confirm_update_message', 'Are you sure you want to update the lab analysis data for this tantalum batch?'),
+        changes
+      });
   
     } catch (error) {
       console.error('Lab update failed:', error);
@@ -400,25 +506,103 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
     }
   
     try {
-      // 3. Clear previous errors
       setErrors({});
-  
-      // 4. Construct and send data
-      const financialData = {
-        price_per_percentage: financialForm.price_per_percentage,
-        purchase_ta2o5_percentage: financialForm.purchase_ta2o5_percentage,
-        exchange_rate: financialForm.exchange_rate,
-        price_of_tag_per_kg_rwf: financialForm.price_of_tag_per_kg_rwf
+
+      // Get changes and show confirmation
+      const originalFinancial = {
+        price_per_percentage: selectedTantalum.price_per_percentage,
+        purchase_ta2o5_percentage: selectedTantalum.purchase_ta2o5_percentage,
+        exchange_rate: selectedTantalum.exchange_rate,
+        price_of_tag_per_kg_rwf: selectedTantalum.price_of_tag_per_kg_rwf,
+        finance_status: selectedTantalum.finance_status
       };
 
-      console.log(financialData)
+      const changes = getChanges(originalFinancial, financialForm);
+
+      setConfirmation({
+        isOpen: true,
+        type: 'financial',
+        title: t('financial.confirm_update', 'Confirm Financial Update'),
+        message: t('financial.confirm_update_message', 'Are you sure you want to update the financial information for this tantalum batch?'),
+        changes
+      });
   
-      // await dispatch(updateFinancials({
-      //   id: selectedTantalum.id,
-      //   financialData
-      // })).unwrap();
+      
     } catch (error) {
       console.error('Financial update failed:', error);
+    }
+  };
+  const handleConfirmSubmit = async () => {
+    if (!selectedTantalum || !confirmation.type) return;
+
+    try {
+      switch (confirmation.type) {
+        case 'stock':
+          const stockDataToSubmit: any = { ...stockForm };
+          if (!stockDataToSubmit.date_of_delivery) {
+            delete stockDataToSubmit.date_of_delivery;
+          }
+          await dispatch(updateStock({ 
+            id: selectedTantalum.id, 
+            stockData: stockDataToSubmit 
+          })).unwrap();
+          break;
+
+        case 'lab':
+          const labDataToSubmit: any = { ...labForm };
+          const hasAlexTa2O5 = labDataToSubmit.alex_stewart_ta2o5 != null && labDataToSubmit.alex_stewart_ta2o5 !== '';
+          const hasAlexNb2O5 = labDataToSubmit.alex_stewart_nb2o5 != null && labDataToSubmit.alex_stewart_nb2o5 !== '';
+          
+          if (!hasAlexTa2O5 && !hasAlexNb2O5) {
+            delete labDataToSubmit.alex_stewart_ta2o5;
+            delete labDataToSubmit.alex_stewart_nb2o5;
+          }
+          
+          await dispatch(updateLabAnalysis({
+            id: selectedTantalum.id,
+            labData: labDataToSubmit
+          })).unwrap();
+          break;
+
+        case 'financial':
+          const financialDataToSubmit: UpdateFinancialsData = {
+            price_per_percentage: financialForm.price_per_percentage,
+            purchase_ta2o5_percentage: financialForm.purchase_ta2o5_percentage,
+            exchange_rate: financialForm.exchange_rate,
+            price_of_tag_per_kg: financialForm.price_of_tag_per_kg_rwf,
+            unit_price: calculatedValues.unit_price,
+            total_amount: calculatedValues.total_amount,
+            rra: calculatedValues.rra,
+            rma: calculatedValues.rma,
+            inkomane_fee: calculatedValues.inkomane_fee,
+            advance: calculatedValues.advance,
+            total_charge: calculatedValues.total_charge,
+            net_amount: calculatedValues.net_amount,
+            finance_status: financialForm.finance_status
+          };
+          
+          await dispatch(updateFinancials({
+            id: selectedTantalum.id,
+            financialData: financialDataToSubmit
+          })).unwrap();
+          break;
+      }
+
+      // Close confirmation dialog
+      setConfirmation({
+        isOpen: false,
+        type: null,
+        title: '',
+        message: '',
+        changes: []
+      });
+
+      setActiveTab(confirmation.type)
+      toast.success(t(`common.update_${confirmation.type}_success`));
+      
+    } catch (error) {
+      console.error(`${confirmation.type} update failed:`, error);
+      toast.error(t(`common.update_${confirmation.type}_error`));
     }
   };
   
@@ -427,6 +611,13 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
     dispatch(resetUpdateLabAnalysisStatus());
     dispatch(resetUpdateFinancialsStatus());
     dispatch(resetUpdateStockStatus());
+    setConfirmation({
+      isOpen: false,
+      type: null,
+      title: '',
+      message: '',
+      changes: []
+    });
     onClose();
   };
 
@@ -692,7 +883,21 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
               </motion.div>
             </div>
           </motion.div>
+          {/* Confirmation Dialog */}
+          <ConfirmationDialog
+            isOpen={confirmation.isOpen}
+            onClose={() => setConfirmation(prev => ({ ...prev, isOpen: false }))}
+            onConfirm={handleConfirmSubmit}
+            title={confirmation.title}
+            message={confirmation.message}
+            changes={confirmation.changes}
+            isLoading={isLoading}
+            type="warning"
+            confirmText={t('common.save_changes', 'Save Changes')}
+            cancelText={t('common.cancel', 'Cancel')}
+          />
         </>
+        
       )}
     </AnimatePresence>
   );

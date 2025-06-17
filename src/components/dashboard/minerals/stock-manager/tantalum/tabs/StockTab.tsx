@@ -53,7 +53,7 @@ export default function StockTab({stockForm, setStockForm, errors = {}}: StockTa
 
             <RenderInput
                 label={t('tantalum.date_of_delivery', 'Date of Delivery')}
-                value={formatDate(stockForm.date_of_delivery)}
+                value={formatDate(stockForm?.date_of_delivery ? stockForm?.date_of_delivery : '')}
                 onChange={(value) => setStockForm((prev) => ({ ...prev, date_of_delivery: value }))}
                 type="date"
                 field="date_of_delivery"

@@ -17,7 +17,13 @@
       "success": "Success",
       "warning": "Warning",
       "info": "Information",
-      "save_settings": "Save Settings"
+      "save_settings": "Save Settings",
+      "update_stock_success": "Stock updated successfully.",
+      "update_stock_error": "Failed to update stock. Please try again.",
+      "update_lab_success": "Lab data updated successfully.",
+      "update_lab_error": "Failed to update lab data. Please try again.",
+      "update_financial_success": "Financial data updated successfully.",
+      "update_financial_error": "Failed to update financial data. Please try again."
     },
     "menu":{
       "users": "Users",
