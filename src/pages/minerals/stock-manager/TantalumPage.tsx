@@ -35,9 +35,9 @@ import {
   FunnelIcon
 } from '@heroicons/react/24/outline';
 
-import CreateTantalumModal from '../../../components/dashboard/minerals/stock-manager/tantalum/CreateTantalumModal';
-import EditTantalumModal from '../../../components/dashboard/minerals/stock-manager/tantalum/EditTantalumModal';
-import ViewTantalumModal from '../../../components/dashboard/minerals/stock-manager/tantalum/ViewTantalumModal';
+import CreateTantalumModal from '../../../components/dashboard/minerals/tantalum/CreateTantalumModal';
+import EditTantalumModal from '../../../components/dashboard/minerals/tantalum/EditTantalumModal';
+import ViewTantalumModal from '../../../components/dashboard/minerals/tantalum/ViewTantalumModal';
 import LoadingSkeleton from '../../../components/common/LoadingSkeleton';
 
 const TantalumPage: React.FC = () => {

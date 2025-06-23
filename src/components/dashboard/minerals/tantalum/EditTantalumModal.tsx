@@ -12,7 +12,7 @@ import {
   ExclamationTriangleIcon,
   LockClosedIcon,
 } from '@heroicons/react/24/outline';
-import { RootState, AppDispatch } from '../../../../../store/store';
+import { RootState, AppDispatch } from '../../../../store/store';
 import {
   resetUpdateLabAnalysisStatus,
   resetUpdateFinancialsStatus,
@@ -25,13 +25,13 @@ import {
   updateFinancials,
   UpdateFinancialsData,
   updateLabAnalysis,
-} from '../../../../../features/minerals/tantalumSlice';
+} from '../../../../features/minerals/tantalumSlice';
 import StockTab from './tabs/StockTab';
 import LabTab from './tabs/LabTab';
 import FinancialTab from './tabs/FinancialTab';
 import SaveFormButton from '../common/SaveFormButton';
 import TabButton from '../common/TabButton';
-import { fetchTantalumSettings, TantalumSettingsData } from '../../../../../features/settings/tantalumSettingSlice';
+import { fetchTantalumSettings, TantalumSettingsData } from '../../../../features/settings/tantalumSettingSlice';
 import ConfirmationDialog from '../common/ConfirmationDialog';
 import toast from 'react-hot-toast';
 

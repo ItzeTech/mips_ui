@@ -1,15 +1,15 @@
 import { CurrencyDollarIcon, CheckBadgeIcon, DocumentTextIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 import React from 'react'
-import { FinancialFormData, LabFormData } from '../../../../../../features/minerals/tantalumSlice';
-import { contentVariants, FINANCE_STATUS_OPTIONS, formatNumber } from '../../../../../../utils/util';
+import { FinancialFormData, LabFormData } from '../../../../../features/minerals/tantalumSlice';
+import { contentVariants, FINANCE_STATUS_OPTIONS, formatNumber } from '../../../../../utils/util';
 import RenderInput from '../../common/RenderInput';
 import RenderSelect from '../../common/RenderSelect';
 import { useTranslation } from 'react-i18next';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 import { NumericFormat } from 'react-number-format';
-import { TantalumSettingsData } from '../../../../../../features/settings/tantalumSettingSlice';
+import { TantalumSettingsData } from '../../../../../features/settings/tantalumSettingSlice';
 import HoverInfoCard from '../../common/HoverInfoCard';
 
 

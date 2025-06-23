@@ -10,6 +10,7 @@ import ResetPasswordPage from '../pages/Auth/ResetPasswordPage';
 import DashboardOverviewPage from '../pages/Dashboard/DashboardOverviewPage';
 import ProfilePage from '../pages/Dashboard/ProfilePage';
 import SettingsPage from '../pages/Dashboard/SettingsPage';
+import ChangePasswordPage from '../pages/Dashboard/ChangePasswordPage';
 import UsersPage from '../pages/Dashboard/UsersPage';
 import SuppliersPage from '../pages/Dashboard/SuppliersPage';
 import MixedMineralsPage from '../pages/minerals/MixedMineralsPage';
@@ -58,6 +59,9 @@ const AnimatedOutlet: React.FC = () => {
             </Route>
             <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
               <Route path="/minerals/tantalum" element={<MotionPage><TantalumPage/></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
+              <Route path="/profile/change-password" element={<MotionPage><ChangePasswordPage/></MotionPage>} />
             </Route>
           </Route>
         </Route>

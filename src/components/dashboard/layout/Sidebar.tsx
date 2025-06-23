@@ -47,13 +47,6 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
     },
     { 
       icon: UsersIcon, 
-      label: 'Users', 
-      path: '/users', 
-      allowedRoles: ['Manager', 'Boss'],
-      color: 'from-green-500 to-teal-600'
-    },
-    { 
-      icon: UsersIcon, 
       label: 'Manage Users', 
       path: '/manage-users', 
       allowedRoles: ['Manager', 'Boss'],

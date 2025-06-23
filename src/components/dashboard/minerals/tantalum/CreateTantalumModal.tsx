@@ -7,16 +7,16 @@ import {
   UserIcon, 
   ScaleIcon,
 } from '@heroicons/react/24/outline';
-import { RootState, AppDispatch } from '../../../../../store/store';
-import { createTantalum, resetCreateStatus } from '../../../../../features/minerals/tantalumSlice';
+import { RootState, AppDispatch } from '../../../../store/store';
+import { createTantalum, resetCreateStatus } from '../../../../features/minerals/tantalumSlice';
 import 'react-datepicker/dist/react-datepicker.css';
 import { toast } from 'react-hot-toast';
-import SelectInput from '../../../../mineralsForm/SelectInput';
-import DateInput from '../../../../mineralsForm/DateInput';
-import TextInput from '../../../../mineralsForm/TextInput';
-import SubmitCancelButtons from '../../../../mineralsForm/SubmitCancelButtons';
-import HeaderCard from '../../../../mineralsForm/HeaderCard';
-import { fetchSuppliers_all } from '../../../../../features/user/suppliersSlice';
+import SelectInput from '../../../mineralsForm/SelectInput';
+import DateInput from '../../../mineralsForm/DateInput';
+import TextInput from '../../../mineralsForm/TextInput';
+import SubmitCancelButtons from '../../../mineralsForm/SubmitCancelButtons';
+import HeaderCard from '../../../mineralsForm/HeaderCard';
+import { fetchSuppliers_all } from '../../../../features/user/suppliersSlice';
 
 interface CreateTantalumModalProps {
   isOpen: boolean;

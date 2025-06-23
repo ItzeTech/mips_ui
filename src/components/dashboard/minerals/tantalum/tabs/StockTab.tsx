@@ -1,10 +1,10 @@
 import { ScaleIcon } from '@heroicons/react/24/solid'
 import { motion } from 'framer-motion'
-import { StockFormData } from '../../../../../../features/minerals/tantalumSlice';
+import { StockFormData } from '../../../../../features/minerals/tantalumSlice';
 import RenderSelect from '../../common/RenderSelect';
 import RenderInput from '../../common/RenderInput';
 import { useTranslation } from 'react-i18next';
-import { contentVariants, formatDate, STOCK_STATUS_OPTIONS } from '../../../../../../utils/util';
+import { contentVariants, formatDate, STOCK_STATUS_OPTIONS } from '../../../../../utils/util';
 
   
 interface StockTabInterface {

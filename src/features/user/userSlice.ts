@@ -64,6 +64,20 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  'user/changePassword',
+  async (passwordData: { current_password: string; new_password: string }, { rejectWithValue }) => {
+    try {
+      console.log(passwordData)
+      const response = await axiosInstance.post('/auth/password/change', passwordData);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'An error occurred');
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -115,7 +129,18 @@ const userSlice = createSlice({
       .addCase(updateUser.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
-      });
+      })
+
+      .addCase(changePassword.pending, (state) => {
+        state.loading = 'pending';
+      })
+      .addCase(changePassword.fulfilled, (state) => {
+        state.loading = 'idle';
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.loading = 'idle';
+        state.error = action.payload as string;
+      })
   },
 });
 

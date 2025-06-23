@@ -1,9 +1,9 @@
 import { BeakerIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
 import React from 'react'
-import { contentVariants } from '../../../../../../utils/util'
+import { contentVariants } from '../../../../../utils/util'
 import RenderInput from '../../common/RenderInput'
-import { LabFormData } from '../../../../../../features/minerals/tantalumSlice'
+import { LabFormData } from '../../../../../features/minerals/tantalumSlice'
 import { useTranslation } from 'react-i18next'
 
 

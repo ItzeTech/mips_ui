@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { fetchUser, updateUser } from '../../features/user/userSlice'; // Adjust path as needed
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 // Helper component for displaying profile details consistently
 const ProfileDetailItem: React.FC<{ label: string; value: string | number | string[] | undefined | null | React.ReactNode; icon?: React.ReactNode }> = ({ label, value, icon }) => {
@@ -37,7 +38,7 @@ const ProfileDetailItem: React.FC<{ label: string; value: string | number | stri
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<any>(); // Consider using your AppDispatch type
-
+  const navigate = useNavigate();
   const {
     full_name,
     national_id,
@@ -474,6 +475,7 @@ const ProfilePage: React.FC = () => {
                       whileHover={{ scale: 1.02, x: 4 }}
                       whileTap={{ scale: 0.98 }}
                       className="w-full text-left p-3 rounded-xl bg-gray-50/80 dark:bg-gray-700/50 hover:bg-gray-100/80 dark:hover:bg-gray-600/50 border border-gray-200/50 dark:border-gray-600/50 transition-all duration-200 group"
+                      onClick={()=> navigate('change-password')}
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
