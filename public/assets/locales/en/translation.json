@@ -127,6 +127,7 @@
       "rma_usd_per_ton": "RMA USD per Ton",
       "rma_per_kg_rwf": "RMA per KG RWF",
       "inkomane_fee_per_kg_rwf": "Inkomane Fee per KG RWF",
+      "rra_price_per_percentage": "RRA Price Per 1%",
       "government_treatment_charge_usd": "Government Treatment Charge USD",
       "validation": {
         "percentage_range": "Percentage must be between 0 and 100",

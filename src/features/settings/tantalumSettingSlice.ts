@@ -7,12 +7,14 @@ export interface TantalumSettings {
   rra_percentage: number;
   rma_usd_per_ton: number;
   inkomane_fee_per_kg_rwf: number;
+  rra_price_per_percentage: number;
 }
 
 export interface TantalumSettingsData {
   rra_percentage: number;
   rma_usd_per_ton: number;
   inkomane_fee_per_kg_rwf: number;
+  rra_price_per_percentage: number;
 }
 
 interface TantalumSettingsState {
