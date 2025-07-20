@@ -1,4 +1,4 @@
-// topbar.tsx
+// TopBar.tsx
 import React, { Fragment, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -70,16 +70,16 @@ const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
             {/* Trigger Button */}
             <Menu.Button as={motion.button}>
               <motion.div
-                className="flex items-center space-x-3 p-2 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 group"
+                className="flex items-center space-x-2 sm:space-x-3 p-1.5 sm:p-2 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 group"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 {/* User Avatar */}
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <UserCircleIcon className="w-6 h-6 text-white" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <UserCircleIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-800 shadow-sm"></div>
+                  <div className="absolute -bottom-0.5 -right-0.5 sm:-bottom-1 sm:-right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-800 shadow-sm"></div>
                 </div>
 
                 {/* User Info (when sidebar expanded) */}
@@ -91,10 +91,10 @@ const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
                       exit={{ opacity: 0, x: -10 }}
                       className="hidden md:block text-left"
                     >
-                      <div className="text-sm font-semibold text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                      <div className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors truncate max-w-24 lg:max-w-32">
                         {user.full_name}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-32">
+                      <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-24 lg:max-w-32">
                         {user.roles.slice(0, 2).join(', ')}
                         {user.roles.length > 2 && '...'}
                       </div>
@@ -107,7 +107,7 @@ const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
                   animate={{ rotate: open ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ChevronDownIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
+                  <ChevronDownIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
                 </motion.div>
               </motion.div>
             </Menu.Button>
@@ -122,38 +122,39 @@ const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
               leaveFrom="opacity-100 scale-100 translate-y-0"
               leaveTo="opacity-0 scale-95 translate-y-1"
             >
-              <Menu.Items className="absolute right-0 mt-3 w-80 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+              <Menu.Items className="absolute right-0 mt-3 w-72 sm:w-80 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
                 {/* Header */}
-                <div className="p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5 border-b border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center space-x-4">
+                <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
                     <div className="relative">
-                      <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                        <UserCircleIcon className="w-8 h-8 text-white" />
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                        <UserCircleIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                       </div>
-                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800 shadow-sm flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800 shadow-sm flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">
                         {user.full_name}
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">
                         {user.email}
                       </p>
                       <div className="flex flex-wrap gap-1 mt-2">
                         {user.roles.slice(0, 3).map((role, index) => (
                           <span
                             key={index}
-                            className={`inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium ${getRoleColor(role)}`}
+                            className={`inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-lg text-xs font-medium ${getRoleColor(role)}`}
                           >
-                            <ShieldCheckIcon className="w-3 h-3 mr-1" />
-                            {role}
+                            <ShieldCheckIcon className="w-2 h-2 sm:w-3 sm:h-3 mr-1" />
+                            <span className="hidden sm:inline">{role}</span>
+                            <span className="sm:hidden">{role.slice(0, 3)}</span>
                           </span>
                         ))}
                         {user.roles.length > 3 && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-                            +{user.roles.length - 3} more
+                          <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                            +{user.roles.length - 3}
                           </span>
                         )}
                       </div>
@@ -169,13 +170,13 @@ const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
                         <motion.button
                           whileHover={{ x: 4 }}
                           onClick={item.action}
-                          className={`w-full flex items-center px-6 py-3 text-sm transition-all duration-200 ${
+                          className={`w-full flex items-center px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm transition-all duration-200 ${
                             active 
                               ? `${item.bgColor} ${item.color}` 
                               : 'text-gray-700 dark:text-gray-300'
                           }`}
                         >
-                          <item.icon className="w-5 h-5 mr-3" />
+                          <item.icon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
                           {item.label}
                         </motion.button>
                       )}
@@ -190,13 +191,13 @@ const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
                       <motion.button
                         whileHover={{ x: 4 }}
                         onClick={onLogout}
-                        className={`w-full flex items-center px-6 py-3 text-sm transition-all duration-200 ${
+                        className={`w-full flex items-center px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm transition-all duration-200 ${
                           active 
                             ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400' 
                             : 'text-red-600 dark:text-red-400'
                         }`}
                       >
-                        <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3" />
+                        <ArrowRightOnRectangleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
                         {t('logout.logout')}
                       </motion.button>
                     )}
@@ -254,7 +255,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
   };
 
   return (
-    <header className="bg-white/80 z-50 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700 h-20 flex items-center justify-between px-6 shadow-lg">
+    <header className="bg-white/80 z-50 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700 h-16 sm:h-20 flex items-center justify-between px-3 sm:px-6 shadow-lg">
       {/* Left Section - Time & Date */}
       <motion.div 
         className="flex items-center space-x-4"
@@ -263,14 +264,13 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
         transition={{ duration: 0.5 }}
       >
         <div className="hidden lg:block">
-          <div className="text-sm font-medium text-gray-900 dark:text-white">
+          <div className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
             {time.toLocaleTimeString()}
           </div>
           <div className="text-xs text-gray-500 dark:text-gray-400">
             {time.toLocaleDateString('en-US', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
+              weekday: 'short', 
+              month: 'short', 
               day: 'numeric' 
             })}
           </div>
@@ -278,13 +278,13 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
       </motion.div>
 
       {/* Right Section - Actions */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2 sm:space-x-4">
         {/* Theme Toggle */}
         <motion.button
           whileHover={{ scale: 1.1, rotate: 180 }}
           whileTap={{ scale: 0.95 }}
           onClick={toggleTheme}
-          className="p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
+          className="p-2 sm:p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -295,8 +295,8 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
               transition={{ duration: 0.3 }}
             >
               {currentTheme !== 'light' ? 
-                <SunIcon className="w-5 h-5" /> : 
-                <MoonIcon className="w-5 h-5" />
+                <SunIcon className="w-4 h-4 sm:w-5 sm:h-5" /> : 
+                <MoonIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               }
             </motion.div>
           </AnimatePresence>
@@ -308,9 +308,9 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
             as={motion.button}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
+            className="p-2 sm:p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
           >
-            <LanguageIcon className="h-5 w-5" />
+            <LanguageIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           </Menu.Button>
           <Transition
             as={Fragment}
@@ -321,7 +321,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right z-30 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <Menu.Items className="absolute right-0 mt-2 w-40 sm:w-48 origin-top-right z-30 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
               <div className="py-2">
                 {languages.map((lang) => (
                   <Menu.Item key={lang.code}>
@@ -329,14 +329,14 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
                       <motion.button
                         whileHover={{ x: 4 }}
                         onClick={() => changeLanguage(lang.code)}
-                        className={`flex w-full items-center px-4 py-3 text-sm transition-all duration-200 ${
+                        className={`flex w-full items-center px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm transition-all duration-200 ${
                           active ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-gray-100'
                         } ${i18n.resolvedLanguage === lang.code ? 'font-semibold bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}
                       >
-                        <span className="mr-3 text-lg">{lang.flag}</span>
-                        {lang.name}
+                        <span className="mr-2 sm:mr-3 text-sm sm:text-lg">{lang.flag}</span>
+                        <span className="truncate">{lang.name}</span>
                         {i18n.resolvedLanguage === lang.code && (
-                          <SparklesIcon className="w-4 h-4 ml-auto" />
+                          <SparklesIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-auto" />
                         )}
                       </motion.button>
                     )}
@@ -355,16 +355,16 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
                 as={motion.button}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                className="relative p-2 sm:p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
               >
-                <BellIcon className="h-5 w-5" />
+                <BellIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 <AnimatePresence>
                   {unreadCount > 0 && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       exit={{ scale: 0 }}
-                      className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white shadow-lg"
+                      className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white shadow-lg"
                     >
                       {unreadCount}
                     </motion.span>
@@ -380,39 +380,41 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
                 leaveFrom="opacity-100 translate-y-0 scale-100"
                 leaveTo="opacity-0 translate-y-1 scale-95"
               >
-                <Popover.Panel className="absolute right-0 z-10 mt-3 w-96 origin-top-right transform">
+                <Popover.Panel className="absolute right-0 z-10 mt-3 w-80 sm:w-96 origin-top-right transform">
                   <div className="overflow-hidden rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl">
                     {/* Header */}
-                    <div className="p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5 border-b border-gray-200 dark:border-gray-700">
+                    <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5 border-b border-gray-200 dark:border-gray-700">
                       <div className="flex justify-between items-center">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                          <BellIcon className="w-5 h-5 mr-2" />
-                          {t('notifications.title')}
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                          <BellIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                          <span className="hidden sm:inline">{t('notifications.title')}</span>
+                          <span className="sm:hidden">Alerts</span>
                         </h3>
                         {unreadCount > 0 && (
                           <motion.button 
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={markAllAsRead} 
-                            className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
+                            className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
                           >
-                            {t('notifications.mark_all_read')} ({unreadCount})
+                            <span className="hidden sm:inline">{t('notifications.mark_all_read')} ({unreadCount})</span>
+                            <span className="sm:hidden">Read ({unreadCount})</span>
                           </motion.button>
                         )}
                       </div>
                     </div>
 
                     {/* Notifications List */}
-                    <div className="max-h-80 overflow-y-auto">
+                    <div className="max-h-64 sm:max-h-80 overflow-y-auto">
                       <AnimatePresence>
                         {notifications.length === 0 ? (
                           <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="p-8 text-center"
+                            className="p-6 sm:p-8 text-center"
                           >
-                            <BellIcon className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-                            <p className="text-sm text-gray-500 dark:text-gray-400">No new notifications</p>
+                            <BellIcon className="w-8 h-8 sm:w-12 sm:h-12 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">No new notifications</p>
                           </motion.div>
                         ) : (
                           notifications.map((notification, index) => (
@@ -421,14 +423,14 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: index * 0.1 }}
-                              className={`p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${
+                              className={`p-3 sm:p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${
                                 notification.unread ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
                               }`}
                             >
-                              <div className="flex items-start space-x-3">
-                                <span className="text-lg mt-0.5">{getNotificationIcon(notification.type)}</span>
-                                <div className="flex-1">
-                                  <p className={`text-sm ${notification.unread ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>
+                              <div className="flex items-start space-x-2 sm:space-x-3">
+                                <span className="text-sm sm:text-lg mt-0.5">{getNotificationIcon(notification.type)}</span>
+                                <div className="flex-1 min-w-0">
+                                  <p className={`text-xs sm:text-sm ${notification.unread ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'} line-clamp-2`}>
                                     {notification.text}
                                   </p>
                                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -436,7 +438,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout }) => {
                                   </p>
                                 </div>
                                 {notification.unread && (
-                                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                                 )}
                               </div>
                             </motion.div>

@@ -29,10 +29,10 @@ import {
   XMarkIcon,
   FunnelIcon
 } from '@heroicons/react/24/outline';
-import CreateMixedMineralModal from '../../components/dashboard/minerals/CreateMixedMineralModal';
-import EditMixedMineralModal from '../../components/dashboard/minerals/EditMixedMineralModal';
-import ViewMixedMineralModal from '../../components/dashboard/minerals/ViewMixedMineralModal';
-import UpdateStatusModal from '../../components/dashboard/minerals/UpdateStatusModal';
+import CreateMixedMineralModal from '../../components/dashboard/minerals/mixedMineral/CreateMixedMineralModal';
+import EditMixedMineralModal from '../../components/dashboard/minerals/mixedMineral/EditMixedMineralModal';
+import ViewMixedMineralModal from '../../components/dashboard/minerals/mixedMineral/ViewMixedMineralModal';
+import UpdateStatusModal from '../../components/dashboard/minerals/mixedMineral/UpdateStatusModal';
 
 const MixedMineralsPage: React.FC = () => {
   const { t } = useTranslation();

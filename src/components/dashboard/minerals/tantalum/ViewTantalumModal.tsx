@@ -17,6 +17,8 @@ import {
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
 import { RootState } from '../../../../store/store';
+import { RoleGuard } from '../../../common/RoleGuard';
+import { Role } from '../../../../types/roles';
 
 interface ViewTantalumModalProps {
   isOpen: boolean;
@@ -159,14 +161,21 @@ const ViewTantalumModal: React.FC<ViewTantalumModalProps> = ({ isOpen, onClose }
 
   if (!selectedTantalum) return null;
 
-  const renderDetailRow = (label: string, value: React.ReactNode, icon?: React.ReactNode) => (
-    <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-b-0">
-      <div className="flex items-center">
-        {icon}
-        <span className="text-gray-600 dark:text-gray-400 ml-2">{label}</span>
+  const renderDetailRow = (
+    label: string, 
+    value: React.ReactNode, 
+    icon?: React.ReactNode, 
+    deniedRoles?: Role[]
+  ) => (
+    <RoleGuard deniedRoles={deniedRoles}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 sm:py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-b-0 space-y-1 sm:space-y-0">
+        <div className="flex items-center">
+          {icon}
+          <span className="text-gray-600 dark:text-gray-400 ml-2 text-xs sm:text-sm">{label}</span>
+        </div>
+        <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base ml-6 sm:ml-0 break-words">{value}</span>
       </div>
-      <span className="font-medium text-gray-900 dark:text-white">{value}</span>
-    </div>
+    </RoleGuard>
   );
 
   return (
@@ -230,6 +239,7 @@ const ViewTantalumModal: React.FC<ViewTantalumModalProps> = ({ isOpen, onClose }
                 className="flex items-center justify-center space-x-4 px-6 pt-6"
                 variants={itemVariants}
               >
+                
                 <motion.button
                   variants={tabVariants}
                   animate={activeTab === 'details' ? 'active' : 'inactive'}
@@ -238,45 +248,53 @@ const ViewTantalumModal: React.FC<ViewTantalumModalProps> = ({ isOpen, onClose }
                   onClick={() => setActiveTab('details')}
                   className={`px-4 py-2.5 rounded-xl flex items-center ${
                     activeTab === 'details' 
-                      ? 'text-indigo-700 dark:text-indigo-300 font-medium shadow-md' 
+                    ? 'text-indigo-700 dark:text-indigo-300 font-medium shadow-md' 
                       : 'text-gray-600 dark:text-gray-400'
-                  }`}
-                >
+                    }`}
+                    >
                   <DocumentTextIcon className="w-5 h-5 mr-2" />
                   {t('tantalum.basic_info', 'Basic Info')}
                 </motion.button>
                 
-                <motion.button
-                  variants={tabVariants}
-                  animate={activeTab === 'lab' ? 'active' : 'inactive'}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setActiveTab('lab')}
-                  className={`px-4 py-2.5 rounded-xl flex items-center ${
-                    activeTab === 'lab' 
-                      ? 'text-indigo-700 dark:text-indigo-300 font-medium shadow-md' 
-                      : 'text-gray-600 dark:text-gray-400'
-                  }`}
+                <RoleGuard
+                  allowedRoles={['Lab Technician', 'Boss']}
                 >
-                  <BeakerIcon className="w-5 h-5 mr-2" />
-                  {t('tantalum.lab_analysis', 'Lab Analysis')}
-                </motion.button>
+                  <motion.button
+                    variants={tabVariants}
+                    animate={activeTab === 'lab' ? 'active' : 'inactive'}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setActiveTab('lab')}
+                    className={`px-4 py-2.5 rounded-xl flex items-center ${
+                      activeTab === 'lab' 
+                        ? 'text-indigo-700 dark:text-indigo-300 font-medium shadow-md' 
+                        : 'text-gray-600 dark:text-gray-400'
+                    }`}
+                  >
+                    <BeakerIcon className="w-5 h-5 mr-2" />
+                    {t('tantalum.lab_analysis', 'Lab Analysis')}
+                  </motion.button>
+                </RoleGuard>
                 
-                <motion.button
-                  variants={tabVariants}
-                  animate={activeTab === 'financial' ? 'active' : 'inactive'}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setActiveTab('financial')}
-                  className={`px-4 py-2.5 rounded-xl flex items-center ${
-                    activeTab === 'financial' 
-                      ? 'text-indigo-700 dark:text-indigo-300 font-medium shadow-md' 
-                      : 'text-gray-600 dark:text-gray-400'
-                  }`}
+                <RoleGuard
+                  allowedRoles={['Boss', 'Finance Officer', 'Manager']}
                 >
-                  <CurrencyDollarIcon className="w-5 h-5 mr-2" />
-                  {t('tantalum.financial_details', 'Financials')}
-                </motion.button>
+                  <motion.button
+                    variants={tabVariants}
+                    animate={activeTab === 'financial' ? 'active' : 'inactive'}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setActiveTab('financial')}
+                    className={`px-4 py-2.5 rounded-xl flex items-center ${
+                      activeTab === 'financial' 
+                        ? 'text-indigo-700 dark:text-indigo-300 font-medium shadow-md' 
+                        : 'text-gray-600 dark:text-gray-400'
+                    }`}
+                  >
+                    <CurrencyDollarIcon className="w-5 h-5 mr-2" />
+                    {t('tantalum.financial_details', 'Financials')}
+                  </motion.button>
+                </RoleGuard>
               </motion.div>
               
               {/* Content */}
@@ -307,7 +325,8 @@ const ViewTantalumModal: React.FC<ViewTantalumModalProps> = ({ isOpen, onClose }
                         {renderDetailRow(
                           t('tantalum.supplier', 'Supplier'),
                           selectedTantalum.supplier_name || '—',
-                          <UserIcon className="w-4 h-4 text-indigo-500" />
+                          <UserIcon className="w-4 h-4 text-indigo-500" />,
+                          ['Lab Technician']
                         )}
                         
                         {renderDetailRow(
@@ -363,18 +382,7 @@ const ViewTantalumModal: React.FC<ViewTantalumModalProps> = ({ isOpen, onClose }
                           formatDate(selectedTantalum.finance_status_changed_date),
                           <ArrowPathIcon className="w-4 h-4 text-indigo-500" />
                         )}
-                        
-                        {/* {renderDetailRow(
-                          t('tantalum.created_at', 'Created At'),
-                          formatDate(selectedTantalum.created_at),
-                          <PencilIcon className="w-4 h-4 text-indigo-500" />
-                        )}
-                        
-                        {renderDetailRow(
-                          t('tantalum.updated_at', 'Updated At'),
-                          formatDate(selectedTantalum.updated_at),
-                          <ArrowPathIcon className="w-4 h-4 text-indigo-500" />
-                        )} */}
+
                       </div>
                     </motion.div>
                   )}

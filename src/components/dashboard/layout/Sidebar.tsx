@@ -1,4 +1,4 @@
-// sidebar.tsx
+// Sidebar.tsx
 import React, { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -135,14 +135,14 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
 
   const sidebarVariants = {
     expanded: {
-      width: 280,
+      width: window.innerWidth < 768 ? '100vw' : 280,
       transition: {
         duration: 0.3,
         ease: [0.4, 0.0, 0.2, 1],
       },
     },
     collapsed: {
-      width: 80,
+      width: window.innerWidth < 768 ? 0 : 80,
       transition: {
         duration: 0.3,
         ease: [0.4, 0.0, 0.2, 1],
@@ -174,162 +174,174 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
   };
 
   return (
-    <motion.div
-      className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-r border-gray-200 dark:border-gray-700 shadow-2xl z-30 h-screen overflow-hidden"
-      variants={sidebarVariants}
-      animate={expanded ? 'expanded' : 'collapsed'}
-    >
-      <div className="flex flex-col h-full">
-        {/* Logo Area */}
-        <div className="p-6 flex items-center h-20 border-b border-gray-200/50 dark:border-gray-700/50 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5"></div>
-          
-          <AnimatePresence mode="wait">
-            {expanded ? (
-              <motion.div
-                key="expanded-logo"
-                className="flex items-center justify-between w-full relative z-10"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.3 }}
-              >
+    <>
+      {/* Mobile Overlay */}
+      {expanded && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-20 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      <motion.div
+        className={`${expanded && window.innerWidth < 768 ? 'fixed' : 'relative'} bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-r border-gray-200 dark:border-gray-700 shadow-2xl z-30 h-screen overflow-hidden`}
+        variants={sidebarVariants}
+        animate={expanded ? 'expanded' : 'collapsed'}
+      >
+        <div className="flex flex-col h-full">
+          {/* Logo Area */}
+          <div className="p-3 sm:p-6 flex items-center h-16 sm:h-20 border-b border-gray-200/50 dark:border-gray-700/50 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5"></div>
+            
+            <AnimatePresence mode="wait">
+              {expanded ? (
                 <motion.div
-                  className="flex items-center space-x-3"
-                  whileHover={{ scale: 1.02 }}
+                  key="expanded-logo"
+                  className="flex items-center justify-between w-full relative z-10"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <div className="p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200">
-                    <Bars3Icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                      RwandaMining
-                    </h1>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Management System</p>
-                  </div>
+                  <motion.div
+                    className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0"
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <div className="p-2 sm:p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 flex-shrink-0">
+                      <Bars3Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
+                        RwandaMining
+                      </h1>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">Management System</p>
+                    </div>
+                  </motion.div>
+                  
+                  <motion.button
+                    onClick={toggleSidebar}
+                    className="p-1.5 sm:p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 flex-shrink-0 ml-2"
+                    whileHover={{ scale: 1.1, rotate: 180 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ChevronLeftIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  </motion.button>
                 </motion.div>
-                
-                <motion.button
-                  onClick={toggleSidebar}
-                  className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200"
-                  whileHover={{ scale: 1.1, rotate: 180 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <ChevronLeftIcon className="w-4 h-4" />
-                </motion.button>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="collapsed-logo"
-                className="flex items-center justify-center w-full relative z-10"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.3 }}
-              >
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                  onClick={toggleSidebar}
-                >
-                  <Bars3Icon className="w-5 h-5" />
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Navigation */}
-        <motion.div 
-          className="py-6 flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <div className="px-4 space-y-8">
-            {/* Main Navigation */}
-            {groupedNavItems.main.length > 0 && (
-              <motion.div variants={itemVariants}>
-                <ul className="space-y-2">
-                  {groupedNavItems.main.map((item) => (
-                    <NavItemComponent
-                      key={item.path}
-                      item={item}
-                      expanded={expanded}
-                      hoveredItem={hoveredItem}
-                      setHoveredItem={setHoveredItem}
-                      location={location}
-                    />
-                  ))}
-                </ul>
-              </motion.div>
-            )}
-
-            {/* Minerals Section */}
-            {groupedNavItems.Minerals && groupedNavItems.Minerals.length > 0 && (
-              <motion.div variants={itemVariants}>
-                <AnimatePresence>
-                  {expanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mb-4"
-                    >
-                      <div className="flex items-center space-x-2 px-3 py-2">
-                        <div className="w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
-                        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Minerals
-                        </span>
-                        <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                
-                <ul className="space-y-2">
-                  {groupedNavItems.Minerals.map((item) => (
-                    <NavItemComponent
-                      key={item.path}
-                      item={item}
-                      expanded={expanded}
-                      hoveredItem={hoveredItem}
-                      setHoveredItem={setHoveredItem}
-                      location={location}
-                    />
-                  ))}
-                </ul>
-              </motion.div>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Sidebar Footer */}
-        <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-900/50">
-          <div className={`flex justify-center items-center`}>
-          
-            <AnimatePresence>
-              {expanded && (
+              ) : (
                 <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="text-center"
+                  key="collapsed-logo"
+                  className="flex items-center justify-center w-full relative z-10"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                    Version 2.0.1
-                  </span>
-                  <div className="text-xs text-gray-400 dark:text-gray-500">
-                    Mining Pro
-                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-2 sm:p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                    onClick={toggleSidebar}
+                  >
+                    <Bars3Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </motion.button>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
+
+          {/* Navigation */}
+          <motion.div 
+            className="py-4 sm:py-6 flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <div className="px-2 sm:px-4 space-y-6 sm:space-y-8">
+              {/* Main Navigation */}
+              {groupedNavItems.main.length > 0 && (
+                <motion.div variants={itemVariants}>
+                  <ul className="space-y-1 sm:space-y-2">
+                    {groupedNavItems.main.map((item) => (
+                      <NavItemComponent
+                        key={item.path}
+                        item={item}
+                        expanded={expanded}
+                        hoveredItem={hoveredItem}
+                        setHoveredItem={setHoveredItem}
+                        location={location}
+                      />
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+
+              {/* Minerals Section */}
+              {groupedNavItems.Minerals && groupedNavItems.Minerals.length > 0 && (
+                <motion.div variants={itemVariants}>
+                  <AnimatePresence>
+                    {expanded && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mb-3 sm:mb-4"
+                      >
+                        <div className="flex items-center space-x-2 px-2 sm:px-3 py-2">
+                          <div className="w-6 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
+                          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Minerals
+                          </span>
+                          <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  
+                  <ul className="space-y-1 sm:space-y-2">
+                    {groupedNavItems.Minerals.map((item) => (
+                      <NavItemComponent
+                        key={item.path}
+                        item={item}
+                        expanded={expanded}
+                        hoveredItem={hoveredItem}
+                        setHoveredItem={setHoveredItem}
+                        location={location}
+                      />
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+
+          {/* Sidebar Footer */}
+          <div className="p-3 sm:p-4 border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-900/50">
+            <div className={`flex justify-center items-center`}>
+              <AnimatePresence>
+                {expanded && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="text-center"
+                  >
+                    <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                      Version 2.0.1
+                    </span>
+                    <div className="text-xs text-gray-400 dark:text-gray-500">
+                      Mining Pro
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </>
   );
 };
 
@@ -354,7 +366,7 @@ const NavItemComponent: React.FC<{
         className="group relative block"
       >
         <motion.div
-          className={`relative flex items-center px-4 py-3 rounded-2xl transition-all duration-300 overflow-hidden ${
+          className={`relative flex items-center px-3 sm:px-4 py-2 sm:py-3 rounded-2xl transition-all duration-300 overflow-hidden ${
             isActive
               ? 'bg-gradient-to-r ' + (item.color || 'from-blue-500 to-purple-600') + ' text-white shadow-lg'
               : 'text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
@@ -381,7 +393,7 @@ const NavItemComponent: React.FC<{
             whileHover={{ rotate: 5, scale: 1.1 }}
             transition={{ duration: 0.2 }}
           >
-            <item.icon className="w-5 h-5" />
+            <item.icon className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.div>
 
           {/* Label */}
@@ -392,7 +404,7 @@ const NavItemComponent: React.FC<{
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2 }}
-                className={`ml-4 font-medium relative z-10 ${isActive ? 'text-white' : ''}`}
+                className={`ml-3 sm:ml-4 font-medium relative z-10 text-sm sm:text-base ${isActive ? 'text-white' : ''} truncate`}
               >
                 {t(`menu.${item.label.toLowerCase().replace(' ', '_')}`)}
               </motion.span>
@@ -403,7 +415,7 @@ const NavItemComponent: React.FC<{
           {isActive && expanded && (
             <motion.div
               layoutId="activeIndicator"
-              className="absolute right-2 w-2 h-4 bg-white/30 rounded-full"
+              className="absolute right-2 w-1.5 h-3 sm:w-2 sm:h-4 bg-white/30 rounded-full"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
@@ -417,7 +429,7 @@ const NavItemComponent: React.FC<{
                 initial={{ opacity: 0, x: -10, scale: 0.8 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: -10, scale: 0.8 }}
-                className="absolute left-full ml-4 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-sm rounded-xl shadow-xl border border-gray-200 dark:border-gray-600 whitespace-nowrap z-50"
+                className="absolute left-full ml-4 px-2 sm:px-3 py-1.5 sm:py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs sm:text-sm rounded-xl shadow-xl border border-gray-200 dark:border-gray-600 whitespace-nowrap z-50"
               >
                 {t(item.label.toLowerCase().replace(' ', '_'))}
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900 dark:bg-gray-700 rotate-45"></div>

@@ -9,8 +9,8 @@ import {
   ExclamationCircleIcon
 } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../../../store/store';
-import { updateMixedMineralStatus, resetUpdateStatusStatus } from '../../../features/minerals/mixedMineralsSlice';
+import { RootState, AppDispatch } from '../../../../store/store';
+import { updateMixedMineralStatus, resetUpdateStatusStatus } from '../../../../features/minerals/mixedMineralsSlice';
 import toast from 'react-hot-toast';
 
 interface UpdateStatusModalProps {
