@@ -1,4 +1,4 @@
-// components/dashboard/minerals/CreateTantalumModal.tsx
+// CreateTantalumModal.tsx
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -187,13 +187,13 @@ const CreateTantalumModal: React.FC<CreateTantalumModalProps> = ({ isOpen, onClo
           
           {/* Modal */}
           <motion.div
-            className="fixed inset-0 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 flex items-center justify-center z-50 p-2 sm:p-4"
             initial="hidden"
             animate="visible"
             exit="exit"
             variants={modalVariants}
           >
-            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-xs sm:max-w-md lg:max-w-lg max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
               {/* Header */}
               <HeaderCard
                 title={t('tantalum.create_new', 'Add New Tantalum')}
@@ -203,12 +203,12 @@ const CreateTantalumModal: React.FC<CreateTantalumModalProps> = ({ isOpen, onClo
               
               
               {/* Form */}
-              <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              <form onSubmit={handleSubmit} className="p-3 sm:p-6 space-y-4 sm:space-y-6">
                 {/* Supplier */}
                 <SelectInput
                   label={t('tantalum.supplier', 'Supplier')}
-                  icon={<UserIcon className="w-5 h-5 text-indigo-500" />}
-                  iconLabel={<UserIcon className="w-5 h-5 text-gray-400" />}
+                  icon={<UserIcon className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-500" />}
+                  iconLabel={<UserIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />}
                   value={formData.supplier_id}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -229,8 +229,8 @@ const CreateTantalumModal: React.FC<CreateTantalumModalProps> = ({ isOpen, onClo
                 {/* Net Weight */}
                 <TextInput
                   label={t('tantalum.net_weight', 'Net Weight (kg)')}
-                  icon={<ScaleIcon className="w-5 h-5 text-indigo-500" />}
-                  iconLabel={<ScaleIcon className="w-5 h-5 text-gray-400" />}
+                  icon={<ScaleIcon className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-500" />}
+                  iconLabel={<ScaleIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />}
                   value={netWeight}
                   onChange={(e) => {
                     setNetWeight(e.target.value);
