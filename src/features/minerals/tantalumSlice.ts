@@ -411,14 +411,3 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
 
   return calculatedData;
 };
-
-
-
-// Role-based permissions
-export const canUpdateStockStatus = (userRole: string): boolean => {
-  return userRole === 'stock_manager' || userRole === 'admin';
-};
-
-export const canUpdateFinanceStatus = (userRole: string): boolean => {
-  return userRole === 'manager' || userRole === 'admin';
-};
