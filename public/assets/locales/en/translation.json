@@ -326,7 +326,8 @@
       "create_new": "Add New Tantalum",
       "create_first": "Add Your First Tantalum",
       "search_placeholder": "Search by lot number, supplier or weight...",
-      
+      "settings_required": "Tantalum Settings Required",
+    "tantalumSettingsMissing": "The required Tantalum configuration settings are missing. Please go to the Settings page to configure the Tantalum settings or ask an administrator to complete this setup. These settings are needed for proper financial calculations.",
       "total_minerals": "Total Tantalums",
       "in_stock": "In Stock",
       "resampled": "Resampled",

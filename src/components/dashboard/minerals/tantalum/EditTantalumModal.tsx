@@ -59,7 +59,8 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
   const [tantalumSetting, setTantalumSetting] = useState<TantalumSettingsData>({
       rra_percentage: 0,
       rma_usd_per_ton: 0,
-      inkomane_fee_per_kg_rwf: 0
+      inkomane_fee_per_kg_rwf: 0,
+      rra_price_per_percentage: 0
     });
 
     // Confirmation dialog state
@@ -83,7 +84,8 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         setTantalumSetting({
           rra_percentage: settings.rra_percentage / 100,
           rma_usd_per_ton: settings.rma_usd_per_ton / 1000,
-          inkomane_fee_per_kg_rwf: settings.inkomane_fee_per_kg_rwf
+          inkomane_fee_per_kg_rwf: settings.inkomane_fee_per_kg_rwf,
+          rra_price_per_percentage: settings.rra_price_per_percentage / 100
         });
       }
     }, [settings]);

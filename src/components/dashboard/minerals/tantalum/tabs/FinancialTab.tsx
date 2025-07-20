@@ -1,4 +1,4 @@
-import { CurrencyDollarIcon, CheckBadgeIcon, DocumentTextIcon } from '@heroicons/react/24/solid';
+import { CurrencyDollarIcon, CheckBadgeIcon, DocumentTextIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 import React from 'react'
 import { FinancialFormData, LabFormData } from '../../../../../features/minerals/tantalumSlice';
@@ -31,14 +31,34 @@ export default function FinancialTab({
   errors = {},
   labForm,
   calculatedValues,
-  TantalumSettingsData = {
-    rra_percentage: 3,
-    inkomane_fee_per_kg_rwf: 40,
-    rma_usd_per_ton: 125
-  }
+  TantalumSettingsData
 }: FinancialTabInterface) {
 
     const { t } = useTranslation();
+
+    if(!TantalumSettingsData) {
+      return (
+        <motion.div
+          variants={contentVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="space-y-6"
+        >
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center space-x-3 text-amber-800 dark:text-amber-300">
+              <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-xl">
+                <ExclamationCircleIcon className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">{t('tantalum.settings_required')}</h3>
+                <p className="text-sm mt-1">{t('tantalum.tantalumSettingsMissing')}</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      );
+    }
 
     
     const renderPurchaseTa2O5Input = (errors: Record<string, string>, field: string) => {
@@ -270,10 +290,10 @@ export default function FinancialTab({
               title={`${t('tantalum.rra', 'RRA')} (${TantalumSettingsData?.rra_percentage}%)`}
               value={`$${formatNumber(calculatedValues.rra)}`}
               color="gray"
-              formula="RRA percentage * total amount"
+              formula="RRA percentage * RRA total amount"
               data={[
                 { label: "RRA Percentage", value: `${TantalumSettingsData?.rra_percentage ? TantalumSettingsData?.rra_percentage/100 : TantalumSettingsData?.rra_percentage}` },
-                { label: "Total Amount", value: `$${formatNumber(calculatedValues.total_amount)}` },
+                { label: "RRA total Amount", value: `$${formatNumber((TantalumSettingsData.rra_price_per_percentage/100) * (financialForm.purchase_ta2o5_percentage ?? 0) * (net_weight ?? 0))}` },
               ]}
               outputLabel="RRA"
               outputValue={`$${formatNumber(calculatedValues.rra)}`}

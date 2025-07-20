@@ -76,8 +76,8 @@ const TantalumSettingsForm: React.FC = () => {
       newErrors.inkomane_fee_per_kg_rwf = t('settings.validation.positive_number');
     }
 
-    if (formData.rra_price_per_percentage <= 0) {
-      newErrors.rra_price_per_percentage = t('settings.validation.positive_number');
+    if (formData.rra_price_per_percentage < 0 || formData.rra_price_per_percentage > 100) {
+      newErrors.rra_price_per_percentage = t('settings.validation.percentage_range');
     }
 
     setErrors(newErrors);
@@ -130,8 +130,8 @@ const TantalumSettingsForm: React.FC = () => {
       key: 'rra_price_per_percentage' as keyof TantalumSettingsData,
       label: t('settings.rra_price_per_percentage'),
       icon: PercentBadgeIcon,
-      unit: 'RWF/kg',
-      step: 0.01,
+      unit: '%',
+      step: 0.1,
       color: 'from-blue-500 to-cyan-600'
     }
   ];

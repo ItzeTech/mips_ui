@@ -56,6 +56,7 @@ export interface Tantalum {
   price_of_tag_per_kg_rwf: number | null;
   total_amount: number | null;
   rra: number | null;
+  rra_total_amount: number | number;
   rma: number | null;
   inkomane_fee: number | null;
   advance: number | null;
@@ -354,7 +355,7 @@ export const {
 export default tantalumSlice.reducer;
 
 // Helper functions for calculations
-export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage = 0.03, inkomane_fee_per_kg_rwf = 40, rma_usd_per_ton = 0.125}: TantalumSettingsData): Partial<Tantalum> => {
+export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, inkomane_fee_per_kg_rwf, rma_usd_per_ton, rra_price_per_percentage}: TantalumSettingsData): Partial<Tantalum> => {
   const {
     price_per_percentage,
     purchase_ta2o5_percentage,
@@ -376,8 +377,9 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage = 0
   }
 
   // Calculate RRA (3% of total amount)
-  if (calculatedData.total_amount) {
-    calculatedData.rra = calculatedData.total_amount * rra_percentage;
+  if (purchase_ta2o5_percentage && net_weight && rra_price_per_percentage) {
+    let rra_total_amount = purchase_ta2o5_percentage * net_weight * rra_price_per_percentage;
+    calculatedData.rra = rra_total_amount * rra_percentage;
   }
 
   // Calculate RMA (USD 125 per 1,000 kg)
