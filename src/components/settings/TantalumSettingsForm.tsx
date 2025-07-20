@@ -18,6 +18,7 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+import { NumericFormat } from 'react-number-format';
 
 const TantalumSettingsForm: React.FC = () => {
   const { t } = useTranslation();
@@ -148,7 +149,7 @@ const TantalumSettingsForm: React.FC = () => {
                 <div className={`absolute left-4 top-1/2 transform -translate-y-1/2 p-2 bg-gradient-to-r ${field.color} rounded-xl shadow-lg group-focus-within:scale-110 transition-transform duration-200`}>
                   <field.icon className="w-4 h-4 text-white" />
                 </div>
-                <input
+                {/* <input
                   type="number"
                   step={field.step}
                   value={formData[field.key]}
@@ -157,6 +158,19 @@ const TantalumSettingsForm: React.FC = () => {
                     errors[field.key] ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-700'
                   }`}
                   placeholder="0.00"
+                /> */}
+                <NumericFormat
+                    value={formData[field.key]}
+                    decimalScale={2}
+                    allowNegative={false}
+                    allowLeadingZeros={false}
+                    onValueChange={(values) => {
+                        handleInputChange(field.key, values?.floatValue || 0)
+                    }}
+                    className={`w-full pl-20 pr-20 py-4 text-lg border-2 rounded-2xl focus:ring-4 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all duration-200 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ${
+                      errors[field.key] ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-700'
+                    }`}
+                    placeholder={`0.00`}    
                 />
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300">
                   {field.unit}

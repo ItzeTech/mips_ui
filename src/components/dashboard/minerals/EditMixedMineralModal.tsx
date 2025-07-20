@@ -106,7 +106,7 @@ const EditMixedMineralModal: React.FC<EditMixedMineralModalProps> = ({ isOpen, o
               className="relative bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md mx-auto overflow-hidden"
             >
               {/* Header */}
-              <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-violet-600 px-8 py-6">
+              <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-violet-600 px-8 py-4">
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="relative flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -203,13 +203,6 @@ const EditMixedMineralModal: React.FC<EditMixedMineralModalProps> = ({ isOpen, o
                         {errors.weight_kg}
                       </motion.p>
                     )}
-                  </div>
-
-                  {/* Note about status update */}
-                  <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
-                    <p className="text-sm text-amber-800 dark:text-amber-200">
-                      <span className="font-medium">{t('mixedMinerals.note')}:</span> {t('mixedMinerals.status_update_note')}
-                    </p>
                   </div>
 
                   {/* Buttons */}
