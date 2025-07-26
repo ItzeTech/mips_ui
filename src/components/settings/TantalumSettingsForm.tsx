@@ -76,8 +76,8 @@ const TantalumSettingsForm: React.FC = () => {
       newErrors.inkomane_fee_per_kg_rwf = t('settings.validation.positive_number');
     }
 
-    if (formData.rra_price_per_percentage < 0 || formData.rra_price_per_percentage > 100) {
-      newErrors.rra_price_per_percentage = t('settings.validation.percentage_range');
+    if (formData.rra_price_per_percentage <= 0 || formData.rra_price_per_percentage > 100) {
+      newErrors.rra_price_per_percentage = t('settings.validation.positive_number');
     }
 
     setErrors(newErrors);
