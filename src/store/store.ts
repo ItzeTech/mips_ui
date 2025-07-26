@@ -3,6 +3,7 @@ import authReducer from '../features/auth/authSlice';
 import themeReducer from '../features/themeSlice';
 import userReducer from '../features/user/userSlice';
 import usersReducer from '../features/user/usersSlice';
+import generalSettingsReducer from '../features/settings/generalSettingsSlice';
 import tantalumSettingsReducer from '../features/settings/tantalumSettingSlice';
 import tinSettingsReducer from '../features/settings/tinSettingSlice';
 import tungstenSettingsReducer from '../features/settings/tungstenSettingSlice';
@@ -18,6 +19,7 @@ export const store = configureStore({
     theme: themeReducer,
     user: userReducer,
     users: usersReducer,
+    generalSettings: generalSettingsReducer,
     tantalumSettings: tantalumSettingsReducer,
     tinSettings: tinSettingsReducer,
     tungstenSettings: tungstenSettingsReducer,

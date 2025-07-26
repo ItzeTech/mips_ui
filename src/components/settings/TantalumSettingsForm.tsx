@@ -1,4 +1,4 @@
-// components/TantalumSettingsForm.tsx
+// components/TantalumSettingsForm.tsx - with responsive adjustments
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -15,7 +15,8 @@ import {
   CurrencyDollarIcon,
   ScaleIcon,
   CheckCircleIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  BanknotesIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { NumericFormat } from 'react-number-format';
@@ -129,10 +130,10 @@ const TantalumSettingsForm: React.FC = () => {
     {
       key: 'rra_price_per_percentage' as keyof TantalumSettingsData,
       label: t('settings.rra_price_per_percentage'),
-      icon: PercentBadgeIcon,
+      icon: BanknotesIcon,
       unit: '%',
       step: 0.1,
-      color: 'from-blue-500 to-cyan-600'
+      color: 'from-red-500 to-pink-600'
     }
   ];
 
@@ -146,8 +147,8 @@ const TantalumSettingsForm: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {formFields.map((field, index) => (
             <motion.div
               key={field.key}
@@ -156,12 +157,12 @@ const TantalumSettingsForm: React.FC = () => {
               transition={{ delay: index * 0.1 }}
               className="group"
             >
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+              <label className="block text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 {field.label}
               </label>
               <div className="relative">
-                <div className={`absolute left-4 top-1/2 transform -translate-y-1/2 p-2 bg-gradient-to-r ${field.color} rounded-xl shadow-lg group-focus-within:scale-110 transition-transform duration-200`}>
-                  <field.icon className="w-4 h-4 text-white" />
+                <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 p-1.5 bg-gradient-to-r ${field.color} rounded-lg shadow-lg group-focus-within:scale-110 transition-transform duration-200`}>
+                  <field.icon className="w-3 h-3 text-white" />
                 </div>
                 <NumericFormat
                     value={formData[field.key]}
@@ -171,12 +172,12 @@ const TantalumSettingsForm: React.FC = () => {
                     onValueChange={(values) => {
                         handleInputChange(field.key, values?.floatValue || 0)
                     }}
-                    className={`w-full pl-20 pr-20 py-4 text-lg border-2 rounded-2xl focus:ring-4 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all duration-200 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ${
+                    className={`w-full pl-12 pr-14 py-2.5 text-sm md:text-base border-2 rounded-xl focus:ring-4 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all duration-200 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white ${
                       errors[field.key] ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-700'
                     }`}
                     placeholder={`0.00`}    
                 />
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300">
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 px-2 py-0.5 bg-gray-200 dark:bg-gray-700 rounded-md text-xs font-medium text-gray-600 dark:text-gray-300">
                   {field.unit}
                 </div>
               </div>
@@ -184,9 +185,9 @@ const TantalumSettingsForm: React.FC = () => {
                 <motion.p 
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-red-600 flex items-center"
+                  className="mt-1 text-xs text-red-600 flex items-center"
                 >
-                  <ExclamationTriangleIcon className="w-4 h-4 mr-1" />
+                  <ExclamationTriangleIcon className="w-3 h-3 mr-1" />
                   {errors[field.key]}
                 </motion.p>
               )}
@@ -199,23 +200,23 @@ const TantalumSettingsForm: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="flex justify-end pt-6 border-t border-gray-200 dark:border-gray-700"
+          className="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700"
         >
           <motion.button
             type="submit"
             disabled={saveStatus === 'loading'}
             whileHover={{ scale: saveStatus === 'loading' ? 1 : 1.02 }}
             whileTap={{ scale: saveStatus === 'loading' ? 1 : 0.98 }}
-            className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed flex items-center space-x-2"
+            className="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed flex items-center space-x-2"
           >
             {saveStatus === 'loading' ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 <span>{t('common.saving')}</span>
               </>
             ) : (
               <>
-                <CheckCircleIcon className="w-5 h-5" />
+                <CheckCircleIcon className="w-4 h-4" />
                 <span>{t('common.save_settings')}</span>
               </>
             )}
@@ -229,23 +230,23 @@ const TantalumSettingsForm: React.FC = () => {
 // Loading Skeleton Component
 const LoadingSkeleton: React.FC = () => {
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Array.from({ length: 3 }).map((_, i) => (
           <motion.div 
             key={i}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="space-y-3"
+            className="space-y-2"
           >
-            <div className="h-5 w-32 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
-            <div className="h-16 w-full bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse"></div>
+            <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+            <div className="h-10 w-full bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
           </motion.div>
         ))}
       </div>
-      <div className="flex justify-end pt-6 border-t border-gray-200 dark:border-gray-700">
-        <div className="h-12 w-40 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse"></div>
+      <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="h-9 w-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
       </div>
     </div>
   );
