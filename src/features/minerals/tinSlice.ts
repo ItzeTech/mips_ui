@@ -1,10 +1,9 @@
 // features/minerals/tinSlice.tsx
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../config/axiosInstance';
-import { TinSettingsData } from '../settings/tinSettingSlice';
 
 export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled';
-export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'advance given' | 'exported';
+export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'exported';
 
 export interface StockFormData {
   net_weight: number | null;

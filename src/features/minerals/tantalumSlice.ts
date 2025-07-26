@@ -4,7 +4,7 @@ import axiosInstance from '../../config/axiosInstance';
 import { TantalumSettingsData } from '../settings/tantalumSettingSlice';
 
 export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled';
-export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'advance given' | 'exported';
+export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'exported';
 
 export interface StockFormData {
   net_weight: number | null;

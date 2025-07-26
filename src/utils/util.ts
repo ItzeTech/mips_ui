@@ -9,7 +9,6 @@ export const FINANCE_STATUS_OPTIONS = {
   paid: 'financeStatus.paid',
   unpaid: 'financeStatus.unpaid',
   invoiced: 'financeStatus.invoiced',
-  'advance-given': 'financeStatus.advance-given',
   exported: 'financeStatus.exported'
 };
 
