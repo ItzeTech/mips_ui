@@ -7,7 +7,7 @@ import {
   XMarkIcon, 
   PencilIcon, 
   ScaleIcon, 
-  BeakerIcon, 
+  CircleStackIcon, 
   CurrencyDollarIcon,
   ExclamationTriangleIcon,
   LockClosedIcon,
@@ -756,7 +756,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                   <TabButton
                     isActive={activeTab === 'lab'}
                     onClick={() => setActiveTab('lab')}
-                    icon={<BeakerIcon className="w-5 h-5 mr-2" />}
+                    icon={<CircleStackIcon className="w-5 h-5 mr-2" />}
                     label={t('tantalum.lab_analysis', 'Lab Analysis')}
                     hasChanges={hasLabChanges}
                   />

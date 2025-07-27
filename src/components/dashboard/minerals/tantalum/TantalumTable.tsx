@@ -8,7 +8,7 @@ import {
   CalendarDaysIcon,
   ScaleIcon,
   UserIcon,
-  BeakerIcon,
+  CircleStackIcon,
   CheckIcon
 } from '@heroicons/react/24/outline';
 import { StockStatus, FinanceStatus } from '../../../../features/minerals/tantalumSlice';
@@ -153,7 +153,7 @@ const TantalumTable: React.FC<TantalumTableProps> = ({ tantalums, onView, onEdit
                         whileHover={{ scale: 1.1 }}
                       >
                         <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center shadow-md">
-                          <BeakerIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                          <CircleStackIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                         </div>
                       </motion.div>
                       <div className="ml-3">

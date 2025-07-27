@@ -54,62 +54,6 @@ const TantalumPage: React.FC = () => {
     };
   }, [searchTimeout]);
 
-  // Fetch data with search parameters if needed
-  // useEffect(() => {
-  //   if (serverSideSearch) {
-  //     dispatch(setPagination({ page: 1 }));
-  //     dispatch(fetchTantalums({ 
-  //       page: 1, 
-  //       limit: pagination.limit
-  //     }));
-  //   } else {
-  //     dispatch(fetchTantalums({ page: pagination.page, limit: pagination.limit }));
-  //   }
-  // }, [
-  //   dispatch, 
-  //   pagination.page, 
-  //   pagination.limit, 
-  //   serverSideSearch, 
-  //   searchTerm, 
-  //   stockStatusFilter
-  // ]);
-
-  // // Handle search with debounce
-  // const handleSearch = (term: string) => {
-  //   setSearchTerm(term);
-    
-  //   if (serverSideSearch) {
-  //     if (searchTimeout) clearTimeout(searchTimeout);
-      
-  //     const timeout = setTimeout(() => {
-  //       dispatch(setPagination({ page: 1 }));
-  //       dispatch(fetchTantalums({ 
-  //         page: 1, 
-  //         limit: pagination.limit
-  //       }));
-  //     }, 500);
-      
-  //     setSearchTimeout(timeout);
-  //   }
-  // };
-
-  // // Handle status filter change
-  // const handleStatusFilter = (status: 'all' | StockStatus) => {
-  //   setStockStatusFilter(status);
-    
-  //   if (serverSideSearch) {
-  //     dispatch(setPagination({ page: 1 }));
-  //     dispatch(fetchTantalums({ 
-  //       page: 1, 
-  //       limit: pagination.limit
-  //     }));
-  //   }
-  // };
-
-  // In TantalumPage.tsx - modify the useEffect and handleSearch functions:
-
-// In TantalumPage.tsx
-
 // Update the useEffect
 useEffect(() => {
   // Clear any pending search timeout
@@ -286,14 +230,6 @@ const handlePageSizeChange = (newLimit: number) => {
     dispatch(setSelectedTantalum(tantalum));
     setShowEditModal(true);
   };
-
-  // const handlePageChange = (newPage: number) => {
-  //   dispatch(setPagination({ page: newPage }));
-  // };
-
-  // const handlePageSizeChange = (newLimit: number) => {
-  //   dispatch(setPagination({ page: 1, limit: newLimit }));
-  // };
 
   if (status === 'loading' && tantalums.length === 0) {
     return <LoadingSkeleton />;

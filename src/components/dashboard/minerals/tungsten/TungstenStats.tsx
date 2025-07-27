@@ -1,109 +1,100 @@
-// components/dashboard/minerals/tantalum/TantalumStats.tsx
+// components/dashboard/minerals/tungsten/TungstenStats.tsx
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { 
-  ScaleIcon,
-  CircleStackIcon,
-  ChartBarIcon,
-  CurrencyDollarIcon,
-  CheckBadgeIcon
-} from '@heroicons/react/24/outline';
+import { ScaleIcon, RectangleGroupIcon, ChartBarIcon, CurrencyDollarIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
 
-interface TantalumStatsProps {
-  tantalums: any[];
-  selectedTantalums: any[];
+interface TungstenStatsProps {
+  tungstens: any[];
+  selectedTungstens: any[];
 }
 
-const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantalums }) => {
+const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungstens }) => {
   const { t } = useTranslation();
   const { getCountByType } = useSelectedMinerals();
 
   // Format number helper
   const formatNumber = (num: number | null, decimals = 2) => {
     if (num === null) return '—';
-    return num.toLocaleString('en-US', { 
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals
-    });
+    return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   };
 
   // Calculate statistics
   const stats = useMemo(() => {
-    // For all tantalums
-    const totalItems = tantalums.length;
-    const totalNetWeight = tantalums.reduce((sum, item) => sum + item.net_weight, 0);
-    
-    // Calculate weighted average Ta2O5 percentage
-    let weightedSumTa2O5 = 0;
-    let totalWeightWithTa2O5 = 0;
-    
-    tantalums.forEach(item => {
-      if (item.internal_ta2o5 !== null) {
-        weightedSumTa2O5 += item.internal_ta2o5 * item.net_weight;
-        totalWeightWithTa2O5 += item.net_weight;
+    // For all tungstens
+    const totalItems = tungstens.length;
+    const totalNetWeight = tungstens.reduce((sum, item) => sum + item.net_weight, 0);
+
+    // Calculate weighted average WO3 percentage
+    let weightedSumWO3 = 0;
+    let totalWeightWithWO3 = 0;
+
+    tungstens.forEach(item => {
+      if (item.wo3_percentage !== null) {
+        weightedSumWO3 += item.wo3_percentage * item.net_weight;
+        totalWeightWithWO3 += item.net_weight;
       }
     });
-    
-    const avgTa2O5Percentage = totalWeightWithTa2O5 > 0 
-      ? weightedSumTa2O5 / totalWeightWithTa2O5 
+
+    const avgWO3Percentage = totalWeightWithWO3 > 0 
+      ? weightedSumWO3 / totalWeightWithWO3 
       : 0;
-    
-    // Calculate average Alex Stewart Ta2O5
+
+    // Calculate average Alex Stewart WO3
     let alexStewartSum = 0;
     let alexStewartCount = 0;
-    
-    tantalums.forEach(item => {
-      if (item.alex_stewart_ta2o5 !== null) {
-        alexStewartSum += item.alex_stewart_ta2o5;
+
+    tungstens.forEach(item => {
+      if (item.alex_stewart_wo3_percentage !== null) {
+        alexStewartSum += item.alex_stewart_wo3_percentage;
         alexStewartCount++;
       }
     });
-    
-    const avgAlexStewartTa2O5 = alexStewartCount > 0 
+
+    const avgAlexStewartWO3 = alexStewartCount > 0 
       ? alexStewartSum / alexStewartCount 
       : 0;
-    
+
     // Calculate total net amount
-    const totalNetAmount = tantalums.reduce((sum, item) => 
+    const totalNetAmount = tungstens.reduce((sum, item) => 
       sum + (item.net_amount || 0), 0);
-    
-    // For selected tantalums
-    const selectedTotalNetWeight = selectedTantalums.reduce(
+
+    // For selected tungstens
+    const selectedTotalNetWeight = selectedTungstens.reduce(
       (sum, item) => sum + item.net_weight, 0);
-    
-    let selectedWeightedSumTa2O5 = 0;
-    let selectedTotalWeightWithTa2O5 = 0;
-    
-    selectedTantalums.forEach(item => {
-      if (item.internal_ta2o5 !== null) {
-        selectedWeightedSumTa2O5 += item.internal_ta2o5 * item.net_weight;
-        selectedTotalWeightWithTa2O5 += item.net_weight;
+
+    let selectedWeightedSumWO3 = 0;
+    let selectedTotalWeightWithWO3 = 0;
+
+    selectedTungstens.forEach(item => {
+      if (item.wo3_percentage !== null) {
+        selectedWeightedSumWO3 += item.wo3_percentage * item.net_weight;
+        selectedTotalWeightWithWO3 += item.net_weight;
       }
     });
-    
-    const selectedAvgTa2O5Percentage = selectedTotalWeightWithTa2O5 > 0 
-      ? selectedWeightedSumTa2O5 / selectedTotalWeightWithTa2O5 
+
+    const selectedAvgWO3Percentage = selectedTotalWeightWithWO3 > 0 
+      ? selectedWeightedSumWO3 / selectedTotalWeightWithWO3 
       : 0;
-    
-    const selectedTotalNetAmount = selectedTantalums.reduce(
+
+    const selectedTotalNetAmount = selectedTungstens.reduce(
       (sum, item) => sum + (item.net_amount || 0), 0);
-    
+
     return {
       totalItems,
       totalNetWeight,
-      avgTa2O5Percentage,
-      avgAlexStewartTa2O5,
+      avgWO3Percentage,
+      avgAlexStewartWO3,
       totalNetAmount,
       selectedTotalNetWeight,
-      selectedAvgTa2O5Percentage,
+      selectedAvgWO3Percentage,
       selectedTotalNetAmount,
-      selectedCount: selectedTantalums.length
+      selectedCount: selectedTungstens.length
     };
-  }, [tantalums, selectedTantalums]);
+  }, [tungstens, selectedTungstens]);
 
-  const hasSelected = getCountByType('tantalum') > 0;
+  const hasSelected = getCountByType('tungsten') > 0;
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 mb-4 md:mb-5">
@@ -113,23 +104,23 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
         className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-md border border-gray-200 dark:border-gray-700"
       >
         <div className="flex items-center space-x-2 sm:space-x-3">
-          <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
+          <div className="p-2 bg-gradient-to-r from-emerald-500 to-green-600 rounded-lg">
             <ScaleIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tantalum.total_net_weight', 'Total Net Weight')}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tungsten.total_net_weight', 'Total Net Weight')}</p>
             <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
               {formatNumber(stats.totalNetWeight)} kg
             </p>
             {hasSelected && (
-              <p className="text-xs text-indigo-600 dark:text-indigo-400">
+              <p className="text-xs text-emerald-600 dark:text-emerald-400">
                 Sel: {formatNumber(stats.selectedTotalNetWeight)} kg
               </p>
             )}
           </div>
         </div>
       </motion.div>
-      
+
       {/* Total Items */}
       <motion.div
         whileHover={{ scale: 1.02 }}
@@ -137,15 +128,15 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
       >
         <div className="flex items-center space-x-2 sm:space-x-3">
           <div className="p-2 bg-gradient-to-r from-purple-500 to-violet-600 rounded-lg">
-            <CircleStackIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            <RectangleGroupIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tantalum.total_items', 'Total Items')}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tungsten.total_items', 'Total Items')}</p>
             <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
               {stats.totalItems}
             </p>
             {hasSelected && (
-              <p className="text-xs text-indigo-600 dark:text-indigo-400">
+              <p className="text-xs text-emerald-600 dark:text-emerald-400">
                 Selected: {stats.selectedCount}
               </p>
             )}
@@ -153,23 +144,23 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
         </div>
       </motion.div>
       
-      {/* Average Ta2O5 Percentage */}
+      {/* Average WO3 Percentage */}
       <motion.div
         whileHover={{ scale: 1.02 }}
         className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-md border border-gray-200 dark:border-gray-700"
       >
         <div className="flex items-center space-x-2 sm:space-x-3">
-          <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg">
+          <div className="p-2 bg-gradient-to-r from-emerald-500 to-green-600 rounded-lg">
             <ChartBarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tantalum.avg_ta2o5', 'Avg Ta₂O₅ %')}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tungsten.avg_wo3_percentage', 'Avg WO3 %')}</p>
             <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              {formatNumber(stats.avgTa2O5Percentage)}%
+              {formatNumber(stats.avgWO3Percentage)}%
             </p>
             {hasSelected && (
-              <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                Sel: {formatNumber(stats.selectedAvgTa2O5Percentage)}%
+              <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                Sel: {formatNumber(stats.selectedAvgWO3Percentage)}%
               </p>
             )}
           </div>
@@ -186,12 +177,12 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
             <CurrencyDollarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tantalum.total_net_amount', 'Total Net Amount')}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tungsten.total_net_amount', 'Total Net Amount')}</p>
             <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
               ${formatNumber(stats.totalNetAmount)}
             </p>
             {hasSelected && (
-              <p className="text-xs text-indigo-600 dark:text-indigo-400">
+              <p className="text-xs text-emerald-600 dark:text-emerald-400">
                 Sel: ${formatNumber(stats.selectedTotalNetAmount)}
               </p>
             )}
@@ -199,7 +190,7 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
         </div>
       </motion.div>
       
-      {/* Average Alex Stewart Ta2O5 */}
+      {/* Average Alex Stewart WO3 */}
       <motion.div
         whileHover={{ scale: 1.02 }}
         className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-md border border-gray-200 dark:border-gray-700"
@@ -209,9 +200,9 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
             <CheckBadgeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tantalum.avg_alex_stewart', 'Avg A.S. Ta₂O₅')}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tungsten.avg_alex_stewart', 'Avg A.S. WO3 %')}</p>
             <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              {formatNumber(stats.avgAlexStewartTa2O5)}%
+              {formatNumber(stats.avgAlexStewartWO3)}%
             </p>
           </div>
         </div>
@@ -220,4 +211,4 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
   );
 };
 
-export default TantalumStats;
+export default TungstenStats;

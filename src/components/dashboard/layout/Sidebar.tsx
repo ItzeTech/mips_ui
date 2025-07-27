@@ -81,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
       path: '/minerals/tantalum', 
       allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
       category: 'Minerals',
-      color: 'from-cyan-500 to-blue-600'
+      color: 'from-blue-600 to-indigo-600'
     },
     { 
       icon: CubeIcon, 
@@ -89,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
       path: '/minerals/tin', 
       allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
       category: 'Minerals',
-      color: 'from-emerald-500 to-green-600'
+      color: 'from-amber-500 via-orange-500 to-red-500'
     },
     { 
       icon: RectangleGroupIcon, 
@@ -97,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
       path: '/minerals/tungsten', 
       allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
       category: 'Minerals',
-      color: 'from-yellow-500 to-orange-600'
+      color: 'from-emerald-500 via-emerald-500 to-green-600'
     },
     { 
       icon: Cog6ToothIcon, 

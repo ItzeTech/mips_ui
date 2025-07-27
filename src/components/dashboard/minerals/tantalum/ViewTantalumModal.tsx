@@ -9,7 +9,7 @@ import {
   CalendarDaysIcon, 
   UserIcon, 
   ScaleIcon, 
-  BeakerIcon, 
+  CircleStackIcon, 
   CurrencyDollarIcon,
   CheckBadgeIcon,
   ArrowPathIcon,
@@ -269,7 +269,7 @@ const ViewTantalumModal: React.FC<ViewTantalumModalProps> = ({ isOpen, onClose }
                         : 'text-gray-600 dark:text-gray-400'
                     }`}
                   >
-                    <BeakerIcon className="w-5 h-5 mr-2" />
+                    <CircleStackIcon className="w-5 h-5 mr-2" />
                     {t('tantalum.lab_analysis', 'Lab Analysis')}
                   </motion.button>
                 </RoleGuard>
@@ -397,7 +397,7 @@ const ViewTantalumModal: React.FC<ViewTantalumModalProps> = ({ isOpen, onClose }
                       {/* Internal Analysis */}
                       <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <BeakerIcon className="w-5 h-5 mr-2 text-indigo-500" />
+                          <CircleStackIcon className="w-5 h-5 mr-2 text-indigo-500" />
                           {t('tantalum.internal_analysis', 'Internal Analysis')}
                         </h3>
                         

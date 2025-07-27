@@ -1,4 +1,4 @@
-import { BeakerIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+import { CircleStackIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
 import React from 'react'
 import { contentVariants } from '../../../../../utils/util'
@@ -27,7 +27,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
         {/* Internal Analysis */}
         <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <BeakerIcon className="w-5 h-5 mr-2 text-indigo-500" />
+            <CircleStackIcon className="w-5 h-5 mr-2 text-indigo-500" />
             {t('tantalum.internal_analysis', 'Internal Analysis')}
         </h3>
         

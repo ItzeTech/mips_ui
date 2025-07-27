@@ -2,7 +2,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { BeakerIcon } from '@heroicons/react/24/outline';
+import { CircleStackIcon } from '@heroicons/react/24/outline';
 
 interface TantalumEmptyStateProps {
   hasSearch: boolean;
@@ -25,7 +25,7 @@ const TantalumEmptyState: React.FC<TantalumEmptyStateProps> = ({ hasSearch, onCr
             }
           }}
         >
-          <BeakerIcon className="mx-auto h-16 w-16 text-gray-300 dark:text-gray-600 mb-3" />
+          <CircleStackIcon className="mx-auto h-16 w-16 text-gray-300 dark:text-gray-600 mb-3" />
         </motion.div>
         <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
           {hasSearch 

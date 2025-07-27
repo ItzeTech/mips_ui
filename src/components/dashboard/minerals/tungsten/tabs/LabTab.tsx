@@ -1,10 +1,10 @@
-// components/dashboard/minerals/tin/tabs/LabTab.tsx
-import { CubeIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+// components/dashboard/minerals/tungsten/tabs/LabTab.tsx
+import { RectangleGroupIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
 import React from 'react'
 import { contentVariants } from '../../../../../utils/util'
 import RenderInput from '../../common/RenderInput'
-import { LabFormData } from '../../../../../features/minerals/tinSlice'
+import { LabFormData } from '../../../../../features/minerals/tungstenSlice'
 import { useTranslation } from 'react-i18next'
 
 
@@ -28,33 +28,33 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
         {/* Internal Analysis */}
         <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <CubeIcon className="w-5 h-5 mr-2 text-amber-500" />
-            {t('tin.internal_analysis', 'Internal Analysis')}
+            <RectangleGroupIcon className="w-5 h-5 mr-2 text-emerald-500" />
+            {t('tungsten.internal_analysis', 'Internal Analysis')}
         </h3>
         
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <RenderInput
-                label={t('tin.internal_sn_percentage', 'Internal Sn %')}
-                value={labForm.internal_sn_percentage}
-                onChange={(value) => setLabForm(prev => ({ ...prev, internal_sn_percentage: value }))}
+                label={t('tungsten.wo3_percentage', 'WO3 %')}
+                value={labForm.wo3_percentage}
+                onChange={(value) => setLabForm(prev => ({ ...prev, wo3_percentage: value }))}
                 type="number"
                 suffix="%"
-                field="internal_sn_percentage"
+                field="wo3_percentage"
                 errors={errors}
             />
 
             <RenderInput
-                label={t('tin.bal_percentage', 'Bal %')}
-                value={labForm.bal_percentage}
-                onChange={(value) => setLabForm(prev => ({ ...prev, bal_percentage: value }))}
+                label={t('tungsten.w_percentage', 'W %')}
+                value={labForm.w_percentage}
+                onChange={(value) => setLabForm(prev => ({ ...prev, w_percentage: value }))}
                 type="number"
                 suffix="%"
-                field="bal_percentage"
+                field="w_percentage"
                 errors={errors}
             />
 
             <RenderInput
-                label={t('tin.fe_percentage', 'Fe %')}
+                label={t('tungsten.fe_percentage', 'Fe %')}
                 value={labForm.fe_percentage}
                 onChange={(value) => setLabForm(prev => ({ ...prev, fe_percentage: value }))}
                 type="number"
@@ -64,12 +64,12 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
             />
 
             <RenderInput
-                label={t('tin.w_percentage', 'W %')}
-                value={labForm.w_percentage}
-                onChange={(value) => setLabForm(prev => ({ ...prev, w_percentage: value }))}
+                label={t('tungsten.bal_percentage', 'Bal %')}
+                value={labForm.bal_percentage}
+                onChange={(value) => setLabForm(prev => ({ ...prev, bal_percentage: value }))}
                 type="number"
                 suffix="%"
-                field="w_percentage"
+                field="bal_percentage"
                 errors={errors}
             />
         </div>
@@ -78,20 +78,20 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
         {/* Alex Stewart Analysis */}
         <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <ArrowPathIcon className="w-5 h-5 mr-2 text-amber-500" />
-            {t('tin.alex_stewart_analysis', 'Alex Stewart Analysis')}
+            <ArrowPathIcon className="w-5 h-5 mr-2 text-emerald-500" />
+            {t('tungsten.alex_stewart_analysis', 'Alex Stewart Analysis')}
         </h3>
         
         <div className="grid grid-cols-1 gap-4">
             <RenderInput
-                label={t('tin.alex_stewart_sn_percentage', 'Alex Stewart Sn %')}
-                value={labForm.alex_stewart_sn_percentage}
+                label={t('tungsten.alex_stewart_wo3_percentage', 'Alex Stewart WO3 %')}
+                value={labForm.alex_stewart_wo3_percentage}
                 onChange={(value) =>
-                setLabForm((prev) => ({ ...prev, alex_stewart_sn_percentage: value }))
+                setLabForm((prev) => ({ ...prev, alex_stewart_wo3_percentage: value }))
                 }
                 type="number"
                 suffix="%"
-                field="alex_stewart_sn_percentage"
+                field="alex_stewart_wo3_percentage"
                 errors={errors}
             />
         </div>

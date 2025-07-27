@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   PlusIcon,
-  BeakerIcon,
+  CubeIcon,
   SparklesIcon,
   CalculatorIcon,
   ChartBarIcon,
@@ -35,7 +35,7 @@ const TinHeader: React.FC<TinHeaderProps> = ({
         <div className="mb-3 sm:mb-0">
           <div className="flex items-center space-x-2 sm:space-x-3">
             <div className="p-2 sm:p-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl shadow-lg">
-              <BeakerIcon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+              <CubeIcon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">

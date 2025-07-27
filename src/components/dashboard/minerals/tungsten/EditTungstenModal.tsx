@@ -7,7 +7,7 @@ import {
   XMarkIcon, 
   PencilIcon, 
   ScaleIcon, 
-  BeakerIcon, 
+  RectangleGroupIcon, 
   CurrencyDollarIcon,
   ExclamationTriangleIcon,
   LockClosedIcon,
@@ -711,7 +711,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                   <TabButton
                     isActive={activeTab === 'lab'}
                     onClick={() => setActiveTab('lab')}
-                    icon={<BeakerIcon className="w-5 h-5 mr-2" />}
+                    icon={<RectangleGroupIcon className="w-5 h-5 mr-2" />}
                     label={t('tungsten.lab_analysis', 'Lab Analysis')}
                     hasChanges={hasLabChanges}
                   />

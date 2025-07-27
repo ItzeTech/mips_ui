@@ -1,28 +1,20 @@
-// components/dashboard/minerals/tin/TinTable.tsx
+// components/dashboard/minerals/tungsten/TungstenTable.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  EyeIcon, 
-  PencilIcon,
-  CalendarDaysIcon,
-  ScaleIcon,
-  UserIcon,
-  CubeIcon,
-  CheckIcon
-} from '@heroicons/react/24/outline';
-import { StockStatus, FinanceStatus } from '../../../../features/minerals/tinSlice';
+import { EyeIcon, PencilIcon, CalendarDaysIcon, ScaleIcon, UserIcon, RectangleGroupIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { StockStatus, FinanceStatus } from '../../../../features/minerals/tungstenSlice';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
 
-interface TinTableProps {
-  tins: any[];
-  onView: (tin: any) => void;
-  onEdit: (tin: any) => void;
+interface TungstenTableProps {
+  tungstens: any[];
+  onView: (tungsten: any) => void;
+  onEdit: (tungsten: any) => void;
 }
 
-const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
+const TungstenTable: React.FC<TungstenTableProps> = ({ tungstens, onView, onEdit }) => {
   const { t } = useTranslation();
-  const { isSelected, selectTin, deselectMineral } = useSelectedMinerals();
+  const { isSelected, selectTungsten, deselectMineral } = useSelectedMinerals();
 
   // Format date helper
   const formatDate = (dateString: string | null) => {
@@ -46,7 +38,7 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
     }
   };
-  
+
   const getFinanceStatusColor = (status: FinanceStatus) => {
     switch (status) {
       case 'paid':
@@ -62,11 +54,11 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
     }
   };
 
-  const handleToggleSelect = (tin: any) => {
-    if (isSelected(tin.id, 'tin')) {
-      deselectMineral(tin.id, 'tin');
+  const handleToggleSelect = (tungsten: any) => {
+    if (isSelected(tungsten.id, 'tungsten')) {
+      deselectMineral(tungsten.id, 'tungsten');
     } else {
-      selectTin(tin);
+      selectTungsten(tungsten);
     }
   };
 
@@ -80,71 +72,57 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                 <span className="sr-only">Selection</span>
               </th>
               <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                {t('tin.lot_info', 'Lot Information')}
+                {t('tungsten.lot_info', 'Lot Information')}
               </th>
               <th className="hidden md:table-cell px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                {t('tin.supplier', 'Supplier')}
+                {t('tungsten.supplier', 'Supplier')}
               </th>
               <th className="hidden sm:table-cell px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                {t('tin.dates', 'Dates')}
+                {t('tungsten.dates', 'Dates')}
               </th>
               <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                {t('tin.status', 'Status')}
+                {t('tungsten.status', 'Status')}
               </th>
               <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                {t('tin.actions', 'Actions')}
+                {t('tungsten.actions', 'Actions')}
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             <AnimatePresence mode="popLayout">
-              {tins.map((tin: any, index: number) => (
+              {tungstens.map((tungsten: any, index: number) => (
                 <motion.tr
-                  key={tin.id}
+                  key={tungsten.id}
                   layout
                   initial={{ opacity: 0, y: 10 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: 0,
-                    transition: { 
-                      delay: index * 0.05,
-                      type: "spring",
-                      stiffness: 100
-                    }
-                  }}
-                  exit={{ 
-                    opacity: 0, 
-                    y: -10,
-                    transition: { duration: 0.2 }
-                  }}
+                  animate={{ opacity: 1, y: 0, transition: { delay: index * 0.05, type: "spring", stiffness: 100 } }}
+                  exit={{ opacity: 0, y: -10, transition: { duration: 0.2 } }}
                   whileHover={{ 
-                    backgroundColor: isSelected(tin.id, 'tin') 
-                      ? "rgba(245, 158, 11, 0.1)" 
-                      : "rgba(245, 158, 11, 0.05)",
-                    transition: { duration: 0.2 }
+                    backgroundColor: isSelected(tungsten.id, 'tungsten') ? "rgba(5, 150, 105, 0.1)" : "rgba(5, 150, 105, 0.05)", 
+                    transition: { duration: 0.2 } 
                   }}
                   className={`group hover:shadow-md transition-all duration-200 ${
-                    isSelected(tin.id, 'tin') ? 'bg-amber-50 dark:bg-amber-900/20' : ''
+                    isSelected(tungsten.id, 'tungsten') ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''
                   }`}
                 >
                   {/* Selection checkbox */}
                   <td className="px-2 py-3 whitespace-nowrap">
                     <div className="flex items-center justify-center">
                       <div 
-                        onClick={() => handleToggleSelect(tin)}
+                        onClick={() => handleToggleSelect(tungsten)} 
                         className={`w-4 h-4 rounded-md border cursor-pointer flex items-center justify-center transition-colors duration-200 ${
-                          isSelected(tin.id, 'tin')
-                            ? 'bg-amber-600 border-amber-600 dark:bg-amber-500 dark:border-amber-500'
-                            : 'border-gray-300 dark:border-gray-600 hover:border-amber-400 dark:hover:border-amber-400'
+                          isSelected(tungsten.id, 'tungsten') 
+                            ? 'bg-emerald-600 border-emerald-600 dark:bg-emerald-500 dark:border-emerald-500' 
+                            : 'border-gray-300 dark:border-gray-600 hover:border-emerald-400 dark:hover:border-emerald-400'
                         }`}
                       >
-                        {isSelected(tin.id, 'tin') && (
+                        {isSelected(tungsten.id, 'tungsten') && (
                           <CheckIcon className="w-3 h-3 text-white" />
                         )}
                       </div>
                     </div>
                   </td>
-                  
+
                   {/* Lot Information */}
                   <td className="px-3 py-3">
                     <div className="flex items-center">
@@ -152,31 +130,31 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                         className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10"
                         whileHover={{ scale: 1.1 }}
                       >
-                        <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-md">
-                          <CubeIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                        <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-gradient-to-r from-emerald-400 to-green-500 flex items-center justify-center shadow-md">
+                          <RectangleGroupIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                         </div>
                       </motion.div>
                       <div className="ml-3">
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
-                          {tin.lot_number}
+                          {tungsten.lot_number}
                         </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center flex-wrap gap-1 mt-0.5">
                           <div className="flex items-center">
                             <ScaleIcon className="w-3 h-3 mr-0.5" />
-                            {tin.net_weight} kg
+                            {tungsten.net_weight} kg
                           </div>
-                          {tin.internal_sn_percentage !== null && (
-                            <span className="px-1.5 py-0.5 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-md text-xs">
-                              Sn: {tin.internal_sn_percentage}%
+                          {tungsten.wo3_percentage !== null && (
+                            <span className="px-1.5 py-0.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-md text-xs">
+                              WO3: {tungsten.wo3_percentage}%
                             </span>
                           )}
                           
                           {/* Mobile-only supplier info */}
                           <div className="md:hidden mt-0.5 w-full">
-                            {tin.supplier_name && (
+                            {tungsten.supplier_name && (
                               <div className="flex items-center text-xs text-gray-500">
-                                <UserIcon className="w-2.5 h-2.5 mr-0.5 text-amber-500" />
-                                {tin.supplier_name}
+                                <UserIcon className="w-2.5 h-2.5 mr-0.5 text-emerald-500" />
+                                {tungsten.supplier_name}
                               </div>
                             )}
                           </div>
@@ -184,8 +162,8 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                           {/* Mobile-only date info */}
                           <div className="sm:hidden mt-0.5 w-full">
                             <div className="flex items-center text-xs text-gray-500">
-                              <CalendarDaysIcon className="w-2.5 h-2.5 mr-0.5 text-amber-500" />
-                              {formatDate(tin.date_of_sampling)}
+                              <CalendarDaysIcon className="w-2.5 h-2.5 mr-0.5 text-emerald-500" />
+                              {formatDate(tungsten.date_of_sampling)}
                             </div>
                           </div>
                         </div>
@@ -195,21 +173,21 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                   
                   {/* Supplier Info - Hidden on mobile */}
                   <td className="hidden md:table-cell px-3 py-3">
-                    {tin.supplier_name ? (
+                    {tungsten.supplier_name ? (
                       <div>
                         <div className="text-xs sm:text-sm text-gray-900 dark:text-white font-medium flex items-center">
-                          <UserIcon className="w-3 h-3 mr-1 text-amber-500" />
-                          {tin.supplier_name}
+                          <UserIcon className="w-3 h-3 mr-1 text-emerald-500" />
+                          {tungsten.supplier_name}
                         </div>
-                        {tin.supplier_id && (
+                        {tungsten.supplier_id && (
                           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            ID: {tin.supplier_id.substring(0, 6)}...
+                            ID: {tungsten.supplier_id.substring(0, 6)}...
                           </div>
                         )}
                       </div>
                     ) : (
                       <span className="text-xs text-gray-400 dark:text-gray-500 italic">
-                        {t('tin.no_supplier_info', 'No supplier info')}
+                        {t('tungsten.no_supplier_info', 'No supplier info')}
                       </span>
                     )}
                   </td>
@@ -218,22 +196,22 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                   <td className="hidden sm:table-cell px-3 py-3">
                     <div className="space-y-1 text-xs">
                       <div className="flex items-center text-gray-900 dark:text-white">
-                        <CalendarDaysIcon className="w-3 h-3 mr-1 text-amber-500" />
+                        <CalendarDaysIcon className="w-3 h-3 mr-1 text-emerald-500" />
                         <span className="font-medium">Samp:</span>
-                        <span className="ml-1">{formatDate(tin.date_of_sampling)}</span>
+                        <span className="ml-1">{formatDate(tungsten.date_of_sampling)}</span>
                       </div>
                       
-                      {tin.date_of_delivery && (
+                      {tungsten.date_of_delivery && (
                         <div className="flex items-center text-gray-500 dark:text-gray-400">
                           <span className="w-3 h-3 mr-1"></span>
-                          <span>Del: {formatDate(tin.date_of_delivery)}</span>
+                          <span>Del: {formatDate(tungsten.date_of_delivery)}</span>
                         </div>
                       )}
                       
-                      {tin.has_alex_stewart && (
+                      {tungsten.has_alex_stewart && (
                         <div className="flex items-center text-gray-500 dark:text-gray-400">
                           <span className="w-3 h-3 mr-1"></span>
-                          <span>A.S.: {formatDate(tin.date_of_alex_stewart)}</span>
+                          <span>A.S.: {formatDate(tungsten.date_of_alex_stewart)}</span>
                         </div>
                       )}
                     </div>
@@ -242,11 +220,11 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                   {/* Status - Horizontal layout */}
                   <td className="px-3 py-3">
                     <div className="flex flex-wrap gap-1">
-                      <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md ${getStockStatusColor(tin.stock_status)}`}>
-                        {t(`tin.status_${tin.stock_status}`, tin.stock_status)}
+                      <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md ${getStockStatusColor(tungsten.stock_status)}`}>
+                        {t(`tungsten.status_${tungsten.stock_status}`, tungsten.stock_status)}
                       </span>
-                      <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md ${getFinanceStatusColor(tin.finance_status)}`}>
-                        {t(`tin.finance_${tin.finance_status}`, tin.finance_status)}
+                      <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md ${getFinanceStatusColor(tungsten.finance_status)}`}>
+                        {t(`tungsten.finance_${tungsten.finance_status}`, tungsten.finance_status)}
                       </span>
                     </div>
                   </td>
@@ -257,9 +235,9 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        onClick={() => onView(tin)}
-                        className="p-1.5 text-amber-600 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300 bg-amber-100 dark:bg-amber-900/30 rounded-lg hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-all duration-200"
-                        title={t('tin.view', 'View Details')}
+                        onClick={() => onView(tungsten)}
+                        className="p-1.5 text-emerald-600 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg hover:bg-emerald-200 dark:hover:bg-emerald-900/50 transition-all duration-200"
+                        title={t('tungsten.view', 'View Details')}
                       >
                         <EyeIcon className="w-3.5 h-3.5" />
                       </motion.button>
@@ -267,9 +245,9 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        onClick={() => onEdit(tin)}
+                        onClick={() => onEdit(tungsten)}
                         className="p-1.5 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 bg-green-100 dark:bg-green-900/30 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-all duration-200"
-                        title={t('tin.edit', 'Edit')}
+                        title={t('tungsten.edit', 'Edit')}
                       >
                         <PencilIcon className="w-3.5 h-3.5" />
                       </motion.button>
@@ -285,4 +263,4 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
   );
 };
 
-export default TinTable;
+export default TungstenTable;

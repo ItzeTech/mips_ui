@@ -1,4 +1,4 @@
-// components/dashboard/minerals/tin/ViewTinModal.tsx
+// components/dashboard/minerals/tungsten/ViewTungstenModal.tsx
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import {
   CalendarDaysIcon, 
   UserIcon, 
   ScaleIcon, 
-  CubeIcon, 
+  RectangleGroupIcon, 
   CurrencyDollarIcon,
   CheckBadgeIcon,
   ArrowPathIcon,
@@ -20,14 +20,14 @@ import { RootState } from '../../../../store/store';
 import { RoleGuard } from '../../../common/RoleGuard';
 import { Role } from '../../../../types/roles';
 
-interface ViewTinModalProps {
+interface ViewTungstenModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
+const ViewTungstenModal: React.FC<ViewTungstenModalProps> = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
-  const { selectedTin } = useSelector((state: RootState) => state.tins);
+  const { selectedTungsten } = useSelector((state: RootState) => state.tungstens);
   
   const [activeTab, setActiveTab] = useState<'details' | 'lab' | 'financial'>('details');
 
@@ -118,7 +118,7 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
       opacity: 1,
       y: 0,
       scale: 1.05,
-      backgroundColor: "rgba(245, 158, 11, 0.1)",
+      backgroundColor: "rgba(5, 150, 105, 0.1)",
       transition: {
         type: "spring",
         duration: 0.5,
@@ -157,7 +157,7 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!selectedTin) return null;
+  if (!selectedTungsten) return null;
 
   const renderDetailRow = (
     label: string, 
@@ -205,19 +205,19 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                 variants={itemVariants}
               >
                 <div className="flex items-center">
-                  <div className="p-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl shadow-lg mr-4">
+                  <div className="p-2 bg-gradient-to-r from-emerald-500 to-green-600 rounded-xl shadow-lg mr-4">
                     <EyeIcon className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                      {t('tin.view_details', 'Tin Details')}
+                      {t('tungsten.view_details', 'Tungsten Details')}
                     </h2>
                     <div className="flex items-center mt-1">
                       <span className="text-sm text-gray-500 dark:text-gray-400 mr-3">
-                        {selectedTin.lot_number}
+                        {selectedTungsten.lot_number}
                       </span>
-                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStockStatusColor(selectedTin.stock_status)}`}>
-                        {t(`tin.status_${selectedTin.stock_status}`, selectedTin.stock_status)}
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStockStatusColor(selectedTungsten.stock_status)}`}>
+                        {t(`tungsten.status_${selectedTungsten.stock_status}`, selectedTungsten.stock_status)}
                       </span>
                     </div>
                   </div>
@@ -246,12 +246,12 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                   onClick={() => setActiveTab('details')}
                   className={`px-4 py-2.5 rounded-xl flex items-center ${
                     activeTab === 'details' 
-                    ? 'text-amber-700 dark:text-amber-300 font-medium shadow-md' 
+                    ? 'text-emerald-700 dark:text-emerald-300 font-medium shadow-md' 
                       : 'text-gray-600 dark:text-gray-400'
                     }`}
                     >
                   <DocumentTextIcon className="w-5 h-5 mr-2" />
-                  {t('tin.basic_info', 'Basic Info')}
+                  {t('tungsten.basic_info', 'Basic Info')}
                 </motion.button>
                 
                 <RoleGuard
@@ -265,12 +265,12 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                     onClick={() => setActiveTab('lab')}
                     className={`px-4 py-2.5 rounded-xl flex items-center ${
                       activeTab === 'lab' 
-                        ? 'text-amber-700 dark:text-amber-300 font-medium shadow-md' 
+                        ? 'text-emerald-700 dark:text-emerald-300 font-medium shadow-md' 
                         : 'text-gray-600 dark:text-gray-400'
                     }`}
                   >
-                    <CubeIcon className="w-5 h-5 mr-2" />
-                    {t('tin.lab_analysis', 'Lab Analysis')}
+                    <RectangleGroupIcon className="w-5 h-5 mr-2" />
+                    {t('tungsten.lab_analysis', 'Lab Analysis')}
                   </motion.button>
                 </RoleGuard>
                 
@@ -285,12 +285,12 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                     onClick={() => setActiveTab('financial')}
                     className={`px-4 py-2.5 rounded-xl flex items-center ${
                       activeTab === 'financial' 
-                        ? 'text-amber-700 dark:text-amber-300 font-medium shadow-md' 
+                        ? 'text-emerald-700 dark:text-emerald-300 font-medium shadow-md' 
                         : 'text-gray-600 dark:text-gray-400'
                     }`}
                   >
                     <CurrencyDollarIcon className="w-5 h-5 mr-2" />
-                    {t('tin.financial_details', 'Financials')}
+                    {t('tungsten.financial_details', 'Financials')}
                   </motion.button>
                 </RoleGuard>
               </motion.div>
@@ -309,76 +309,76 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                     >
                       <div className="space-y-1">
                         {renderDetailRow(
-                          t('tin.lot_number', 'Lot Number'),
-                          selectedTin.lot_number,
-                          <DocumentTextIcon className="w-4 h-4 text-amber-500" />
+                          t('tungsten.lot_number', 'Lot Number'),
+                          selectedTungsten.lot_number,
+                          <DocumentTextIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.net_weight', 'Net Weight'),
-                          formatNumber(selectedTin.net_weight, ' kg'),
-                          <ScaleIcon className="w-4 h-4 text-amber-500" />
+                          t('tungsten.net_weight', 'Net Weight'),
+                          formatNumber(selectedTungsten.net_weight, ' kg'),
+                          <ScaleIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.supplier', 'Supplier'),
-                          selectedTin.supplier_name || '—',
-                          <UserIcon className="w-4 h-4 text-amber-500" />,
+                          t('tungsten.supplier', 'Supplier'),
+                          selectedTungsten.supplier_name || '—',
+                          <UserIcon className="w-4 h-4 text-emerald-500" />,
                           ['Lab Technician']
                         )}
                         
                         {renderDetailRow(
-                          t('tin.date_of_delivery', 'Date of Delivery'),
-                          formatDate(selectedTin.date_of_delivery),
-                          <CalendarDaysIcon className="w-4 h-4 text-amber-500" />
+                          t('tungsten.date_of_delivery', 'Date of Delivery'),
+                          formatDate(selectedTungsten.date_of_delivery),
+                          <CalendarDaysIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.date_of_sampling', 'Date of Sampling'),
-                          formatDate(selectedTin.date_of_sampling),
-                          <CalendarDaysIcon className="w-4 h-4 text-amber-500" />
+                          t('tungsten.date_of_sampling', 'Date of Sampling'),
+                          formatDate(selectedTungsten.date_of_sampling),
+                          <CalendarDaysIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.date_of_alex_stewart', 'Date of Alex Stewart'),
-                          formatDate(selectedTin.date_of_alex_stewart),
-                          <CalendarDaysIcon className="w-4 h-4 text-amber-500" />
+                          t('tungsten.date_of_alex_stewart', 'Date of Alex Stewart'),
+                          formatDate(selectedTungsten.date_of_alex_stewart),
+                          <CalendarDaysIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.has_alex_stewart', 'Has Alex Stewart'),
-                          selectedTin.has_alex_stewart 
+                          t('tungsten.has_alex_stewart', 'Has Alex Stewart'),
+                          selectedTungsten.has_alex_stewart 
                             ? t('common.yes', 'Yes') 
                             : t('common.no', 'No'),
-                          <InformationCircleIcon className="w-4 h-4 text-amber-500" />
+                          <InformationCircleIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.stock_status_label', 'Stock Status'),
-                          <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStockStatusColor(selectedTin.stock_status)}`}>
-                            {t(`tin.status_${selectedTin.stock_status}`, selectedTin.stock_status)}
+                          t('tungsten.stock_status_label', 'Stock Status'),
+                          <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStockStatusColor(selectedTungsten.stock_status)}`}>
+                            {t(`tungsten.status_${selectedTungsten.stock_status}`, selectedTungsten.stock_status)}
                           </span>,
-                          <CheckBadgeIcon className="w-4 h-4 text-amber-500" />
+                          <CheckBadgeIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.stock_status_changed', 'Stock Status Changed At'),
-                          formatDate(selectedTin.stock_status_changed_date),
-                          <ArrowPathIcon className="w-4 h-4 text-amber-500" />
+                          t('tungsten.stock_status_changed', 'Stock Status Changed At'),
+                          formatDate(selectedTungsten.stock_status_changed_date),
+                          <ArrowPathIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.finance_status_label', 'Finance Status'),
-                          <span className={`px-3 py-1 text-xs font-medium rounded-full ${getFinanceStatusColor(selectedTin.finance_status)}`}>
-                            {t(`tin.finance_${selectedTin.finance_status}`, selectedTin.finance_status)}
+                          t('tungsten.finance_status_label', 'Finance Status'),
+                          <span className={`px-3 py-1 text-xs font-medium rounded-full ${getFinanceStatusColor(selectedTungsten.finance_status)}`}>
+                            {t(`tungsten.finance_${selectedTungsten.finance_status}`, selectedTungsten.finance_status)}
                           </span>,
-                          <CurrencyDollarIcon className="w-4 h-4 text-amber-500" />
+                          <CurrencyDollarIcon className="w-4 h-4 text-emerald-500" />
                         )}
                         
                         {renderDetailRow(
-                          t('tin.finance_status_changed', 'Finance Status Changed At'),
-                          formatDate(selectedTin.finance_status_changed_date),
-                          <ArrowPathIcon className="w-4 h-4 text-amber-500" />
+                          t('tungsten.finance_status_changed', 'Finance Status Changed At'),
+                          formatDate(selectedTungsten.finance_status_changed_date),
+                          <ArrowPathIcon className="w-4 h-4 text-emerald-500" />
                         )}
 
                       </div>
@@ -397,36 +397,36 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                       {/* Internal Analysis */}
                       <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <CubeIcon className="w-5 h-5 mr-2 text-amber-500" />
-                          {t('tin.internal_analysis', 'Internal Analysis')}
+                          <RectangleGroupIcon className="w-5 h-5 mr-2 text-emerald-500" />
+                          {t('tungsten.internal_analysis', 'Internal Analysis')}
                         </h3>
                         
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Sn %</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">WO3 %</div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.internal_sn_percentage, '%')}
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Bal %</div>
-                            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.bal_percentage, '%')}
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Fe %</div>
-                            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.fe_percentage, '%')}
+                              {formatNumber(selectedTungsten.wo3_percentage, '%')}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">W %</div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.w_percentage, '%')}
+                              {formatNumber(selectedTungsten.w_percentage, '%')}
+                            </div>
+                          </div>
+                          
+                          <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Fe %</div>
+                            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+                              {formatNumber(selectedTungsten.fe_percentage, '%')}
+                            </div>
+                          </div>
+                          
+                          <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Bal %</div>
+                            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+                              {formatNumber(selectedTungsten.bal_percentage, '%')}
                             </div>
                           </div>
                         </div>
@@ -435,25 +435,25 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                       {/* Alex Stewart Analysis */}
                       <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <ArrowPathIcon className="w-5 h-5 mr-2 text-amber-500" />
-                          {t('tin.alex_stewart_analysis', 'Alex Stewart Analysis')}
-                          {!selectedTin.has_alex_stewart && (
+                          <ArrowPathIcon className="w-5 h-5 mr-2 text-emerald-500" />
+                          {t('tungsten.alex_stewart_analysis', 'Alex Stewart Analysis')}
+                          {!selectedTungsten.has_alex_stewart && (
                             <span className="ml-2 text-xs bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded-full">
-                              {t('tin.not_available', 'Not available')}
+                              {t('tungsten.not_available', 'Not available')}
                             </span>
                           )}
                         </h3>
                         
-                        {selectedTin.has_alex_stewart ? (
+                        {selectedTungsten.has_alex_stewart ? (
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Sn %</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">WO3 %</div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.alex_stewart_sn_percentage, '%')}
+                              {formatNumber(selectedTungsten.alex_stewart_wo3_percentage, '%')}
                             </div>
                           </div>
                         ) : (
                           <div className="text-center py-6 text-gray-500 dark:text-gray-400 italic">
-                            {t('tin.no_alex_stewart_data', 'No Alex Stewart analysis data available')}
+                            {t('tungsten.no_alex_stewart_data', 'No Alex Stewart analysis data available')}
                           </div>
                         )}
                       </div>
@@ -472,80 +472,44 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                       {/* Pricing Information */}
                       <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <CurrencyDollarIcon className="w-5 h-5 mr-2 text-amber-500" />
-                          {t('tin.pricing', 'Pricing Information')}
+                          <CurrencyDollarIcon className="w-5 h-5 mr-2 text-emerald-500" />
+                          {t('tungsten.pricing', 'Pricing Information')}
                         </h3>
                         
                         <div className="grid grid-cols-2 gap-4">
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.lme_rate', 'LME Rate')}
+                              {t('tungsten.mtu', 'MTU')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.lme_rate)}
+                              {formatNumber(selectedTungsten.mtu)}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.government_tc', 'Government TC')}
+                              {t('tungsten.purchase_wo3_percentage', 'Purchase WO3 %')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.government_tc)}
+                              {formatNumber(selectedTungsten.purchase_wo3_percentage, '%')}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.purchase_sn_percentage', 'Purchase Sn %')}
+                              {t('tungsten.price_per_kg', 'Price Per kg')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.purchase_sn_percentage, '%')}
+                              {formatNumber(selectedTungsten.price_per_kg)}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.rra_price_per_kg', 'RRA Price/kg')}
+                              {t('tungsten.exchange_rate', 'Exchange Rate')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.rra_price_per_kg)}
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.fluctuation_fee', 'Fluctuation Fee')}
-                            </div>
-                            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.fluctuation_fee)}
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.internal_tc', 'Internal TC')}
-                            </div>
-                            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.internal_tc)}
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.internal_price_per_kg', 'Internal Price/kg')}
-                            </div>
-                            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.internal_price_per_kg)}
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.exchange_rate', 'Exchange Rate')}
-                            </div>
-                            <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.exchange_rate)}
+                              {formatNumber(selectedTungsten.exchange_rate)}
                             </div>
                           </div>
                         </div>
@@ -554,44 +518,44 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                       {/* Fees and Charges */}
                       <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <ArrowPathIcon className="w-5 h-5 mr-2 text-amber-500" />
-                          {t('tin.fees_charges', 'Fees & Charges')}
+                          <ArrowPathIcon className="w-5 h-5 mr-2 text-emerald-500" />
+                          {t('tungsten.fees_charges', 'Fees & Charges')}
                         </h3>
                         
                         <div className="grid grid-cols-2 gap-4">
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.rra', 'RRA')}
+                              {t('tungsten.rra', 'RRA')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.rra)}
+                              {formatNumber(selectedTungsten.rra)}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.rma', 'RMA')}
+                              {t('tungsten.rma', 'RMA')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.rma)}
+                              {formatNumber(selectedTungsten.rma)}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.inkomane_fee', 'Inkomane Fee (RWF)')}
+                              {t('tungsten.inkomane_fee', 'Inkomane Fee (RWF)')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.inkomane_fee)}
+                              {formatNumber(selectedTungsten.inkomane_fee)}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.advance', 'Advance')}
+                              {t('tungsten.advance', 'Advance')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.advance)}
+                              {formatNumber(selectedTungsten.advance)}
                             </div>
                           </div>
                         </div>
@@ -600,44 +564,44 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                       {/* Amounts */}
                       <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <DocumentTextIcon className="w-5 h-5 mr-2 text-amber-500" />
-                          {t('tin.amounts', 'Amounts')}
+                          <DocumentTextIcon className="w-5 h-5 mr-2 text-emerald-500" />
+                          {t('tungsten.amounts', 'Amounts')}
                         </h3>
                         
                         <div className="grid grid-cols-2 gap-4">
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.price_of_tag', 'Price of Tag (RWF)')}
+                              {t('tungsten.price_of_tag', 'Price of Tag (RWF)')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.price_of_tag_per_kg_rwf)}
+                              {formatNumber(selectedTungsten.price_of_tag_per_kg_rwf)}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.total_amount', 'Total Amount')}
+                              {t('tungsten.total_amount', 'Total Amount')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.total_amount)}
+                              {formatNumber(selectedTungsten.total_amount)}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.total_charge', 'Total Charge')}
+                              {t('tungsten.total_charge', 'Total Charge')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.total_charge)}
+                              {formatNumber(selectedTungsten.total_charge)}
                             </div>
                           </div>
                           
                           <div className="bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                              {t('tin.net_amount', 'Net Amount')}
+                              {t('tungsten.net_amount', 'Net Amount')}
                             </div>
                             <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {formatNumber(selectedTin.net_amount)}
+                              {formatNumber(selectedTungsten.net_amount)}
                             </div>
                           </div>
                         </div>
@@ -669,4 +633,4 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default ViewTinModal;
+export default ViewTungstenModal;

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { 
   ScaleIcon,
-  BeakerIcon,
+  CubeIcon,
   ChartBarIcon,
   CurrencyDollarIcon,
   CheckBadgeIcon
@@ -137,7 +137,7 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
       >
         <div className="flex items-center space-x-2 sm:space-x-3">
           <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
-            <BeakerIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            <CubeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
             <p className="text-xs text-gray-600 dark:text-gray-400">{t('tin.total_items', 'Total Items')}</p>

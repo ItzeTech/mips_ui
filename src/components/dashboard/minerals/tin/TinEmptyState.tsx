@@ -2,7 +2,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { BeakerIcon } from '@heroicons/react/24/outline';
+import { CubeIcon } from '@heroicons/react/24/outline';
 
 interface TinEmptyStateProps {
   hasSearch: boolean;
@@ -25,7 +25,7 @@ const TinEmptyState: React.FC<TinEmptyStateProps> = ({ hasSearch, onCreateClick 
             }
           }}
         >
-          <BeakerIcon className="mx-auto h-16 w-16 text-gray-300 dark:text-gray-600 mb-3" />
+          <CubeIcon className="mx-auto h-16 w-16 text-gray-300 dark:text-gray-600 mb-3" />
         </motion.div>
         <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
           {hasSearch 

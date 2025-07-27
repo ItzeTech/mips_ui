@@ -7,7 +7,7 @@ import {
   XMarkIcon, 
   PencilIcon, 
   ScaleIcon, 
-  BeakerIcon, 
+  CubeIcon, 
   CurrencyDollarIcon,
   ExclamationTriangleIcon,
   LockClosedIcon,
@@ -749,7 +749,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
                   <TabButton
                     isActive={activeTab === 'lab'}
                     onClick={() => setActiveTab('lab')}
-                    icon={<BeakerIcon className="w-5 h-5 mr-2" />}
+                    icon={<CubeIcon className="w-5 h-5 mr-2" />}
                     label={t('tin.lab_analysis', 'Lab Analysis')}
                     hasChanges={hasLabChanges}
                   />
