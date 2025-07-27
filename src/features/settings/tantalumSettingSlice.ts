@@ -55,10 +55,8 @@ export const saveTantalumSettings = createAsyncThunk(
       
       let response;
       if (existingSettings) {
-        // Update existing settings
         response = await axiosInstance.put('/settings/tantalum', data);
       } else {
-        // Create new settings
         response = await axiosInstance.post('/settings/tantalum', data);
       }
       return response.data.data;

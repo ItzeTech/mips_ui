@@ -10,6 +10,8 @@ import tungstenSettingsReducer from '../features/settings/tungstenSettingSlice';
 import suppliersReducer from '../features/user/suppliersSlice';
 import mixedMineralsReducer from '../features/minerals/mixedMineralsSlice';
 import tantalumsReducer from '../features/minerals/tantalumSlice';
+import tinReducer from '../features/minerals/tinSlice';
+import tungstenReducer from '../features/minerals/tungstenSlice';
 import selectedMineralsReducer from '../features/minerals/selectedMineralsSlice';
 
 
@@ -26,6 +28,8 @@ export const store = configureStore({
     suppliers: suppliersReducer,
     mixedMinerals: mixedMineralsReducer,
     tantalums: tantalumsReducer,
+    tins: tinReducer,
+    tungstens: tungstenReducer,
     selectedMinerals: selectedMineralsReducer
   },
   // Middleware can be added here if needed

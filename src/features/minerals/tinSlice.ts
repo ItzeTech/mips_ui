@@ -1,6 +1,7 @@
 // features/minerals/tinSlice.tsx
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../config/axiosInstance';
+import { TinSettingsData } from '../settings/tinSettingSlice';
 
 export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled';
 export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'exported';
@@ -25,6 +26,9 @@ export interface FinancialFormData {
   government_tc: number | null;
   purchase_sn_percentage: number | null;
   rra_price_per_kg: number | null;
+  fluctuation_fee: number | null;
+  internal_tc: number | null;
+  internal_price_per_kg: number | null;
   exchange_rate: number | null;
   price_of_tag_per_kg_rwf: number | null;
   finance_status: FinanceStatus;
@@ -39,15 +43,21 @@ export interface Tin {
   supplier_id: string;
   supplier_name: string;
   net_weight: number;
+  
+  // Composition
   internal_sn_percentage: number | null;
   bal_percentage: number | null;
   fe_percentage: number | null;
   w_percentage: number | null;
   alex_stewart_sn_percentage: number | null;
+
+  // Pricing
   lme_rate: number | null;
   government_tc: number | null;
   purchase_sn_percentage: number | null;
   rra_price_per_kg: number | null;
+  
+  // Charges
   rra: number | null;
   fluctuation_fee: number | null;
   internal_tc: number | null;
@@ -60,11 +70,15 @@ export interface Tin {
   advance: number | null;
   total_charge: number | null;
   net_amount: number | null;
+  
+  // Status
   stock_status: StockStatus;
   finance_status: FinanceStatus;
+  previous_finance_status: FinanceStatus;
   finance_status_changed_date: string;
   stock_status_changed_date: string;
   has_alex_stewart: boolean;
+  
   created_at: string;
   updated_at: string;
 }
@@ -88,24 +102,29 @@ export interface UpdateFinancialsData {
   government_tc?: number | null;
   purchase_sn_percentage?: number | null;
   rra_price_per_kg?: number | null;
+  fluctuation_fee?: number | null;
   internal_tc?: number | null;
   internal_price_per_kg?: number | null;
-  exchange_rate?: number | null;
-  price_of_tag_per_kg_rwf?: number | null;
-  fluctuation_fee?: number | null;
   total_amount?: number | null;
+  price_of_tag_per_kg?: number | null;
+  exchange_rate?: number | null;
   rra?: number | null;
   rma?: number | null;
   inkomane_fee?: number | null;
   advance?: number | null;
   total_charge?: number | null;
   net_amount?: number | null;
-  finance_status?: FinanceStatus
+  finance_status?: FinanceStatus;
 }
 
 export interface PaginationParams {
   page: number;
   limit: number;
+}
+
+export interface TinSearchParams extends PaginationParams {
+  search?: string;
+  stockStatus?: StockStatus;
 }
 
 export interface TinsResponse {
@@ -151,18 +170,32 @@ const initialState: TinState = {
   isFetched: false
 };
 
-// Async thunks
 export const fetchTins = createAsyncThunk(
   'tins/fetchTins',
-  async (params: PaginationParams, { rejectWithValue }) => {
+  async (params: TinSearchParams, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/tin', {
-        params: {
-          page: params.page,
-          limit: params.limit,
-        },
-      });
-      return response.data.data;
+      const { page, limit, search, stockStatus } = params;
+      
+      const isSearchRequest = !!(search || stockStatus);
+      
+      if (isSearchRequest) {
+        const searchParams: any = {
+          page,
+          limit
+        };
+        
+        if (search) {
+          searchParams.search_term = search;
+        }
+        
+        const response = await axiosInstance.get('/tin/search/item', { params: searchParams });
+        return response.data.data;
+      } else {
+        const response = await axiosInstance.get('/tin', { 
+          params: { page, limit }
+        });
+        return response.data.data;
+      }
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch tins');
     }
@@ -248,7 +281,6 @@ const tinSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch tins
       .addCase(fetchTins.pending, (state) => {
         state.status = 'loading';
         state.error = null;
@@ -353,3 +385,68 @@ export const {
 } = tinSlice.actions;
 
 export default tinSlice.reducer;
+
+export const calculateFinancials = (data: Partial<Tin>, settings: TinSettingsData): Partial<Tin> => {
+  const {
+    lme_rate,
+    purchase_sn_percentage,
+    net_weight,
+    exchange_rate,
+    price_of_tag_per_kg_rwf,
+    fluctuation_fee,
+    internal_tc,
+    government_tc
+  } = data;
+
+  let calculatedData: Partial<Tin> = { ...data };
+
+  // RRA price/kg: ((LME * Purchase Sn %) - Government TC) / 1000
+  if (lme_rate && purchase_sn_percentage && government_tc) {
+    calculatedData.rra_price_per_kg = ((lme_rate * purchase_sn_percentage / 100) - government_tc) / 1000;
+  }
+
+  // RRA: (RRA price/kg * rra_percentage) * net_weight
+  if (calculatedData.rra_price_per_kg && net_weight && settings.rra_percentage) {
+    calculatedData.rra = (calculatedData.rra_price_per_kg * settings.rra_percentage) * net_weight;
+  }
+
+  // Internal Price/kg: (((LME - Fluctuation Fee) * Purchase Sn %) - internal TC) / 1000
+  if (lme_rate && fluctuation_fee && purchase_sn_percentage && internal_tc) {
+    calculatedData.internal_price_per_kg = (((lme_rate - fluctuation_fee) * purchase_sn_percentage / 100) - internal_tc) / 1000;
+  }
+
+  // Total amount: internal price/kg * net weight
+  if (calculatedData.internal_price_per_kg && net_weight) {
+    calculatedData.total_amount = calculatedData.internal_price_per_kg * net_weight;
+  }
+
+  // RMA: settings.rma_per_kg_rwf * Net weight
+  if (net_weight) {
+    calculatedData.rma = settings.rma_per_kg_rwf * net_weight;
+  }
+
+  // Inkomane Fee: settings.inkomane_fee_per_kg_rwf * Net weight
+  if (net_weight) {
+    calculatedData.inkomane_fee = settings.inkomane_fee_per_kg_rwf * net_weight;
+  }
+
+  // Advance: price of tag/kg * net weight
+  if (price_of_tag_per_kg_rwf && net_weight) {
+    calculatedData.advance = price_of_tag_per_kg_rwf * net_weight;
+  }
+
+  // Total charge: RRA + (RMA / exchange_rate) + (Inkomane / exchange_rate) + (advance / exchange_rate)
+  if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && calculatedData.advance && exchange_rate) {
+    calculatedData.total_charge = calculatedData.rra + 
+      (calculatedData.rma / exchange_rate) + 
+      (calculatedData.inkomane_fee / exchange_rate) + 
+      (calculatedData.advance / exchange_rate);
+  }
+
+  // Net amount: Total amount - Total charge
+  if (calculatedData.total_amount && calculatedData.total_charge) {
+    calculatedData.net_amount = calculatedData.total_amount - calculatedData.total_charge;
+  }
+
+  return calculatedData;
+};

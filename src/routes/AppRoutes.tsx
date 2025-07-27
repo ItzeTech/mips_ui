@@ -14,7 +14,9 @@ import ChangePasswordPage from '../pages/Dashboard/ChangePasswordPage';
 import UsersPage from '../pages/Dashboard/UsersPage';
 import SuppliersPage from '../pages/Dashboard/SuppliersPage';
 import MixedMineralsPage from '../pages/minerals/MixedMineralsPage';
-import TantalumPage from '../pages/minerals/stock-manager/TantalumPage';
+import TantalumPage from '../pages/minerals/TantalumPage';
+import TinPage from '../pages/minerals/TinPage';
+import TungstenPage from '../pages/minerals/TungstenPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 // Route Protectors
@@ -59,6 +61,12 @@ const AnimatedOutlet: React.FC = () => {
             </Route>
             <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
               <Route path="/minerals/tantalum" element={<MotionPage><TantalumPage/></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
+              <Route path="/minerals/tin" element={<MotionPage><TinPage/></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
+              <Route path="/minerals/tungsten" element={<MotionPage><TungstenPage/></MotionPage>} />
             </Route>
             <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
               <Route path="/profile/change-password" element={<MotionPage><ChangePasswordPage/></MotionPage>} />

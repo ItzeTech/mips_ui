@@ -109,6 +109,11 @@ export interface PaginationParams {
   limit: number;
 }
 
+export interface TantalumSearchParams extends PaginationParams {
+  search?: string;
+  stockStatus?: StockStatus;
+}
+
 export interface TantalumsResponse {
   items: Tantalum[];
   total: number;
@@ -152,18 +157,32 @@ const initialState: TantalumState = {
   isFetched: false
 };
 
-// Async thunks
 export const fetchTantalums = createAsyncThunk(
   'tantalums/fetchTantalums',
-  async (params: PaginationParams, { rejectWithValue }) => {
+  async (params: TantalumSearchParams, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/tantalum', {
-        params: {
-          page: params.page,
-          limit: params.limit,
-        },
-      });
-      return response.data.data;
+      const { page, limit, search, stockStatus } = params;
+      
+      const isSearchRequest = !!(search || stockStatus);
+      
+      if (isSearchRequest) {
+        const searchParams: any = {
+          page,
+          limit
+        };
+        
+        if (search) {
+          searchParams.search_term = search;
+        }
+        
+        const response = await axiosInstance.get('/tantalum/search/item', { params: searchParams });
+        return response.data.data;
+      } else {
+        const response = await axiosInstance.get('/tantalum', { 
+          params: { page, limit }
+        });
+        return response.data.data;
+      }
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch tantalums');
     }
@@ -249,7 +268,6 @@ const tantalumSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch tantalums
       .addCase(fetchTantalums.pending, (state) => {
         state.status = 'loading';
         state.error = null;
@@ -354,7 +372,6 @@ export const {
 } = tantalumSlice.actions;
 export default tantalumSlice.reducer;
 
-// Helper functions for calculations
 export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, inkomane_fee_per_kg_rwf, rma_usd_per_ton, rra_price_per_percentage}: TantalumSettingsData): Partial<Tantalum> => {
   const {
     price_per_percentage,
@@ -366,45 +383,37 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
 
   let calculatedData: Partial<Tantalum> = { ...data };
 
-  // Calculate unit price
   if (price_per_percentage && purchase_ta2o5_percentage) {
     calculatedData.unit_price = price_per_percentage * purchase_ta2o5_percentage;
   }
 
-  // Calculate total amount
   if (calculatedData.unit_price && net_weight) {
     calculatedData.total_amount = calculatedData.unit_price * net_weight;
   }
 
-  // Calculate RRA (3% of total amount)
   if (purchase_ta2o5_percentage && net_weight && rra_price_per_percentage) {
     let rra_total_amount = purchase_ta2o5_percentage * net_weight * rra_price_per_percentage;
     calculatedData.rra = rra_total_amount * rra_percentage;
   }
 
-  // Calculate RMA (USD 125 per 1,000 kg)
   if (net_weight) {
     calculatedData.rma = rma_usd_per_ton * net_weight;
   }
 
-  // Calculate Inkomane Fee (40 RWF per kg)
   if (net_weight) {
     calculatedData.inkomane_fee = inkomane_fee_per_kg_rwf * net_weight;
   }
 
-  // Calculate Advance (price of tag/kg * net weight)
   if (price_of_tag_per_kg_rwf && net_weight) {
     calculatedData.advance = price_of_tag_per_kg_rwf * net_weight;
   }
 
-  // Calculate Total Charge
   if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && 
       calculatedData.advance && exchange_rate) {
     calculatedData.total_charge = calculatedData.rra + calculatedData.rma + 
       (calculatedData.inkomane_fee / exchange_rate) + (calculatedData.advance / exchange_rate);
   }
 
-  // Calculate Net Amount
   if (calculatedData.total_amount && calculatedData.total_charge) {
     calculatedData.net_amount = calculatedData.total_amount - calculatedData.total_charge;
   }
