@@ -13,6 +13,8 @@ import tantalumsReducer from '../features/minerals/tantalumSlice';
 import tinReducer from '../features/minerals/tinSlice';
 import tungstenReducer from '../features/minerals/tungstenSlice';
 import selectedMineralsReducer from '../features/minerals/selectedMineralsSlice';
+import salesReducer from '../features/finance/salesSlice';
+import advancePaymentsReducer from "../features/finance/advancePaymentSlice"
 
 
 export const store = configureStore({
@@ -30,7 +32,9 @@ export const store = configureStore({
     tantalums: tantalumsReducer,
     tins: tinReducer,
     tungstens: tungstenReducer,
-    selectedMinerals: selectedMineralsReducer
+    selectedMinerals: selectedMineralsReducer,
+    sales: salesReducer,
+    advancePayments: advancePaymentsReducer
   },
   // Middleware can be added here if needed
 });

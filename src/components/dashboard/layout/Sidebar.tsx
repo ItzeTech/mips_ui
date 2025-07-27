@@ -13,7 +13,11 @@ import {
   CubeIcon,
   RectangleGroupIcon,
   Square3Stack3DIcon,
-  CircleStackIcon
+  CircleStackIcon,
+  ShoppingCartIcon,
+  CreditCardIcon,
+  BanknotesIcon,
+  CalculatorIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../../hooks/useAuth';
 
@@ -31,89 +35,122 @@ interface SidebarProps {
   toggleSidebar: () => void;
 }
 
+const navItems: NavItem[] = [
+  { 
+    icon: HomeIcon, 
+    label: 'Dashboard', 
+    path: '/dashboard', 
+    allowedRoles: ['Manager', 'Boss', 'Lab Technician', 'Finance Officer'],
+    color: 'from-blue-500 to-purple-600'
+  },
+  { 
+    icon: UsersIcon, 
+    label: 'Manage Users', 
+    path: '/manage-users', 
+    allowedRoles: ['Manager', 'Boss'],
+    color: 'from-green-500 to-teal-600'
+  },
+  { 
+    icon: UsersIcon, 
+    label: 'Suppliers', 
+    path: '/suppliers', 
+    allowedRoles: ['Manager', 'Boss'],
+    color: 'from-green-500 to-teal-600'
+  },
+  { 
+    icon: ChartBarIcon, 
+    label: 'Reports', 
+    path: '/reports', 
+    allowedRoles: ['Finance Officer'],
+    color: 'from-orange-500 to-red-600'
+  },
+  // Minerals Category
+  { 
+    icon: Square3Stack3DIcon, 
+    label: 'Mixed Minerals', 
+    path: '/minerals/mixed', 
+    allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+    category: 'Minerals',
+    color: 'from-indigo-500 to-purple-600'
+  },
+  { 
+    icon: CircleStackIcon, 
+    label: 'Tantalum', 
+    path: '/minerals/tantalum', 
+    allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+    category: 'Minerals',
+    color: 'from-blue-600 to-indigo-600'
+  },
+  { 
+    icon: CubeIcon, 
+    label: 'Tin', 
+    path: '/minerals/tin', 
+    allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+    category: 'Minerals',
+    color: 'from-amber-500 via-orange-500 to-red-500'
+  },
+  { 
+    icon: RectangleGroupIcon, 
+    label: 'Tungsten', 
+    path: '/minerals/tungsten', 
+    allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+    category: 'Minerals',
+    color: 'from-emerald-500 via-emerald-500 to-green-600'
+  },
+  // Finance Category
+  { 
+    icon: ShoppingCartIcon, 
+    label: 'Sales', 
+    path: '/sales', 
+    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    category: 'Finance',
+    color: 'from-blue-500 via-indigo-500 to-purple-500'
+  },
+  { 
+    icon: CreditCardIcon, 
+    label: 'Payments', 
+    path: '/payments', 
+    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    category: 'Finance',
+    color: 'from-green-500 via-teal-500 to-emerald-500'
+  },
+  { 
+    icon: BanknotesIcon, 
+    label: 'Advances', 
+    path: '/advance-payments', 
+    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    category: 'Finance',
+    color: 'from-amber-500 via-orange-500 to-yellow-500'
+  },
+  { 
+    icon: CalculatorIcon, 
+    label: 'Calculations', 
+    path: '/calculations', 
+    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    category: 'Finance',
+    color: 'from-purple-500 via-violet-500 to-fuchsia-500'
+  },
+  { 
+    icon: Cog6ToothIcon, 
+    label: 'Settings', 
+    path: '/settings', 
+    allowedRoles: ['Manager', 'Boss'],
+    color: 'from-gray-500 to-slate-600'
+  },
+];
+
 const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
   const location = useLocation();
   const { roles } = useAuth();
+  const { t } = useTranslation();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const navItems: NavItem[] = [
-    { 
-      icon: HomeIcon, 
-      label: 'Dashboard', 
-      path: '/dashboard', 
-      allowedRoles: ['Manager', 'Boss', 'Lab Technician', 'Finance Officer'],
-      color: 'from-blue-500 to-purple-600'
-    },
-    { 
-      icon: UsersIcon, 
-      label: 'Manage Users', 
-      path: '/manage-users', 
-      allowedRoles: ['Manager', 'Boss'],
-      color: 'from-green-500 to-teal-600'
-    },
-    { 
-      icon: UsersIcon, 
-      label: 'Suppliers', 
-      path: '/suppliers', 
-      allowedRoles: ['Manager', 'Boss'],
-      color: 'from-green-500 to-teal-600'
-    },
-    { 
-      icon: ChartBarIcon, 
-      label: 'Reports', 
-      path: '/reports', 
-      allowedRoles: ['Finance Officer'],
-      color: 'from-orange-500 to-red-600'
-    },
-    // Minerals Category
-    { 
-      icon: Square3Stack3DIcon, 
-      label: 'Mixed Minerals', 
-      path: '/minerals/mixed', 
-      allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
-      category: 'Minerals',
-      color: 'from-indigo-500 to-purple-600'
-    },
-    { 
-      icon: CircleStackIcon, 
-      label: 'Tantalum', 
-      path: '/minerals/tantalum', 
-      allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
-      category: 'Minerals',
-      color: 'from-blue-600 to-indigo-600'
-    },
-    { 
-      icon: CubeIcon, 
-      label: 'Tin', 
-      path: '/minerals/tin', 
-      allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
-      category: 'Minerals',
-      color: 'from-amber-500 via-orange-500 to-red-500'
-    },
-    { 
-      icon: RectangleGroupIcon, 
-      label: 'Tungsten', 
-      path: '/minerals/tungsten', 
-      allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
-      category: 'Minerals',
-      color: 'from-emerald-500 via-emerald-500 to-green-600'
-    },
-    { 
-      icon: Cog6ToothIcon, 
-      label: 'Settings', 
-      path: '/settings', 
-      allowedRoles: ['Manager', 'Boss'],
-      color: 'from-gray-500 to-slate-600'
-    },
-  ];
 
   // Filter nav items based on user roles
   const visibleNavItems = useMemo(() => {
     return navItems.filter(item => {
       return item.allowedRoles.some(role => roles.includes(role));
     });
-  }, [navItems, roles]);
+  }, [roles]);
 
   // Group items by category
   const groupedNavItems = useMemo(() => {
@@ -302,6 +339,43 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                   
                   <ul className="space-y-1 sm:space-y-2">
                     {groupedNavItems.Minerals.map((item) => (
+                      <NavItemComponent
+                        key={item.path}
+                        item={item}
+                        expanded={expanded}
+                        hoveredItem={hoveredItem}
+                        setHoveredItem={setHoveredItem}
+                        location={location}
+                      />
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+
+              {/* Finance Section */}
+              {groupedNavItems.Finance && groupedNavItems.Finance.length > 0 && (
+                <motion.div variants={itemVariants}>
+                  <AnimatePresence>
+                    {expanded && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mb-3 sm:mb-4"
+                      >
+                        <div className="flex items-center space-x-2 px-2 sm:px-3 py-2">
+                          <div className="w-6 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
+                          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Finance
+                          </span>
+                          <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  
+                  <ul className="space-y-1 sm:space-y-2">
+                    {groupedNavItems.Finance.map((item) => (
                       <NavItemComponent
                         key={item.path}
                         item={item}

@@ -6,7 +6,6 @@ import {
   removeMineral, 
   clearAllMinerals, 
   clearMineralsByType,
-  SelectedMineral,
   MineralType
 } from '../features/minerals/selectedMineralsSlice';
 import { Tin } from '../features/minerals/tinSlice';
