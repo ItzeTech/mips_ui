@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+
 import {
   HomeIcon,
   ChevronLeftIcon,
@@ -20,6 +21,7 @@ import {
   CalculatorIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../../hooks/useAuth';
+import '../../../sidebar.css';
 
 interface NavItem {
   icon: any;
@@ -116,7 +118,7 @@ const navItems: NavItem[] = [
   },
   { 
     icon: BanknotesIcon, 
-    label: 'Advances', 
+    label: 'Advance Payments', 
     path: '/advance-payments', 
     allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
     category: 'Finance',
@@ -252,9 +254,11 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                     </div>
                     <div className="min-w-0 flex-1">
                       <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
-                        RwandaMining
+                        {t('sidebar.app_name', 'RwandaMining')}
                       </h1>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">Management System</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        {t('sidebar.app_subtitle', 'Management System')}
+                      </p>
                     </div>
                   </motion.div>
                   
@@ -291,7 +295,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
 
           {/* Navigation */}
           <motion.div 
-            className="py-4 sm:py-6 flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
+            className="py-4 sm:py-6 flex-grow overflow-y-auto custom-scrollbar"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -329,7 +333,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                         <div className="flex items-center space-x-2 px-2 sm:px-3 py-2">
                           <div className="w-6 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
                           <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Minerals
+                            {t('sidebar.minerals_category', 'Minerals')}
                           </span>
                           <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
                         </div>
@@ -366,7 +370,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                         <div className="flex items-center space-x-2 px-2 sm:px-3 py-2">
                           <div className="w-6 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
                           <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Finance
+                            {t('sidebar.finance_category', 'Finance')}
                           </span>
                           <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
                         </div>
@@ -403,10 +407,10 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                     className="text-center"
                   >
                     <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                      Version 2.0.1
+                      {t('sidebar.version', 'Version')} 2.0.1
                     </span>
                     <div className="text-xs text-gray-400 dark:text-gray-500">
-                      Mining Pro
+                      {t('sidebar.edition', 'Mining Pro')}
                     </div>
                   </motion.div>
                 )}
@@ -480,7 +484,7 @@ const NavItemComponent: React.FC<{
                 transition={{ duration: 0.2 }}
                 className={`ml-3 sm:ml-4 font-medium relative z-10 text-sm sm:text-base ${isActive ? 'text-white' : ''} truncate`}
               >
-                {t(`menu.${item.label.toLowerCase().replace(' ', '_')}`)}
+                {t(`sidebar.menu.${item.label.toLowerCase().replace(/\s+/g, '_')}`, item.label)}
               </motion.span>
             )}
           </AnimatePresence>
@@ -505,7 +509,7 @@ const NavItemComponent: React.FC<{
                 exit={{ opacity: 0, x: -10, scale: 0.8 }}
                 className="absolute left-full ml-4 px-2 sm:px-3 py-1.5 sm:py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs sm:text-sm rounded-xl shadow-xl border border-gray-200 dark:border-gray-600 whitespace-nowrap z-50"
               >
-                {t(item.label.toLowerCase().replace(' ', '_'))}
+                {t(`sidebar.menu.${item.label.toLowerCase().replace(/\s+/g, '_')}`, item.label)}
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900 dark:bg-gray-700 rotate-45"></div>
               </motion.div>
             )}
