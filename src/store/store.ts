@@ -15,6 +15,7 @@ import tungstenReducer from '../features/minerals/tungstenSlice';
 import selectedMineralsReducer from '../features/minerals/selectedMineralsSlice';
 import salesReducer from '../features/finance/salesSlice';
 import advancePaymentsReducer from "../features/finance/advancePaymentSlice"
+import paymentsReducer from "../features/finance/paymentSlice"
 
 
 export const store = configureStore({
@@ -34,7 +35,8 @@ export const store = configureStore({
     tungstens: tungstenReducer,
     selectedMinerals: selectedMineralsReducer,
     sales: salesReducer,
-    advancePayments: advancePaymentsReducer
+    advancePayments: advancePaymentsReducer,
+    payments: paymentsReducer
   },
   // Middleware can be added here if needed
 });
