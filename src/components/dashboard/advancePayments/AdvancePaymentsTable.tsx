@@ -3,9 +3,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { EyeIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { AdvancePayment } from '../../../features/finance/advancePaymentSlice'; // Import the type
 
 interface AdvancePaymentsTableProps {
-  payments: any[];
+  payments: AdvancePayment[];
   onView: (paymentId: string) => void;
 }
 
@@ -21,7 +22,18 @@ const AdvancePaymentsTable: React.FC<AdvancePaymentsTableProps> = ({ payments, o
     });
   };
 
-  const formatAmount = (amount: number) => {
+  const formatAmount = (amount: number, currency: string = 'USD') => {
+    // Handle different currencies
+    if (currency === 'RWF') {
+      return amount.toLocaleString('rw-RW', {
+        style: 'currency',
+        currency: 'RWF',
+        minimumFractionDigits: 0, // RWF typically doesn't use decimal places
+        maximumFractionDigits: 0
+      });
+    }
+    
+    // Default to USD
     return amount.toLocaleString('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -64,13 +76,13 @@ const AdvancePaymentsTable: React.FC<AdvancePaymentsTableProps> = ({ payments, o
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
                 >
-                  {t('advancePayments.status', 'Status')}
+                  {t('advancePayments.status_title', 'Status')}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
                 >
-                  {t('advancePayments.actions', 'Actions')}
+                  {t('advancePayments.actions_title', 'Actions')}
                 </th>
               </tr>
             </thead>
@@ -94,7 +106,7 @@ const AdvancePaymentsTable: React.FC<AdvancePaymentsTableProps> = ({ payments, o
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    {formatAmount(payment.amount)}
+                    {formatAmount(payment.amount, payment.currency)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {payment.payment_method}

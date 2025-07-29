@@ -28,7 +28,6 @@ const EditAdvancePaymentModal: React.FC<EditAdvancePaymentModalProps> = ({ isOpe
       setPaymentMethod(payment.payment_method || '');
       setStatus(payment.status || '');
       
-      // Format date for the date input (YYYY-MM-DD)
       if (payment.date) {
         const dateObj = new Date(payment.date);
         setDate(dateObj.toISOString().split('T')[0]);
@@ -173,7 +172,7 @@ const EditAdvancePaymentModal: React.FC<EditAdvancePaymentModalProps> = ({ isOpe
                   
                   <div className="mb-4">
                     <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      {t('advancePayments.status', 'Status')}
+                      {t('advancePayments.status_title', 'Status')}
                     </label>
                     <div className="relative">
                       <select
@@ -182,9 +181,9 @@ const EditAdvancePaymentModal: React.FC<EditAdvancePaymentModalProps> = ({ isOpe
                         onChange={(e) => setStatus(e.target.value)}
                         className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500"
                       >
-                        <option value="">Select status</option>
-                        <option value="Paid">Paid</option>
-                        <option value="Unpaid">Unpaid</option>
+                        <option value="">{t('advancePayments.status.select_status', 'Select status')}</option>
+                        <option value="Paid">{t('advancePayments.status.paid', 'Paid')}</option>
+                        <option value="Unpaid">{t('advancePayments.status.unpaid', 'Unpaid')}</option>
                       </select>
                     </div>
                   </div>

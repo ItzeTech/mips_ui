@@ -3,6 +3,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../config/axiosInstance';
 
 export type PaymentStatus = 'Paid' | 'Unpaid';
+export type currencyType = 'USD' | 'RWF';
 
 export interface Supplier {
   id: string;
@@ -16,6 +17,7 @@ export interface AdvancePayment {
   supplier_id: string;
   date: string;
   amount: number;
+  currency: currencyType;
   payment_method: string;
   status: PaymentStatus;
   created_at: string;
@@ -27,6 +29,7 @@ export interface CreateAdvancePaymentData {
   supplier_id: string;
   amount: number;
   payment_method: string;
+  currency?: currencyType;
   date?: string;
   status?: PaymentStatus;
 }

@@ -786,7 +786,7 @@
       "paid": "Paid",
       "unpaid": "Unpaid",
       "dates": "Dates",
-      "actions": "Actions",
+      "actions_title": "Actions",
       "view": "View",
       "edit": "Edit",
       "edit_payment": "Edit Advance Payment",
@@ -813,7 +813,109 @@
       "loading_suppliers": "Loading suppliers...",
       "no_suppliers_found": "No suppliers found",
       "no_supplier_info": "No supplier information available",
-      "supplier_selected": "Selected"
+      "supplier_selected": "Selected", 
+      "edit_title": "Edit Advance Payment",
+      "date": "Date",
+      "status_title": "Status",
+      "status": {
+        "select_status": "Select status",
+        "paid": "Paid",
+        "unpaid": "Unpaid"
+      },
+      "supplier_info": "Supplier Information",
+      "payment_info": "Payment Information",
+      "audit_info": "Audit Information",
+      "selected_supplier": "Selected",
+      "supplier_name": "Supplier Name",
+      "supplier_contact": "Contact Number",
+      "supplier_company": "Company",
+      "payment_status": "Payment Status",
+      "amount_with_currency": "Amount & Currency",
+      "created_at": "Created At",
+      "updated_at": "Last Updated",
+      "currency": "Currency",
+      "deleting": "Deleting...",
+      "delete_payment": "Delete Payment",
+      "cancel": "Cancel",
+      "no_payments_desc": "There are no advance payments in the system yet. Create one to get started.",
+      "search": "Search advance payments",
+      "showing": "Showing",
+      "of": "of",
+      "results": "results",
+      "supplier_not_available": "Supplier information not available",
+      "payment_created": "Advance payment has been successfully created.",
+      "payment_methods": {
+        "cash": "Cash",
+        "check": "Check",
+        "bank_transfer": "Bank Transfer",
+        "mobile_money": "Mobile Money"
+      },
+      "select_payment_method": "Select payment method",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "print": "Print",
+        "view": "View"
+      },
+      "filter": {
+        "all": "All",
+        "paid": "Paid",
+        "unpaid": "Unpaid"
+      },
+      "rwf_note": "Amount in Rwandan Francs (no decimals)",
+      "usd_note": "Amount in US Dollars (with cents)",
+      "update_payment": "Update Payment",
+      "save": "Save",
+      "delete_warning": "This action cannot be undone.",
+      "errors": {
+        "select_supplier": "Please select a supplier",
+        "valid_amount": "Please enter a valid amount",
+        "select_payment_method": "Please select a payment method",
+        "create_failed": "Failed to create advance payment",
+        "update_failed": "Failed to update advance payment",
+        "delete_failed": "Failed to delete advance payment",
+        "fetch_failed": "Failed to fetch advance payment details"
+      },
+      "validation": {
+        "supplier_required": "Supplier is required",
+        "amount_required": "Amount is required",
+        "amount_positive": "Amount must be greater than zero",
+        "payment_method_required": "Payment method is required"
+      },
+      "filters": {
+        "all": "All",
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "filter_by_status": "Filter by status",
+        "search_placeholder": "Search payments...",
+        "date_range": "Date Range",
+        "amount_range": "Amount Range"
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page",
+        "of": "of",
+        "items_per_page": "items per page",
+        "showing": "Showing",
+        "to": "to",
+        "results": "results"
+      },
+      "empty_state": {
+        "title": "No advance payments found",
+        "description": "Get started by creating your first advance payment.",
+        "create_button": "Create First Payment"
+      },
+      "export": {
+        "export": "Export",
+        "export_csv": "Export to CSV",
+        "export_pdf": "Export to PDF",
+        "exporting": "Exporting..."
+      }
+    },
+    "currency": {
+      "rwf": "Rwandan Franc",
+      "usd": "US Dollar"
     }
   }
   
