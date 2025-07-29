@@ -37,6 +37,7 @@ export interface CreateAdvancePaymentData {
 export interface UpdateAdvancePaymentData {
   amount?: number;
   payment_method?: string;
+  currency?: currencyType;
   date?: string;
   status?: PaymentStatus;
 }

@@ -874,7 +874,9 @@
         "create_failed": "Failed to create advance payment",
         "update_failed": "Failed to update advance payment",
         "delete_failed": "Failed to delete advance payment",
-        "fetch_failed": "Failed to fetch advance payment details"
+        "fetch_failed": "Failed to fetch advance payment details",
+        "select_status": "Please select a payment status",
+        "select_date": "Please select a payment date"
       },
       "validation": {
         "supplier_required": "Supplier is required",
@@ -911,7 +913,8 @@
         "export_csv": "Export to CSV",
         "export_pdf": "Export to PDF",
         "exporting": "Exporting..."
-      }
+      },
+      "save_changes": "Save Changes"
     },
     "currency": {
       "rwf": "Rwandan Franc",
