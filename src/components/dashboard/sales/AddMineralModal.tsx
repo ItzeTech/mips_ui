@@ -54,7 +54,8 @@ const AddMineralModal: React.FC<AddMineralModalProps> = ({ isOpen, onClose, sale
         const existingMineralIds = sale?.minerals?.map((mineral: any) => mineral.id) || [];
         
         const data = {
-          exclude_ids: existingMineralIds
+          exclude_ids: existingMineralIds,
+          finance_statuses: ["paid", "invoiced"]
         };
         
         const response = await axiosInstance.post(endpoint, data);
