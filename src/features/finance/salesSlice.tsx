@@ -10,6 +10,7 @@ export type SaleMineralType = 'TANTALUM' | 'TIN' | 'TUNGSTEN';
 export interface SaleMineral {
   id: string;
   net_weight: number;
+  supplier_name: string;
   percentage: number;
   net_amount: number;
   total_charge: number;
@@ -17,6 +18,7 @@ export interface SaleMineral {
   lot_number: string;
   stock_status: string;
   finance_status: string;
+  created_at: string;
 }
 
 export interface Sale {

@@ -1,4 +1,3 @@
-// components/dashboard/sales/SaleMinerals.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,15 +6,17 @@ import {
   ScaleIcon,
   ChartBarIcon,
   CurrencyDollarIcon,
-  XCircleIcon
+  XCircleIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import { useSales } from '../../../hooks/useSales';
 
 interface SaleMineralsProps {
   sale: any;
+  showSupplier?: boolean;
 }
 
-const SaleMinerals: React.FC<SaleMineralsProps> = ({ sale }) => {
+const SaleMinerals: React.FC<SaleMineralsProps> = ({ sale, showSupplier = false }) => {
   const { t } = useTranslation();
   const { handleRemoveMineralFromSale, removeMineralStatus } = useSales();
 
@@ -134,6 +135,14 @@ const SaleMinerals: React.FC<SaleMineralsProps> = ({ sale }) => {
                           <CurrencyDollarIcon className="w-3 h-3 mr-1" />
                           ${formatNumber(mineral.net_amount)}
                         </div>
+                        
+                        {/* Supplier name (conditionally rendered) */}
+                        {showSupplier && mineral.supplier_name && (
+                          <div className="flex items-center sm:mt-1 w-full">
+                            <UserIcon className="w-3 h-3 mr-1 text-blue-500" />
+                            {t('sales.supplier', 'Supplier')}: {mineral.supplier_name}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -1,11 +1,11 @@
-// components/dashboard/sales/SaleHeader.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   PencilIcon,
   PrinterIcon,
   PlusIcon,
-  ShoppingCartIcon
+  ShoppingCartIcon,
+  PercentBadgeIcon
 } from '@heroicons/react/24/outline';
 
 interface SaleHeaderProps {
@@ -13,9 +13,16 @@ interface SaleHeaderProps {
   onEdit: () => void;
   onPrint: () => void;
   onAddMineral: () => void;
+  avgPercentage?: number | null;
 }
 
-const SaleHeader: React.FC<SaleHeaderProps> = ({ sale, onEdit, onPrint, onAddMineral }) => {
+const SaleHeader: React.FC<SaleHeaderProps> = ({ 
+  sale, 
+  onEdit, 
+  onPrint, 
+  onAddMineral, 
+  avgPercentage 
+}) => {
   const { t } = useTranslation();
 
   const formatDate = (dateString: string | null) => {
@@ -24,6 +31,14 @@ const SaleHeader: React.FC<SaleHeaderProps> = ({ sale, onEdit, onPrint, onAddMin
       year: 'numeric',
       month: 'short',
       day: 'numeric'
+    });
+  };
+
+  const formatNumber = (num: number | null | undefined, decimals = 2) => {
+    if (num === null || num === undefined) return '—';
+    return num.toLocaleString('en-US', { 
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
     });
   };
 
@@ -94,13 +109,13 @@ const SaleHeader: React.FC<SaleHeaderProps> = ({ sale, onEdit, onPrint, onAddMin
           </div>
         </div>
         
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-4 gap-3">
           <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-3">
             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
               {t('sales.total_weight', 'Total Weight')}
             </div>
             <div className="text-base font-semibold text-gray-900 dark:text-white">
-              {sale.total_weight.toLocaleString('en-US', { minimumFractionDigits: 2 })} kg
+              {formatNumber(sale.total_weight)} kg
             </div>
           </div>
           
@@ -118,7 +133,20 @@ const SaleHeader: React.FC<SaleHeaderProps> = ({ sale, onEdit, onPrint, onAddMin
               {t('sales.total_amount', 'Total Amount')}
             </div>
             <div className="text-base font-semibold text-gray-900 dark:text-white">
-              ${sale.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              ${formatNumber(sale.total_amount)}
+            </div>
+          </div>
+          
+          {/* Average Percentage Card */}
+          <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-3">
+            <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-1">
+              <PercentBadgeIcon className="w-3 h-3 mr-1 text-indigo-500" />
+              {t('sales.avg_percentage', 'Avg. Percentage')}
+            </div>
+            <div className="text-base font-semibold text-gray-900 dark:text-white">
+              {avgPercentage !== null && avgPercentage !== undefined 
+                ? `${formatNumber(avgPercentage)}%` 
+                : formatNumber(sale.average_percentage) + '%'}
             </div>
           </div>
         </div>

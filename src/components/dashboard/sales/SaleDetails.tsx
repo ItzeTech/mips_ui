@@ -1,4 +1,3 @@
-// components/dashboard/sales/SaleDetails.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -25,16 +24,18 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Buyer */}
       <div className="space-y-2">
         <div className="flex items-center text-gray-700 dark:text-gray-300 mb-1">
-          <UserIcon className="w-4 h-4 mr-1.5 text-blue-500" />
-          <h3 className="text-sm font-medium">{t('sales.buyer', 'Buyer')}</h3>
+          <div className="p-1.5 rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 mr-2">
+            <UserIcon className="w-4 h-4" />
+          </div>
+          <h3 className="text-sm font-semibold">{t('sales.buyer', 'Buyer')}</h3>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
           {sale.buyer ? (
-            <p className="text-sm text-gray-900 dark:text-white">{sale.buyer}</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">{sale.buyer}</p>
           ) : (
             <p className="text-sm text-gray-400 dark:text-gray-500 italic">
               {t('sales.no_buyer_specified', 'No buyer specified')}
@@ -46,10 +47,12 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
       {/* Amounts */}
       <div className="space-y-2">
         <div className="flex items-center text-gray-700 dark:text-gray-300 mb-1">
-          <CurrencyDollarIcon className="w-4 h-4 mr-1.5 text-green-500" />
-          <h3 className="text-sm font-medium">{t('sales.amounts', 'Amounts')}</h3>
+          <div className="p-1.5 rounded-md bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 mr-2">
+            <CurrencyDollarIcon className="w-4 h-4" />
+          </div>
+          <h3 className="text-sm font-semibold">{t('sales.amounts', 'Amounts')}</h3>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
@@ -76,10 +79,12 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
       {/* Mineral Details */}
       <div className="space-y-2">
         <div className="flex items-center text-gray-700 dark:text-gray-300 mb-1">
-          <ChartBarIcon className="w-4 h-4 mr-1.5 text-indigo-500" />
-          <h3 className="text-sm font-medium">{t('sales.mineral_details', 'Mineral Details')}</h3>
+          <div className="p-1.5 rounded-md bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 mr-2">
+            <ChartBarIcon className="w-4 h-4" />
+          </div>
+          <h3 className="text-sm font-semibold">{t('sales.mineral_details', 'Mineral Details')}</h3>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
@@ -94,7 +99,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
                 {t('sales.avg_percentage', 'Average Percentage')}
               </p>
               <p className="text-sm font-medium text-gray-900 dark:text-white">
-                {sale.average_percentage.toLocaleString('en-US', { minimumFractionDigits: 2 })}%
+                {sale.average_percentage ? sale.average_percentage.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '%' : '—'}
               </p>
             </div>
             <div>
@@ -120,10 +125,12 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
       {/* Dates */}
       <div className="space-y-2">
         <div className="flex items-center text-gray-700 dark:text-gray-300 mb-1">
-          <CalendarIcon className="w-4 h-4 mr-1.5 text-purple-500" />
-          <h3 className="text-sm font-medium">{t('sales.dates', 'Dates')}</h3>
+          <div className="p-1.5 rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 mr-2">
+            <CalendarIcon className="w-4 h-4" />
+          </div>
+          <h3 className="text-sm font-semibold">{t('sales.dates', 'Dates')}</h3>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
