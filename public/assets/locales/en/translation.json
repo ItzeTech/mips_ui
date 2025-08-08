@@ -767,7 +767,12 @@
       "finance_paid": "Paid",
       "finance_unpaid": "Unpaid",
       "finance_invoiced": "Invoiced",
-      "finance_exported": "Exported"
+      "finance_exported": "Exported",
+      "print_options": "Print Options",
+      "print_description": "Choose how you would like to access the sales report",
+      "view_report": "View Report",
+      "download_report": "Download Report",
+      "sn": "SN"
     },
     "advancePayments": {
       "title": "Advance Payments",
