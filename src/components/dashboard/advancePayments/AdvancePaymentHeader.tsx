@@ -1,12 +1,9 @@
-// components/dashboard/advancePayments/AdvancePaymentHeader.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   PencilIcon,
-  PrinterIcon,
   BanknotesIcon
 } from '@heroicons/react/24/outline';
-// import { useAdvancePayments } from '../../../hooks/useAdvancePayments';
 
 interface AdvancePaymentHeaderProps {
   payment: any;
@@ -16,7 +13,6 @@ interface AdvancePaymentHeaderProps {
 
 const AdvancePaymentHeader: React.FC<AdvancePaymentHeaderProps> = ({ payment, onEdit, onPrint }) => {
   const { t } = useTranslation();
-  // const { handleDeleteAdvancePayment } = useAdvancePayments();
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '—';
@@ -78,22 +74,6 @@ const AdvancePaymentHeader: React.FC<AdvancePaymentHeaderProps> = ({ payment, on
             >
               <PencilIcon className="w-3.5 h-3.5 mr-1" />
               {t('advancePayments.edit', 'Edit')}
-            </button>
-{/*             
-            <button
-              onClick={handleDelete}
-              className="inline-flex items-center px-3 py-1.5 text-xs bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 rounded-lg transition-colors"
-            >
-              <TrashIcon className="w-3.5 h-3.5 mr-1" />
-              {t('advancePayments.delete', 'Delete')}
-            </button> */}
-            
-            <button
-              onClick={onPrint}
-              className="inline-flex items-center px-3 py-1.5 text-xs bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 text-amber-700 dark:text-amber-300 rounded-lg transition-colors"
-            >
-              <PrinterIcon className="w-3.5 h-3.5 mr-1" />
-              {t('advancePayments.print', 'Print')}
             </button>
           </div>
         </div>

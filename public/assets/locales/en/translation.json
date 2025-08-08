@@ -774,6 +774,16 @@
       "download_report": "Download Report",
       "sn": "SN"
     },
+    "payments": {
+      "filter": "Filter",
+      "select_all": "Select All",
+      "unselect_all": "Unselect All",
+      "print": "Print",
+      "print_options": "Print Options",
+      "print_description": "Choose how you would like to access the payment receipt",
+      "view_receipt": "View Receipt",
+      "download_receipt": "Download Receipt"
+    },
     "advancePayments": {
       "title": "Advance Payments",
       "subtitle": "Manage supplier advance payments",

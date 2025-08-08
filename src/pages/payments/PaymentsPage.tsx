@@ -25,6 +25,7 @@ const PaymentsPage: React.FC = () => {
   
   const { payments, status, pagination } = useSelector((state: RootState) => state.payments);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(['TANTALUM', 'TIN', 'TUNGSTEN']);
 
   useEffect(() => {
     dispatch(fetchPayments({
@@ -37,17 +38,25 @@ const PaymentsPage: React.FC = () => {
     setSearchTerm(term);
   };
 
+  const handleTypeFilterChange = (types: string[]) => {
+    setSelectedTypes(types);
+  };
+
   const filteredPayments = useMemo(() => {
     return payments.filter((payment) => {
+      // Filter by search term
       const matchesSearch = 
         payment.id.includes(searchTerm) ||
         (payment.supplier_name && payment.supplier_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
         payment.mineral_types.some(type => type.toLowerCase().includes(searchTerm.toLowerCase())) ||
         payment.total_amount.toString().includes(searchTerm);
       
-      return matchesSearch;
+      // Filter by selected mineral types
+      const matchesTypes = payment.mineral_types.some(type => selectedTypes.includes(type));
+      
+      return matchesSearch && (selectedTypes.length === 0 || matchesTypes);
     });
-  }, [payments, searchTerm]);
+  }, [payments, searchTerm, selectedTypes]);
 
   const handlePageChange = (newPage: number) => {
     dispatch(setPagination({ page: newPage }));
@@ -78,13 +87,18 @@ const PaymentsPage: React.FC = () => {
       
       <div className="max-w-7xl mx-auto">
         <PaymentsHeader onCreateClick={handleCreatePayment} />
-        <PaymentsSearchBar searchTerm={searchTerm} onSearchChange={handleSearch} />
+        <PaymentsSearchBar 
+          searchTerm={searchTerm} 
+          onSearchChange={handleSearch}
+          selectedTypes={selectedTypes}
+          onTypeFilterChange={handleTypeFilterChange}
+        />
 
         {filteredPayments.length > 0 ? (
           <PaymentsTable payments={filteredPayments} onView={handleViewPayment} />
         ) : (
           <PaymentsEmptyState
-            hasSearch={!!searchTerm}
+            hasSearch={!!searchTerm || selectedTypes.length < 3}
             onCreateClick={handleCreatePayment}
           />
         )}
