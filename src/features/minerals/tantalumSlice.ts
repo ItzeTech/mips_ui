@@ -393,7 +393,7 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
 
   if (purchase_ta2o5_percentage && net_weight && rra_price_per_percentage) {
     let rra_total_amount = purchase_ta2o5_percentage * net_weight * rra_price_per_percentage;
-    calculatedData.rra = rra_total_amount * rra_percentage;
+    calculatedData.rra = rra_total_amount * (rra_percentage / 100);
   }
 
   if (net_weight) {

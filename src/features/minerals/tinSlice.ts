@@ -424,8 +424,11 @@ export const calculateFinancials = (
   const lme_percentage =
     netLme * ((purchase_sn_percentage ?? 0) / 100);
 
+  const lme_s_percentage =
+    (lme_rate ?? 0) * ((purchase_sn_percentage ?? 0) / 100);
+
   // Step 3: Final LME values
-  const final_lme = lme_percentage - (government_tc ?? 0);
+  const final_lme = lme_s_percentage - (government_tc ?? 0);
   const final_s_lme = lme_percentage - (internal_tc ?? 0);
 
   // Step 4: RRA price per kg
