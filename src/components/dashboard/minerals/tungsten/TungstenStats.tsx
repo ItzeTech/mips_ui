@@ -43,17 +43,17 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
 
     // Calculate average Alex Stewart WO3
     let alexStewartSum = 0;
-    let alexStewartCount = 0;
+    let totalWeightAlexStewart = 0;
 
     tungstens.forEach(item => {
       if (item.alex_stewart_wo3_percentage !== null) {
-        alexStewartSum += item.alex_stewart_wo3_percentage;
-        alexStewartCount++;
+        alexStewartSum += item.alex_stewart_wo3_percentage * item.net_weight;
+        totalWeightAlexStewart += item.net_weight;
       }
     });
 
-    const avgAlexStewartWO3 = alexStewartCount > 0 
-      ? alexStewartSum / alexStewartCount 
+    const avgAlexStewartWO3 = totalWeightAlexStewart > 0 
+      ? alexStewartSum / totalWeightAlexStewart 
       : 0;
 
     // Calculate total net amount
@@ -78,6 +78,21 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
       ? selectedWeightedSumWO3 / selectedTotalWeightWithWO3 
       : 0;
 
+
+    let selectedWeightedSumASWO3 = 0;
+    let selectedTotalWeightWithASWO3 = 0;
+
+    selectedTungstens.forEach(item => {
+      if (item.alex_stewart_wo3_percentage !== null) {
+        selectedWeightedSumASWO3 += item.alex_stewart_wo3_percentage * item.net_weight;
+        selectedTotalWeightWithASWO3 += item.net_weight;
+      }
+    });
+
+    const selectedAvgASWO3Percentage = selectedTotalWeightWithASWO3 > 0 
+      ? selectedWeightedSumASWO3 / selectedTotalWeightWithASWO3 
+      : 0;
+
     const selectedTotalNetAmount = selectedTungstens.reduce(
       (sum, item) => sum + (item.net_amount || 0), 0);
 
@@ -89,6 +104,7 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
       totalNetAmount,
       selectedTotalNetWeight,
       selectedAvgWO3Percentage,
+      selectedAvgASWO3Percentage,
       selectedTotalNetAmount,
       selectedCount: selectedTungstens.length
     };
@@ -204,6 +220,11 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
             <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
               {formatNumber(stats.avgAlexStewartWO3)}%
             </p>
+            {hasSelected && (
+              <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                Sel: {formatNumber(stats.selectedAvgASWO3Percentage)}%
+              </p>
+            )}
           </div>
         </div>
       </motion.div>
