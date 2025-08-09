@@ -11,6 +11,7 @@ import {
   CheckBadgeIcon
 } from '@heroicons/react/24/outline';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
+import { useNavigate } from 'react-router-dom';
 
 interface TinHeaderProps {
   onCreateClick: () => void;
@@ -24,9 +25,10 @@ const TinHeader: React.FC<TinHeaderProps> = ({
   const { t } = useTranslation();
   const { clearByType, getCountByType } = useSelectedMinerals();
 
+  const navigate = useNavigate();
+
   const handleComputeSelected = () => {
-    console.log('Computing for selected tins:', selectedTins);
-    // Implement compute functionality
+    navigate('/sales/create/tin');
   };
 
   return (

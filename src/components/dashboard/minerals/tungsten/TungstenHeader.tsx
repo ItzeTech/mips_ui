@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PlusIcon, RectangleGroupIcon, SparklesIcon, CalculatorIcon, ChartBarIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
+import { useNavigate } from 'react-router-dom';
 
 interface TungstenHeaderProps {
   onCreateClick: () => void;
@@ -14,9 +15,10 @@ const TungstenHeader: React.FC<TungstenHeaderProps> = ({ onCreateClick, selected
   const { t } = useTranslation();
   const { clearByType, getCountByType } = useSelectedMinerals();
 
+  const navigate = useNavigate();
+
   const handleComputeSelected = () => {
-    console.log('Computing for selected tungstens:', selectedTungstens);
-    // Implement compute functionality
+    navigate('/sales/create/tungsten');
   };
 
   return (
