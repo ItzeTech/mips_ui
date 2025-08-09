@@ -94,7 +94,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
       if (settings) {
         setTinSetting({
           government_treatment_charge_usd: settings.government_treatment_charge_usd,
-          rra_percentage: settings.rra_percentage / 100,
+          rra_percentage: settings.rra_percentage,
           rma_per_kg_rwf: settings.rma_per_kg_rwf,
           inkomane_fee_per_kg_rwf: settings.inkomane_fee_per_kg_rwf
         });
@@ -213,6 +213,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
 
   // Calculate financial values when relevant fields change
   useEffect(() => {
+    console.log(financialForm.fluctuation_fee)
     if (selectedTin && stockForm.net_weight && 
         financialForm.lme_rate !== null && 
         financialForm.purchase_sn_percentage !== null && 

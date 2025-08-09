@@ -15,6 +15,7 @@ interface RenderInputProps {
   allowNegative?: boolean;
   allowLeadingZeros?: boolean;
   decimalScale?: number;
+  canHaveZero?: boolean;
 }
 
 const RenderInput: React.FC<RenderInputProps> = ({
@@ -28,8 +29,9 @@ const RenderInput: React.FC<RenderInputProps> = ({
   field = '',
   errors = {},
   allowNegative = false,
-  allowLeadingZeros = false,
-  decimalScale = 2
+  allowLeadingZeros = true,
+  decimalScale = 2,
+  canHaveZero = false
 }) => (
   <div className="space-y-2">
     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -38,13 +40,14 @@ const RenderInput: React.FC<RenderInputProps> = ({
     <div className="relative">
     {
         type === 'number' ?
+
         <NumericFormat
             value={value}
             decimalScale={decimalScale}
             allowNegative={allowNegative}
             allowLeadingZeros={allowLeadingZeros}
             onValueChange={(values) => {
-                onChange(values.floatValue || null)
+                onChange(values.floatValue || (canHaveZero ? 0 : null))
             }}
             className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
             placeholder={`Enter ${label.toLowerCase()}`}    

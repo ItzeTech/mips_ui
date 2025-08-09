@@ -229,6 +229,7 @@ export default function FinancialTab({
               suffix="RWF"
               field="price_of_tag_per_kg_rwf"
               errors={errors}
+              canHaveZero={true}
             />
           </div>
         </div>

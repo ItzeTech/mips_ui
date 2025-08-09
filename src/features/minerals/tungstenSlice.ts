@@ -387,7 +387,7 @@ export const calculateFinancials = (data: Partial<Tungsten>, settings: TungstenS
 
   // Price/kg = (MTU * Purchase WO3%) / 1000
   if (mtu && purchase_wo3_percentage) {
-    calculatedData.price_per_kg = (mtu * purchase_wo3_percentage / 100) / 1000;
+    calculatedData.price_per_kg = (mtu * purchase_wo3_percentage) / 1000;
   }
 
   // Total amount = price/kg * net weight

@@ -386,7 +386,10 @@ export const {
 
 export default tinSlice.reducer;
 
-export const calculateFinancials = (data: Partial<Tin>, settings: TinSettingsData): Partial<Tin> => {
+export const calculateFinancials = (
+  data: Partial<Tin>,
+  settings: TinSettingsData
+): Partial<Tin> => {
   const {
     lme_rate,
     purchase_sn_percentage,
@@ -400,53 +403,74 @@ export const calculateFinancials = (data: Partial<Tin>, settings: TinSettingsDat
 
   let calculatedData: Partial<Tin> = { ...data };
 
-  // RRA price/kg: ((LME * Purchase Sn %) - Government TC) / 1000
-  if (lme_rate && purchase_sn_percentage && government_tc) {
-    calculatedData.rra_price_per_kg = ((lme_rate * purchase_sn_percentage / 100) - government_tc) / 1000;
+  // --- Debug Logging ---
+  console.log("=== DEBUG: Input Data ===", {
+    lme_rate,
+    purchase_sn_percentage,
+    net_weight,
+    exchange_rate,
+    price_of_tag_per_kg_rwf,
+    fluctuation_fee,
+    internal_tc,
+    government_tc,
+    settings
+  });
+
+  // Step 1: Net LME
+  const netLme =
+    (lme_rate ?? 0) - (fluctuation_fee ?? 0);
+
+  // Step 2: LME %
+  const lme_percentage =
+    netLme * ((purchase_sn_percentage ?? 0) / 100);
+
+  // Step 3: Final LME values
+  const final_lme = lme_percentage - (government_tc ?? 0);
+  const final_s_lme = lme_percentage - (internal_tc ?? 0);
+
+  // Step 4: RRA price per kg
+  calculatedData.rra_price_per_kg = final_lme / 1000;
+
+  // Step 5: RRA total
+  calculatedData.rra =
+    calculatedData.rra_price_per_kg *
+    ((settings.rra_percentage ?? 0) / 100) *
+    (net_weight ?? 0);
+
+  // Step 6: Internal price/kg
+  calculatedData.internal_price_per_kg = final_s_lme / 1000;
+
+  // Step 7: Total amount (USD)
+  calculatedData.total_amount =
+    (calculatedData.internal_price_per_kg ?? 0) *
+    (net_weight ?? 0);
+
+  // Step 8: RMA & Inkomane in RWF
+  calculatedData.rma =
+    (settings.rma_per_kg_rwf ?? 0) * (net_weight ?? 0);
+  calculatedData.inkomane_fee =
+    (settings.inkomane_fee_per_kg_rwf ?? 0) *
+    (net_weight ?? 0);
+
+  // Step 9: Advance in RWF
+  calculatedData.advance =
+    (price_of_tag_per_kg_rwf ?? 0) * (net_weight ?? 0);
+
+  // Step 10: Total charge in USD
+  if (exchange_rate && exchange_rate !== 0) {
+    calculatedData.total_charge =
+      (calculatedData.rra ?? 0) +
+      (calculatedData.rma ?? 0) / exchange_rate +
+      (calculatedData.inkomane_fee ?? 0) / exchange_rate +
+      (calculatedData.advance ?? 0) / exchange_rate;
+  } else {
+    calculatedData.total_charge = 0;
   }
 
-  // RRA: (RRA price/kg * rra_percentage) * net_weight
-  if (calculatedData.rra_price_per_kg && net_weight && settings.rra_percentage) {
-    calculatedData.rra = (calculatedData.rra_price_per_kg * settings.rra_percentage) * net_weight;
-  }
-
-  // Internal Price/kg: (((LME - Fluctuation Fee) * Purchase Sn %) - internal TC) / 1000
-  if (lme_rate && fluctuation_fee && purchase_sn_percentage && internal_tc) {
-    calculatedData.internal_price_per_kg = (((lme_rate - fluctuation_fee) * purchase_sn_percentage / 100) - internal_tc) / 1000;
-  }
-
-  // Total amount: internal price/kg * net weight
-  if (calculatedData.internal_price_per_kg && net_weight) {
-    calculatedData.total_amount = calculatedData.internal_price_per_kg * net_weight;
-  }
-
-  // RMA: settings.rma_per_kg_rwf * Net weight
-  if (net_weight) {
-    calculatedData.rma = settings.rma_per_kg_rwf * net_weight;
-  }
-
-  // Inkomane Fee: settings.inkomane_fee_per_kg_rwf * Net weight
-  if (net_weight) {
-    calculatedData.inkomane_fee = settings.inkomane_fee_per_kg_rwf * net_weight;
-  }
-
-  // Advance: price of tag/kg * net weight
-  if (price_of_tag_per_kg_rwf && net_weight) {
-    calculatedData.advance = price_of_tag_per_kg_rwf * net_weight;
-  }
-
-  // Total charge: RRA + (RMA / exchange_rate) + (Inkomane / exchange_rate) + (advance / exchange_rate)
-  if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && calculatedData.advance && exchange_rate) {
-    calculatedData.total_charge = calculatedData.rra + 
-      (calculatedData.rma / exchange_rate) + 
-      (calculatedData.inkomane_fee / exchange_rate) + 
-      (calculatedData.advance / exchange_rate);
-  }
-
-  // Net amount: Total amount - Total charge
-  if (calculatedData.total_amount && calculatedData.total_charge) {
-    calculatedData.net_amount = calculatedData.total_amount - calculatedData.total_charge;
-  }
+  // Step 11: Net amount in USD
+  calculatedData.net_amount =
+    (calculatedData.total_amount ?? 0) -
+    (calculatedData.total_charge ?? 0);
 
   return calculatedData;
 };

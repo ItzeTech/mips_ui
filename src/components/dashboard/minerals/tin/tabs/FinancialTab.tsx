@@ -208,46 +208,12 @@ export default function FinancialTab({
             />
 
             <RenderInput
-              label={t('tin.government_tc', 'Government Treatment Charge')}
-              value={financialForm.government_tc}
-              onChange={(value) => setFinancialForm(prev => ({ ...prev, government_tc: value }))}
-              type="number"
-              suffix="$"
-              field="government_tc"
-              errors={errors}
-            />
-
-            {/* Special Purchase Sn% input */}
-            <div className="space-y-2">
-              {renderPurchaseSnInput(errors, 'purchase_sn_percentage')}
-            </div>
-
-            <RenderInput
-              label={t('tin.fluctuation_fee', 'Fluctuation Fee')}
-              value={financialForm.fluctuation_fee}
-              onChange={(value) => setFinancialForm(prev => ({ ...prev, fluctuation_fee: value }))}
-              type="number"
-              suffix="$"
-              field="fluctuation_fee"
-              errors={errors}
-            />
-
-            <RenderInput
               label={t('tin.internal_tc', 'Internal Treatment Charge')}
               value={financialForm.internal_tc}
               onChange={(value) => setFinancialForm(prev => ({ ...prev, internal_tc: value }))}
               type="number"
               suffix="$"
               field="internal_tc"
-              errors={errors}
-            />
-
-            <RenderInput
-              label={t('tin.exchange_rate', 'Exchange Rate (USD to RWF)')}
-              value={financialForm.exchange_rate}
-              onChange={(value) => setFinancialForm(prev => ({ ...prev, exchange_rate: value }))}
-              type="number"
-              field="exchange_rate"
               errors={errors}
             />
 
@@ -259,7 +225,35 @@ export default function FinancialTab({
               suffix="RWF"
               field="price_of_tag_per_kg_rwf"
               errors={errors}
+              canHaveZero={true}
             />
+
+
+            <RenderInput
+              label={t('tin.fluctuation_fee', 'Fluctuation Fee')}
+              value={financialForm.fluctuation_fee}
+              onChange={(value) => setFinancialForm(prev => ({ ...prev, fluctuation_fee: value }))}
+              type="number"
+              suffix="$"
+              field="fluctuation_fee"
+              errors={errors}
+              canHaveZero={true}
+            />
+            
+            {/* Special Purchase Sn% input */}
+            <div className="space-y-2">
+              {renderPurchaseSnInput(errors, 'purchase_sn_percentage')}
+            </div>
+
+            <RenderInput
+              label={t('tin.exchange_rate', 'Exchange Rate (USD to RWF)')}
+              value={financialForm.exchange_rate}
+              onChange={(value) => setFinancialForm(prev => ({ ...prev, exchange_rate: value }))}
+              type="number"
+              field="exchange_rate"
+              errors={errors}
+            />
+
           </div>
         </div>
 
@@ -332,13 +326,13 @@ export default function FinancialTab({
               />
 
               <HoverInfoCard
-                title={`${t('tin.rra', 'RRA')} (${TinSettingsData?.rra_percentage}%)`}
+                title={`${t('tin.rra', 'RRA')} (${TinSettingsData?.rra_percentage / 100}%)`}
                 value={`$${formatNumber(calculatedValues.rra)}`}
                 color="amber"
                 formula="(RRA price/kg * RRA %) * net weight"
                 data={[
                   { label: "RRA Price/kg", value: `$${formatNumber(calculatedValues.rra_price_per_kg)}` },
-                  { label: "RRA %", value: `${TinSettingsData?.rra_percentage}%` },
+                  { label: "RRA %", value: `${TinSettingsData?.rra_percentage / 100}%` },
                   { label: "Net Weight", value: formatNumber(net_weight) },
                 ]}
                 outputLabel="RRA"
@@ -410,6 +404,19 @@ export default function FinancialTab({
                 ]}
                 outputLabel="Net Amount"
                 outputValue={`$${formatNumber(calculatedValues.net_amount)}`}
+              />
+
+              <HoverInfoCard
+                title={t('tin.net_amount_in_rwf', 'Net Amount')}
+                value={`${formatNumber(calculatedValues.net_amount * (financialForm?.exchange_rate ?? 0))} RWF`}
+                color="orange"
+                formula="Net Amount * Exchange Rate"
+                data={[
+                  { label: "Net Amount", value: `$${formatNumber(calculatedValues.net_amount)}` },
+                  { label: "Exchange Rate", value: `${formatNumber((financialForm?.exchange_rate ?? 0))}` },
+                ]}
+                outputLabel="Net Amount In Rwf"
+                outputValue={`$${formatNumber(calculatedValues.net_amount * (financialForm?.exchange_rate ?? 0))}`}
               />
             </div>
           </div>

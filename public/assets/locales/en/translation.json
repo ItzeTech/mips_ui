@@ -526,6 +526,7 @@
       "total_amount": "Total Amount",
       "total_charge": "Total Charge",
       "net_amount": "Net Amount",
+      "net_amount_in_rwf": "Net Amount in Rwf",
       
       "quick_select": "Quick Select",
       "save_stock": "Save Stock",

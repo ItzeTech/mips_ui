@@ -230,6 +230,7 @@ export default function FinancialTab({
               suffix="RWF"
               field="price_of_tag_per_kg_rwf"
               errors={errors}
+              canHaveZero={true}
             />
           </div>
         </div>
@@ -292,8 +293,8 @@ export default function FinancialTab({
               color="gray"
               formula="RRA percentage * RRA total amount"
               data={[
-                { label: "RRA Percentage", value: `${TantalumSettingsData?.rra_percentage ? TantalumSettingsData?.rra_percentage/100 : TantalumSettingsData?.rra_percentage}` },
-                { label: "RRA total Amount", value: `$${formatNumber((TantalumSettingsData.rra_price_per_percentage/100) * (financialForm.purchase_ta2o5_percentage ?? 0) * (net_weight ?? 0))}` },
+                { label: "RRA Percentage", value: `${TantalumSettingsData?.rra_percentage ? TantalumSettingsData?.rra_percentage / 100 : TantalumSettingsData?.rra_percentage}` },
+                { label: "RRA total Amount", value: `$${formatNumber((TantalumSettingsData.rra_price_per_percentage / 100) * (financialForm.purchase_ta2o5_percentage ?? 0) * (net_weight ?? 0))}` },
               ]}
               outputLabel="RRA"
               outputValue={`$${formatNumber(calculatedValues.rra)}`}
