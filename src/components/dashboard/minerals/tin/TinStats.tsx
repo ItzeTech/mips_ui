@@ -52,17 +52,17 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
     
     // Calculate average Alex Stewart Sn
     let alexStewartSum = 0;
-    let alexStewartCount = 0;
+    let totalWeightAlexStewart = 0;
     
     tins.forEach(item => {
       if (item.alex_stewart_sn_percentage !== null) {
         alexStewartSum += item.alex_stewart_sn_percentage;
-        alexStewartCount++;
+        totalWeightAlexStewart += item.net_weight;
       }
     });
     
-    const avgAlexStewartSn = alexStewartCount > 0 
-      ? alexStewartSum / alexStewartCount 
+    const avgAlexStewartSn = totalWeightAlexStewart > 0 
+      ? alexStewartSum / totalWeightAlexStewart 
       : 0;
     
     // Calculate total net amount
@@ -87,6 +87,20 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
       ? selectedWeightedSumSn / selectedTotalWeightWithSn 
       : 0;
     
+    let selectedWeightedSumASsn = 0;
+    let selectedTotalWeightWithASsn = 0;
+
+    selectedTins.forEach(item => {
+      if (item.alex_stewart_sn_percentage !== null) {
+        selectedWeightedSumASsn += item.alex_stewart_sn_percentage * item.net_weight;
+        selectedTotalWeightWithASsn += item.net_weight;
+      }
+    });
+
+    const selectedAvgASSNPercentage = selectedTotalWeightWithASsn > 0 
+      ? selectedWeightedSumASsn / selectedTotalWeightWithASsn 
+      : 0;
+    
     const selectedTotalNetAmount = selectedTins.reduce(
       (sum, item) => sum + (item.net_amount || 0), 0);
     
@@ -98,6 +112,7 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
       totalNetAmount,
       selectedTotalNetWeight,
       selectedAvgSnPercentage,
+      selectedAvgASSNPercentage,
       selectedTotalNetAmount,
       selectedCount: selectedTins.length
     };
@@ -213,6 +228,11 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
             <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
               {formatNumber(stats.avgAlexStewartSn)}%
             </p>
+            {hasSelected && (
+              <p className="text-xs text-amber-600 dark:text-amber-400">
+                Sel: {formatNumber(stats.selectedAvgASSNPercentage)}%
+              </p>
+            )}
           </div>
         </div>
       </motion.div>
