@@ -274,194 +274,194 @@ const ViewPaymentPage: React.FC = () => {
           <div className="lg:col-span-2 space-y-4">
             {/* Mineral Types Overview */}
             {/* Mineral Types Overview - Redesigned */}
-<motion.div 
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: 0.3 }}
-  className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden"
->
-  <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">
-    <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center">
-      <BeakerIcon className="w-5 h-5 mr-2 text-blue-500" />
-      {t('payments.mineral_breakdown', 'Mineral Breakdown')}
-    </h2>
-  </div>
-  
-  <div className="p-3">
-    {/* Weight Distribution Chart */}
-    <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Weight Distribution</p>
-      <div className="flex items-center h-5 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-        {selectedPayment.tantalum_total_weight && (
-          <div 
-            className="h-full bg-purple-500 dark:bg-purple-600" 
-            style={{ 
-              width: `${(selectedPayment.tantalum_total_weight / selectedPayment.total_weight) * 100}%`,
-              transition: 'width 1s ease-in-out'
-            }}
-          />
-        )}
-        {selectedPayment.tin_total_weight && (
-          <div 
-            className="h-full bg-gray-500 dark:bg-gray-600" 
-            style={{ 
-              width: `${(selectedPayment.tin_total_weight / selectedPayment.total_weight) * 100}%`,
-              transition: 'width 1s ease-in-out'
-            }}
-          />
-        )}
-        {selectedPayment.tungsten_total_weight && (
-          <div 
-            className="h-full bg-yellow-500 dark:bg-yellow-600" 
-            style={{ 
-              width: `${(selectedPayment.tungsten_total_weight / selectedPayment.total_weight) * 100}%`,
-              transition: 'width 1s ease-in-out'
-            }}
-          />
-        )}
-      </div>
-      <div className="flex flex-wrap mt-2 gap-3 text-xs">
-        {selectedPayment.tantalum_total_weight && (
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-purple-500 dark:bg-purple-600 rounded-sm mr-1"></div>
-            <span>Tantalum: {Math.round((selectedPayment.tantalum_total_weight / selectedPayment.total_weight) * 100)}%</span>
-          </div>
-        )}
-        {selectedPayment.tin_total_weight && (
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-gray-500 dark:bg-gray-600 rounded-sm mr-1"></div>
-            <span>Tin: {Math.round((selectedPayment.tin_total_weight / selectedPayment.total_weight) * 100)}%</span>
-          </div>
-        )}
-        {selectedPayment.tungsten_total_weight && (
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-yellow-500 dark:bg-yellow-600 rounded-sm mr-1"></div>
-            <span>Tungsten: {Math.round((selectedPayment.tungsten_total_weight / selectedPayment.total_weight) * 100)}%</span>
-          </div>
-        )}
-      </div>
-    </div>
-    
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-      {/* Tantalum Card - Redesigned */}
-      {selectedPayment.tantalum_total_weight && (
-        <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-lg border border-purple-200 dark:border-purple-800/50 shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="absolute top-0 left-0 w-1 h-full bg-purple-500 dark:bg-purple-600"></div>
-          <div className="p-3">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-purple-800 dark:text-purple-300 flex items-center">
-                <BeakerIcon className="w-4 h-4 mr-1.5" />
-                Tantalum
-              </h3>
-              <Badge color="purple" size="sm">
-                {selectedPayment.tantalum_minerals.length} minerals
-              </Badge>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatWeight(selectedPayment.tantalum_total_weight)}
-                </p>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden"
+            >
+              <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center">
+                  <BeakerIcon className="w-5 h-5 mr-2 text-blue-500" />
+                  {t('payments.mineral_breakdown', 'Mineral Breakdown')}
+                </h2>
               </div>
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Avg. Ta₂O₅</p>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatPercentage(selectedPayment.avg_ta2o5_percentage)}
-                </p>
+              
+              <div className="p-3">
+                {/* Weight Distribution Chart */}
+                <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Weight Distribution</p>
+                  <div className="flex items-center h-5 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
+                    {selectedPayment.tantalum_total_weight && (
+                      <div 
+                        className="h-full bg-purple-500 dark:bg-purple-600" 
+                        style={{ 
+                          width: `${(selectedPayment.tantalum_total_weight / selectedPayment.total_weight) * 100}%`,
+                          transition: 'width 1s ease-in-out'
+                        }}
+                      />
+                    )}
+                    {selectedPayment.tin_total_weight && (
+                      <div 
+                        className="h-full bg-gray-500 dark:bg-gray-600" 
+                        style={{ 
+                          width: `${(selectedPayment.tin_total_weight / selectedPayment.total_weight) * 100}%`,
+                          transition: 'width 1s ease-in-out'
+                        }}
+                      />
+                    )}
+                    {selectedPayment.tungsten_total_weight && (
+                      <div 
+                        className="h-full bg-yellow-500 dark:bg-yellow-600" 
+                        style={{ 
+                          width: `${(selectedPayment.tungsten_total_weight / selectedPayment.total_weight) * 100}%`,
+                          transition: 'width 1s ease-in-out'
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div className="flex flex-wrap mt-2 gap-3 text-xs">
+                    {selectedPayment.tantalum_total_weight && (
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-purple-500 dark:bg-purple-600 rounded-sm mr-1"></div>
+                        <span>Tantalum: {Math.round((selectedPayment.tantalum_total_weight / selectedPayment.total_weight) * 100)}%</span>
+                      </div>
+                    )}
+                    {selectedPayment.tin_total_weight && (
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-gray-500 dark:bg-gray-600 rounded-sm mr-1"></div>
+                        <span>Tin: {Math.round((selectedPayment.tin_total_weight / selectedPayment.total_weight) * 100)}%</span>
+                      </div>
+                    )}
+                    {selectedPayment.tungsten_total_weight && (
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-yellow-500 dark:bg-yellow-600 rounded-sm mr-1"></div>
+                        <span>Tungsten: {Math.round((selectedPayment.tungsten_total_weight / selectedPayment.total_weight) * 100)}%</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {/* Tantalum Card - Redesigned */}
+                  {selectedPayment.tantalum_total_weight && (
+                    <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-lg border border-purple-200 dark:border-purple-800/50 shadow-sm hover:shadow-md transition-shadow duration-200">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-purple-500 dark:bg-purple-600"></div>
+                      <div className="p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-semibold text-purple-800 dark:text-purple-300 flex items-center">
+                            <BeakerIcon className="w-4 h-4 mr-1.5" />
+                            Tantalum
+                          </h3>
+                          <Badge color="purple" size="sm">
+                            {selectedPayment.tantalum_minerals.length} minerals
+                          </Badge>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {formatWeight(selectedPayment.tantalum_total_weight)}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Avg. Ta₂O₅</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {formatPercentage(selectedPayment.avg_ta2o5_percentage)}
+                            </p>
+                          </div>
+                          <div className="col-span-2">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
+                            <p className="font-medium text-green-600 dark:text-green-400">
+                              {formatAmount(selectedPayment.tantalum_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Tin Card - Redesigned */}
+                  {selectedPayment.tin_total_weight && (
+                    <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm hover:shadow-md transition-shadow duration-200">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-gray-500 dark:bg-gray-400"></div>
+                      <div className="p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-semibold text-gray-800 dark:text-gray-300 flex items-center">
+                            <BeakerIcon className="w-4 h-4 mr-1.5" />
+                            Tin
+                          </h3>
+                          <Badge color="gray" size="sm">
+                            {selectedPayment.tin_minerals.length} minerals
+                          </Badge>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {formatWeight(selectedPayment.tin_total_weight)}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Avg. Sn</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {formatPercentage(selectedPayment.avg_sn_percentage)}
+                            </p>
+                          </div>
+                          <div className="col-span-2">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
+                            <p className="font-medium text-green-600 dark:text-green-400">
+                              {formatAmount(selectedPayment.tin_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Tungsten Card - Redesigned */}
+                  {selectedPayment.tungsten_total_weight && (
+                    <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-lg border border-yellow-200 dark:border-yellow-800/50 shadow-sm hover:shadow-md transition-shadow duration-200">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-yellow-500 dark:bg-yellow-600"></div>
+                      <div className="p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-semibold text-yellow-800 dark:text-yellow-300 flex items-center">
+                            <BeakerIcon className="w-4 h-4 mr-1.5" />
+                            Tungsten
+                          </h3>
+                          <Badge color="yellow" size="sm">
+                            {selectedPayment.tungsten_minerals.length} minerals
+                          </Badge>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {formatWeight(selectedPayment.tungsten_total_weight)}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Avg. WO₃</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {formatPercentage(selectedPayment.avg_wo3_percentage)}
+                            </p>
+                          </div>
+                          <div className="col-span-2">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
+                            <p className="font-medium text-green-600 dark:text-green-400">
+                              {formatAmount(selectedPayment.tungsten_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="col-span-2">
-                <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
-                <p className="font-medium text-green-600 dark:text-green-400">
-                  {formatAmount(selectedPayment.tantalum_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Tin Card - Redesigned */}
-      {selectedPayment.tin_total_weight && (
-        <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="absolute top-0 left-0 w-1 h-full bg-gray-500 dark:bg-gray-400"></div>
-          <div className="p-3">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-gray-800 dark:text-gray-300 flex items-center">
-                <BeakerIcon className="w-4 h-4 mr-1.5" />
-                Tin
-              </h3>
-              <Badge color="gray" size="sm">
-                {selectedPayment.tin_minerals.length} minerals
-              </Badge>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatWeight(selectedPayment.tin_total_weight)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Avg. Sn</p>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatPercentage(selectedPayment.avg_sn_percentage)}
-                </p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
-                <p className="font-medium text-green-600 dark:text-green-400">
-                  {formatAmount(selectedPayment.tin_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Tungsten Card - Redesigned */}
-      {selectedPayment.tungsten_total_weight && (
-        <div className="relative overflow-hidden bg-white dark:bg-gray-800 rounded-lg border border-yellow-200 dark:border-yellow-800/50 shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="absolute top-0 left-0 w-1 h-full bg-yellow-500 dark:bg-yellow-600"></div>
-          <div className="p-3">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-yellow-800 dark:text-yellow-300 flex items-center">
-                <BeakerIcon className="w-4 h-4 mr-1.5" />
-                Tungsten
-              </h3>
-              <Badge color="yellow" size="sm">
-                {selectedPayment.tungsten_minerals.length} minerals
-              </Badge>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatWeight(selectedPayment.tungsten_total_weight)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Avg. WO₃</p>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {formatPercentage(selectedPayment.avg_wo3_percentage)}
-                </p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
-                <p className="font-medium text-green-600 dark:text-green-400">
-                  {formatAmount(selectedPayment.tungsten_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  </div>
-</motion.div>
+            </motion.div>
 
             {/* Collapsible Mineral Details */}
             <motion.div 

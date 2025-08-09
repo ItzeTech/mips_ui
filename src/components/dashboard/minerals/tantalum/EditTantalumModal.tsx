@@ -11,6 +11,7 @@ import {
   CurrencyDollarIcon,
   ExclamationTriangleIcon,
   LockClosedIcon,
+  PrinterIcon,
 } from '@heroicons/react/24/outline';
 import { RootState, AppDispatch } from '../../../../store/store';
 import {
@@ -34,6 +35,7 @@ import TabButton from '../common/TabButton';
 import { fetchTantalumSettings, TantalumSettingsData } from '../../../../features/settings/tantalumSettingSlice';
 import ConfirmationDialog from '../common/ConfirmationDialog';
 import toast from 'react-hot-toast';
+import TantalumPrintModal from './TantalumPrintModal';
 
 type UserRole = "Stock Manager" | "Boss" | "Manager" | "Lab Technician" | "Finance Officer";
 
@@ -55,6 +57,57 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
   const { t } = useTranslation();
   const { settings, isFetched } = useSelector((state: RootState) => state.tantalumSettings);
   const dispatch = useDispatch<AppDispatch>();
+
+  const [printModalOpen, setPrintModalOpen] = useState(false);
+
+ 
+  const handlePrint = () => {
+    if (selectedTantalum) {
+      setPrintModalOpen(true);
+    }
+  };
+
+  const renderHeader = () => (
+    <motion.div 
+      className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center"
+      variants={itemVariants}
+    >
+      <div className="flex items-center">
+        <div className="p-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg mr-4">
+          <PencilIcon className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            {t('tantalum.edit_details', 'Edit Tantalum')}
+          </h2>
+          <div className="flex items-center mt-1">
+            <span className="text-sm text-gray-500 dark:text-gray-400 mr-3">
+              {selectedTantalum?.lot_number}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center space-x-2">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handlePrint}
+          className="p-2 rounded-full text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors"
+          title={t('tantalum.print_report', 'Print Report')}
+        >
+          <PrinterIcon className="w-5 h-5" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1, rotate: 90 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleClose}
+          className="p-2 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        >
+          <XMarkIcon className="w-5 h-5" />
+        </motion.button>
+      </div>
+    </motion.div>
+  );
 
   const [tantalumSetting, setTantalumSetting] = useState<TantalumSettingsData>({
       rra_percentage: 0,
@@ -89,6 +142,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         });
       }
     }, [settings]);
+
 
   const { 
     selectedTantalum, 
@@ -708,34 +762,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
           >
             <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
               {/* Header */}
-              <motion.div 
-                className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center"
-                variants={itemVariants}
-              >
-                <div className="flex items-center">
-                  <div className="p-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg mr-4">
-                    <PencilIcon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                      {t('tantalum.edit_details', 'Edit Tantalum')}
-                    </h2>
-                    <div className="flex items-center mt-1">
-                      <span className="text-sm text-gray-500 dark:text-gray-400 mr-3">
-                        {selectedTantalum.lot_number}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <motion.button
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={handleClose}
-                  className="p-2 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <XMarkIcon className="w-5 h-5" />
-                </motion.button>
-              </motion.div>
+              {renderHeader()}
               
               {/* Tabs */}
               <motion.div
@@ -898,6 +925,13 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
             confirmText={t('common.save_changes', 'Save Changes')}
             cancelText={t('common.cancel', 'Cancel')}
           />
+          {selectedTantalum && (
+            <TantalumPrintModal
+              isOpen={printModalOpen}
+              onClose={() => setPrintModalOpen(false)}
+              tantalumId={selectedTantalum.id}
+            />
+          )}
         </>
         
       )}

@@ -417,7 +417,13 @@
       "has_alex_stewart": "Has Alex Stewart",
       "date_of_alex_stewart": "Date of Alex Stewart",
       "date_of_sampling": "Date of Sampling",
-      "date_of_delivery": "Delivery Date"
+      "date_of_delivery": "Delivery Date",
+      "print": "Print Report",
+      "print_report": "Print Report",
+      "print_options": "Print Options",
+      "print_description": "Choose how you would like to access the mineral report",
+      "view_report": "View Report",
+      "download_report": "Download Report"
     },
     "tin": {
       "title": "Tin Management",
