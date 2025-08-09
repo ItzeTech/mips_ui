@@ -93,7 +93,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
     useEffect(() => {
       if (settings) {
         setTungstenSetting({
-          rra_percentage: settings.rra_percentage,
+          rra_percentage: settings.rra_percentage / 100,
           rma_usd_per_ton: settings.rma_usd_per_ton,
           inkomane_fee_per_kg_rwf: settings.inkomane_fee_per_kg_rwf
         });
