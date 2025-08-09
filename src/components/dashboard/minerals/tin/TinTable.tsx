@@ -1,5 +1,5 @@
 // components/dashboard/minerals/tin/TinTable.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -9,10 +9,12 @@ import {
   ScaleIcon,
   UserIcon,
   CubeIcon,
-  CheckIcon
+  CheckIcon,
+  PrinterIcon
 } from '@heroicons/react/24/outline';
 import { StockStatus, FinanceStatus } from '../../../../features/minerals/tinSlice';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
+import TinPrintModal from './TinPrintModal';
 
 interface TinTableProps {
   tins: any[];
@@ -23,6 +25,10 @@ interface TinTableProps {
 const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
   const { t } = useTranslation();
   const { isSelected, selectTin, deselectMineral } = useSelectedMinerals();
+
+    // Print modal state
+    const [printModalOpen, setPrintModalOpen] = useState(false);
+    const [selectedTinId, setSelectedTinId] = useState<string | null>(null);
 
   // Format date helper
   const formatDate = (dateString: string | null) => {
@@ -70,7 +76,14 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
     }
   };
 
+
+  const handlePrintClick = (tantalumId: string) => {
+    setSelectedTinId(tantalumId);
+    setPrintModalOpen(true);
+  };
+
   return (
+  <>
     <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-4 md:mb-5">
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -243,10 +256,10 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                   <td className="px-3 py-3">
                     <div className="flex flex-wrap gap-1">
                       <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md ${getStockStatusColor(tin.stock_status)}`}>
-                        {t(`tin.status_${tin.stock_status}`, tin.stock_status)}
+                        {t(`tin.status_${tin.stock_status}`, tin.stock_status) as string}
                       </span>
                       <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md ${getFinanceStatusColor(tin.finance_status)}`}>
-                        {t(`tin.finance_${tin.finance_status}`, tin.finance_status)}
+                        {t(`tin.finance_${tin.finance_status}`, tin.finance_status) as string}
                       </span>
                     </div>
                   </td>
@@ -273,6 +286,16 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                       >
                         <PencilIcon className="w-3.5 h-3.5" />
                       </motion.button>
+
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => handlePrintClick(tin.id)}
+                        className="p-1.5 text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-100 dark:bg-purple-900/30 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all duration-200"
+                        title={t('tantalum.print', 'Print Report')}
+                      >
+                        <PrinterIcon className="w-3.5 h-3.5" />
+                      </motion.button>
                     </div>
                   </td>
                 </motion.tr>
@@ -282,6 +305,15 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
         </table>
       </div>
     </div>
+    {/* Print Modal */}
+    {selectedTinId && (
+      <TinPrintModal
+        isOpen={printModalOpen}
+        onClose={() => setPrintModalOpen(false)}
+        tinId={selectedTinId}
+      />
+    )}
+  </>
   );
 };
 

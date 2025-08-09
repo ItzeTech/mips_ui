@@ -551,7 +551,12 @@
       "government_tc_required": "Government TC is required",
       "purchase_sn_percentage_required": "Purchase Sn % is required",
       "exchange_rate_required": "Exchange rate is required",
-      "price_of_tag_per_kg_rwf_required": "Price of tag per kg is required"
+      "price_of_tag_per_kg_rwf_required": "Price of tag per kg is required",
+      "print_report": "Print Report",
+      "print_options": "Print Options",
+      "print_description": "Choose how you would like to access the mineral report",
+      "view_report": "View Report",
+      "download_report": "Download Report"
     },
     "tungsten": {
       "title": "Tungsten Management",
@@ -674,7 +679,12 @@
       "mtu_required": "MTU is required",
       "purchase_wo3_percentage_required": "Purchase WO3 % is required",
       "exchange_rate_required": "Exchange rate is required",
-      "price_of_tag_per_kg_rwf_required": "Price of tag per kg is required"
+      "price_of_tag_per_kg_rwf_required": "Price of tag per kg is required",
+      "print_report": "Print Report",
+      "print_options": "Print Options",
+      "print_description": "Choose how you would like to access the mineral report",
+      "view_report": "View Report",
+      "download_report": "Download Report"
     },
 
     "stockStatus": {

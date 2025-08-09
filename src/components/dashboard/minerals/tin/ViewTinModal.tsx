@@ -14,11 +14,13 @@ import {
   CheckBadgeIcon,
   ArrowPathIcon,
   DocumentTextIcon,
-  InformationCircleIcon
+  InformationCircleIcon,
+  PrinterIcon
 } from '@heroicons/react/24/outline';
 import { RootState } from '../../../../store/store';
 import { RoleGuard } from '../../../common/RoleGuard';
 import { Role } from '../../../../types/roles';
+import TinPrintModal from './TinPrintModal';
 
 interface ViewTinModalProps {
   isOpen: boolean;
@@ -30,6 +32,15 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
   const { selectedTin } = useSelector((state: RootState) => state.tins);
   
   const [activeTab, setActiveTab] = useState<'details' | 'lab' | 'financial'>('details');
+  const [printModalOpen, setPrintModalOpen] = useState(false);
+  
+  
+    // Add this inside the component before the return statement
+  const handlePrint = () => {
+    if (selectedTin) {
+      setPrintModalOpen(true);
+    }
+  };
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '—';
@@ -649,9 +660,19 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
               
               {/* Footer */}
               <motion.div 
-                className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end"
+                className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-between"
                 variants={itemVariants}
               >
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handlePrint}
+                  className="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center"
+                >
+                  <PrinterIcon className="w-5 h-5 mr-2" />
+                  {t('tantalum.print_report', 'Print Report')}
+                </motion.button>
+                
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -661,6 +682,13 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                   {t('common.close', 'Close')}
                 </motion.button>
               </motion.div>
+              {selectedTin && (
+                <TinPrintModal
+                  isOpen={printModalOpen}
+                  onClose={() => setPrintModalOpen(false)}
+                  tinId={selectedTin.id}
+                />
+              )}
             </div>
           </motion.div>
         </>
