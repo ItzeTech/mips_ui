@@ -11,6 +11,7 @@ import {
   CurrencyDollarIcon,
   ExclamationTriangleIcon,
   LockClosedIcon,
+  PrinterIcon,
 } from '@heroicons/react/24/outline';
 import { RootState, AppDispatch } from '../../../../store/store';
 import {
@@ -34,6 +35,7 @@ import TabButton from '../common/TabButton';
 import { fetchTungstenSettings, TungstenSettingsData } from '../../../../features/settings/tungstenSettingSlice';
 import ConfirmationDialog from '../common/ConfirmationDialog';
 import toast from 'react-hot-toast';
+import TungstenPrintModal from './TungstenPrintModal';
 
 type UserRole = "Stock Manager" | "Boss" | "Manager" | "Lab Technician" | "Finance Officer";
 
@@ -55,6 +57,16 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
   const { t } = useTranslation();
   const { settings, isFetched } = useSelector((state: RootState) => state.tungstenSettings);
   const dispatch = useDispatch<AppDispatch>();
+
+
+  const [printModalOpen, setPrintModalOpen] = useState(false);
+  
+   
+  const handlePrint = () => {
+    if (selectedTungsten) {
+      setPrintModalOpen(true);
+    }
+  };
 
   const [tungstenSetting, setTungstenSetting] = useState<TungstenSettingsData>({
       rra_percentage: 0,
@@ -682,14 +694,25 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                     </div>
                   </div>
                 </div>
-                <motion.button
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={handleClose}
-                  className="p-2 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <XMarkIcon className="w-5 h-5" />
-                </motion.button>
+                <div className="flex items-center space-x-2">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handlePrint}
+                    className="p-2 rounded-full text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors"
+                    title={t('tungsten.print_report', 'Print Report')}
+                  >
+                    <PrinterIcon className="w-5 h-5" />
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={handleClose}
+                    className="p-2 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <XMarkIcon className="w-5 h-5" />
+                  </motion.button>
+                </div>
               </motion.div>
               
               {/* Tabs */}
@@ -852,6 +875,13 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
             confirmText={t('common.save_changes', 'Save Changes')}
             cancelText={t('common.cancel', 'Cancel')}
           />
+          {selectedTungsten && (
+            <TungstenPrintModal
+              isOpen={printModalOpen}
+              onClose={() => setPrintModalOpen(false)}
+              tungstenId={selectedTungsten.id}
+            />
+          )}
         </>
         
       )}
