@@ -23,7 +23,8 @@ jobs:
 
       # 3️⃣ Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
+
 
       # 4️⃣ Create .env from Secrets and Variables
       - name: Create .env file
