@@ -37,9 +37,9 @@ jobs:
         run: CI=false npm run build
 
       # 6️⃣ Commit and push build folder
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v5
+      - name: Upload build as artifact
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          name: react-build
+          path: ./build
 
