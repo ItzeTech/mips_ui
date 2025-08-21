@@ -34,7 +34,7 @@ jobs:
 
       # 5️⃣ Build React app
       - name: Build React app
-        run: npm run build
+        run: CI=false npm run build
 
       # 6️⃣ Commit and push build folder
       - name: Commit build folder
