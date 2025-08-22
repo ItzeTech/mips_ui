@@ -18,7 +18,7 @@ import {
   ShoppingCartIcon,
   CreditCardIcon,
   BanknotesIcon,
-  CalculatorIcon
+  ReceiptRefundIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../../hooks/useAuth';
 import '../../../sidebar.css';
@@ -125,12 +125,12 @@ const navItems: NavItem[] = [
     color: 'from-amber-500 via-orange-500 to-yellow-500'
   },
   { 
-    icon: CalculatorIcon, 
-    label: 'Calculations', 
-    path: '/calculations', 
+    icon: ReceiptRefundIcon, 
+    label: 'Expenses', 
+    path: '/expenses', 
     allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
     category: 'Finance',
-    color: 'from-purple-500 via-violet-500 to-fuchsia-500'
+    color: 'from-rose-500 via-red-500 to-pink-500'
   },
   { 
     icon: Cog6ToothIcon, 

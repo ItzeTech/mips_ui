@@ -34,6 +34,12 @@ import PaymentsPage from '../pages/payments/PaymentsPage';
 import CreatePaymentPage from '../pages/payments/CreatePaymentPage';
 import ViewPaymentPage from '../pages/payments/ViewPaymentPage';
 
+// Expense Pages
+import ExpensesPage from '../pages/expenses/ExpensesPage';
+import CreateExpensePage from '../pages/expenses/CreateExpensePage';
+import ViewExpensePage from '../pages/expenses/ViewExpensePage';
+
+
 // Route Protectors
 import ProtectedRoute from './ProtectedRoutes';
 import RoleBasedRoute from './RoleBasedRoute';
@@ -118,6 +124,17 @@ const AnimatedOutlet: React.FC = () => {
             </Route>
             <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
               <Route path="/payments/:paymentId" element={<MotionPage><ViewPaymentPage /></MotionPage>} />
+            </Route>
+
+             {/* Expenses Routes */}
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss', 'Finance Officer']} />}>
+              <Route path="/expenses" element={<MotionPage><ExpensesPage /></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss', 'Finance Officer']} />}>
+              <Route path="/expenses/create" element={<MotionPage><CreateExpensePage /></MotionPage>} />
+            </Route>
+            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss', 'Finance Officer']} />}>
+              <Route path="/expenses/:expenseId" element={<MotionPage><ViewExpensePage /></MotionPage>} />
             </Route>
 
           </Route>
