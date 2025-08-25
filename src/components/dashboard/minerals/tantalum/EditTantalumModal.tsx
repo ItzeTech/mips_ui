@@ -480,24 +480,12 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
       const hasAlexTa2O5 = labData.alex_stewart_ta2o5 != null && labData.alex_stewart_ta2o5 !== '';
       const hasAlexNb2O5 = labData.alex_stewart_nb2o5 != null && labData.alex_stewart_nb2o5 !== '';
   
-      if (hasAlexTa2O5 !== hasAlexNb2O5) {
-        if (!hasAlexTa2O5) {
-          newErrors.alex_stewart_ta2o5 = t(
-            'tantalum.alex_stewart_ta2o5_required_if_nb2o5',
-            'Alex Stewart Ta2O5 must be filled if Nb2O5 is filled'
-          );
-        }
-        if (!hasAlexNb2O5) {
-          newErrors.alex_stewart_nb2o5 = t(
-            'tantalum.alex_stewart_nb2o5_required_if_ta2o5',
-            'Alex Stewart Nb2O5 must be filled if Ta2O5 is filled'
-          );
-        }
-      }
-  
       // If both Alex Stewart fields are empty, remove them from payload
-      if (!hasAlexTa2O5 && !hasAlexNb2O5) {
+      if (!hasAlexTa2O5) {
         delete labData.alex_stewart_ta2o5;
+      }
+
+      if (!hasAlexNb2O5) {
         delete labData.alex_stewart_nb2o5;
       }
   

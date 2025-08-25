@@ -41,6 +41,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="internal_sn_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -51,6 +52,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="bal_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -61,6 +63,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="fe_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -71,6 +74,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="w_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
         </div>
         </div>
@@ -93,6 +97,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="alex_stewart_sn_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
         </div>
         </div>

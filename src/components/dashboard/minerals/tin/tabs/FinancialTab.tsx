@@ -215,6 +215,7 @@ export default function FinancialTab({
               suffix="$"
               field="internal_tc"
               errors={errors}
+              canHaveZero={true}
             />
 
             <RenderInput

@@ -40,6 +40,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="internal_ta2o5"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -50,6 +51,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="internal_nb2o5"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -60,6 +62,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="nb_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -70,6 +73,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="sn_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -80,6 +84,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="fe_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -90,6 +95,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="w_percentage"
                 errors={errors}
+                canHaveZero={true}
             />
             </div>
 
@@ -113,6 +119,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="alex_stewart_ta2o5"
                 errors={errors}
+                canHaveZero={true}
             />
 
             <RenderInput
@@ -125,6 +132,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 suffix="%"
                 field="alex_stewart_nb2o5"
                 errors={errors}
+                canHaveZero={true}
             />
             </div>
         </div>
