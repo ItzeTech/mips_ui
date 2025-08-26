@@ -32,6 +32,11 @@ export interface FinancialFormData {
   exchange_rate: number | null;
   price_of_tag_per_kg_rwf: number | null;
   finance_status: FinanceStatus;
+
+  government_treatment_charge_usd_fee: number | null;
+  rra_percentage_fee: number | null;
+  rma_per_kg_rwf_fee: number | null;
+  inkomane_fee_per_kg_rwf_fee: number | null;
 }
 
 export interface Tin {
@@ -56,6 +61,11 @@ export interface Tin {
   government_tc: number | null;
   purchase_sn_percentage: number | null;
   rra_price_per_kg: number | null;
+
+  government_treatment_charge_usd_fee: number | null;
+  rra_percentage_fee: number | null;
+  rma_per_kg_rwf_fee: number | null;
+  inkomane_fee_per_kg_rwf_fee: number | null;
   
   // Charges
   rra: number | null;
@@ -115,6 +125,11 @@ export interface UpdateFinancialsData {
   total_charge?: number | null;
   net_amount?: number | null;
   finance_status?: FinanceStatus;
+
+  government_treatment_charge_usd_fee: number | null;
+  rra_percentage_fee: number | null;
+  rma_per_kg_rwf_fee: number | null;
+  inkomane_fee_per_kg_rwf_fee: number | null;
 }
 
 export interface PaginationParams {
@@ -388,7 +403,8 @@ export default tinSlice.reducer;
 
 export const calculateFinancials = (
   data: Partial<Tin>,
-  settings: TinSettingsData
+  settings: TinSettingsData,
+  useCustomFees: boolean = false
 ): Partial<Tin> => {
   const {
     lme_rate,
@@ -397,8 +413,7 @@ export const calculateFinancials = (
     exchange_rate,
     price_of_tag_per_kg_rwf,
     fluctuation_fee,
-    internal_tc,
-    government_tc
+    internal_tc
   } = data;
 
   let calculatedData: Partial<Tin> = { ...data };
@@ -412,9 +427,13 @@ export const calculateFinancials = (
     price_of_tag_per_kg_rwf,
     fluctuation_fee,
     internal_tc,
-    government_tc,
     settings
   });
+
+  const rraPercentage = useCustomFees ? data.rra_percentage_fee : settings.rra_percentage;
+  const rmaUsdPerKg = useCustomFees ? data.rma_per_kg_rwf_fee : settings.rma_per_kg_rwf;
+  const inkomaneFeePerKg = useCustomFees ? data.inkomane_fee_per_kg_rwf_fee : settings.inkomane_fee_per_kg_rwf;
+  const governmentTcFee = useCustomFees ? data.government_treatment_charge_usd_fee : settings.government_treatment_charge_usd;
 
   // Step 1: Net LME
   const netLme =
@@ -428,7 +447,7 @@ export const calculateFinancials = (
     (lme_rate ?? 0) * ((purchase_sn_percentage ?? 0) / 100);
 
   // Step 3: Final LME values
-  const final_lme = lme_s_percentage - (government_tc ?? 0);
+  const final_lme = lme_s_percentage - (governmentTcFee ?? 0);
   const final_s_lme = lme_percentage - (internal_tc ?? 0);
 
   // Step 4: RRA price per kg
@@ -437,7 +456,7 @@ export const calculateFinancials = (
   // Step 5: RRA total
   calculatedData.rra =
     calculatedData.rra_price_per_kg *
-    ((settings.rra_percentage ?? 0) / 100) *
+    ((rraPercentage ?? 0) / 100) *
     (net_weight ?? 0);
 
   // Step 6: Internal price/kg
@@ -450,9 +469,9 @@ export const calculateFinancials = (
 
   // Step 8: RMA & Inkomane in RWF
   calculatedData.rma =
-    (settings.rma_per_kg_rwf ?? 0) * (net_weight ?? 0);
+    (rmaUsdPerKg ?? 0) * (net_weight ?? 0);
   calculatedData.inkomane_fee =
-    (settings.inkomane_fee_per_kg_rwf ?? 0) *
+    (inkomaneFeePerKg ?? 0) *
     (net_weight ?? 0);
 
   // Step 9: Advance in RWF

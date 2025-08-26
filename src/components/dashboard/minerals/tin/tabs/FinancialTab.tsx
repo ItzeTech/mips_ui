@@ -1,5 +1,5 @@
 // components/dashboard/minerals/tin/tabs/FinancialTab.tsx
-import { CurrencyDollarIcon, CheckBadgeIcon, DocumentTextIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid';
+import { CurrencyDollarIcon, CheckBadgeIcon, DocumentTextIcon, ExclamationCircleIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 import React from 'react'
 import { FinancialFormData, LabFormData } from '../../../../../features/minerals/tinSlice';
@@ -23,7 +23,28 @@ interface FinancialTabInterface {
     labForm: LabFormData;
     calculatedValues: any;
     TinSettingsData?: TinSettingsData | null;
+    setUseCustomFees: React.Dispatch<React.SetStateAction<boolean>>;
+        useCustomFees: boolean;
 }
+
+const CustomFeeToggle = ({ isEnabled, onChange }: { isEnabled: boolean, onChange: (enabled: boolean) => void }) => {
+  return (
+    <div className="flex items-center space-x-2">
+      <button 
+        onClick={() => onChange(!isEnabled)}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${isEnabled ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'}`}
+      >
+        <span
+          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isEnabled ? 'translate-x-6' : 'translate-x-1'}`}
+        />
+      </button>
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        {isEnabled ? 'Custom fees enabled' : 'Using global settings'}
+      </span>
+    </div>
+  );
+};
+
 
 export default function FinancialTab({
   financialForm,
@@ -32,10 +53,48 @@ export default function FinancialTab({
   errors = {},
   labForm,
   calculatedValues,
-  TinSettingsData
+  TinSettingsData,
+  setUseCustomFees,
+  useCustomFees
 }: FinancialTabInterface) {
 
     const { t } = useTranslation();
+
+    const handleResetToGlobalSettings = () => {
+    if(TinSettingsData) {
+      setFinancialForm(prev => ({
+        ...prev,
+        government_treatment_charge_usd_fee: TinSettingsData.government_treatment_charge_usd,
+        rra_percentage_fee: TinSettingsData.rra_percentage,
+        rma_per_kg_rwf_fee: TinSettingsData.rma_per_kg_rwf,
+        inkomane_fee_per_kg_rwf_fee: TinSettingsData.inkomane_fee_per_kg_rwf
+      }));
+    }else{
+      setFinancialForm(prev => ({
+        ...prev,
+        government_treatment_charge_usd_fee: null,
+        rra_percentage_fee: null,
+        rma_per_kg_rwf_fee: null,
+        inkomane_fee_per_kg_rwf_fee: null
+    }));
+    }
+    
+    setUseCustomFees(false);
+  };
+
+  // Function to handle initializing with global settings
+  const handleInitializeWithGlobalSettings = () => {
+    if (TinSettingsData) {
+      setFinancialForm(prev => ({
+        ...prev,
+        government_treatment_charge_usd_fee: TinSettingsData.government_treatment_charge_usd,
+        rra_percentage_fee: TinSettingsData.rra_percentage,
+        rma_per_kg_rwf_fee: TinSettingsData.rma_per_kg_rwf,
+        inkomane_fee_per_kg_rwf_fee: TinSettingsData.inkomane_fee_per_kg_rwf
+      }));
+      setUseCustomFees(true);
+    }
+  };
 
     if(!TinSettingsData) {
       return (
@@ -276,6 +335,100 @@ export default function FinancialTab({
           </div>
         </div>
 
+        <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                <CurrencyDollarIcon className="w-5 h-5 mr-2 text-indigo-500" />
+                {t('tantalum.fee_settings', 'Fee Settings')}
+            </h3>
+            <CustomFeeToggle 
+              isEnabled={useCustomFees}
+              onChange={(enabled) => {
+                setUseCustomFees(enabled);
+                if (enabled && !financialForm.rra_percentage_fee) {
+                  handleInitializeWithGlobalSettings();
+                }
+              }}
+            />
+          </div>
+          
+          {useCustomFees ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <RenderInput
+                  label={t('tantalum.rra_percentage_fee', 'RRA Percentage Fee')}
+                  value={financialForm.rra_percentage_fee}
+                  onChange={(value) => setFinancialForm(prev => ({ ...prev, rra_percentage_fee: value }))}
+                  type="number"
+                  suffix="%"
+                  field="rra_percentage_fee"
+                  errors={errors}
+                />
+
+                <RenderInput
+                  label={t('tantalum.government_treatment_charge_usd', 'Government Treatment Charge (USD)')}
+                  value={financialForm.government_treatment_charge_usd_fee}
+                  onChange={(value) => setFinancialForm(prev => ({ ...prev, government_treatment_charge_usd_fee: value }))}
+                  type="number"
+                  suffix="$"
+                  field="government_treatment_charge_usd_fee"
+                  errors={errors}
+                />
+
+                <RenderInput
+                  label={t('tantalum.rma_per_kg_rwf_fee', 'RMA Per kg (RWF) Fee')}
+                  value={financialForm.rma_per_kg_rwf_fee}
+                  onChange={(value) => setFinancialForm(prev => ({ ...prev, rma_per_kg_rwf_fee: value }))}
+                  type="number"
+                  suffix="RWF"
+                  field="rma_per_kg_rwf_fee"
+                  errors={errors}
+                />
+
+                <RenderInput
+                  label={t('tantalum.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee Per kg (RWF) Fee')}
+                  value={financialForm.inkomane_fee_per_kg_rwf_fee}
+                  onChange={(value) => setFinancialForm(prev => ({ ...prev, inkomane_fee_per_kg_rwf_fee: value }))}
+                  type="number"
+                  suffix="RWF"
+                  field="inkomane_fee_per_kg_rwf_fee"
+                  errors={errors}
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={handleResetToGlobalSettings}
+                  className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                >
+                  {t('tantalum.reset_to_global', 'Reset to global settings')}
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <InformationCircleIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-blue-800 dark:text-blue-300">
+                    {t('tantalum.using_global_settings', 'Using global fee settings')}
+                  </h3>
+                  <div className="mt-2 text-sm text-blue-700 dark:text-blue-400">
+                    <ul className="list-disc pl-5 space-y-1">
+                      <li>{t('financial.government_treatment_charge_usd_fee', 'Government Treatment Charge (USD)')}: ${TinSettingsData?.government_treatment_charge_usd}</li>
+                      <li>{t('financial.rra_percentage_fee', 'RRA Percentage Fee')}: {TinSettingsData?.rra_percentage}%</li>
+                      <li>{t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee per Kg (RWF)')}: {TinSettingsData?.inkomane_fee_per_kg_rwf} RWF</li>
+                      <li>{t('financial.rma_per_kg_rwf_fee', 'RMA Price per Kg (RWF)')}: {TinSettingsData?.rma_per_kg_rwf} RWF</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          </div>
+
         {/* Calculated Values */}
         <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-5 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
@@ -292,7 +445,7 @@ export default function FinancialTab({
                 data={[
                   { label: "LME Rate", value: formatNumber(financialForm.lme_rate) },
                   { label: "Purchase Sn %", value: formatNumber(financialForm.purchase_sn_percentage) + '%' },
-                  { label: "Govt TC", value: formatNumber(financialForm.government_tc) },
+                  { label: "Govt TC", value: formatNumber((financialForm.government_treatment_charge_usd_fee ?? TinSettingsData.government_treatment_charge_usd)) },
                 ]}
                 outputLabel="RRA Price per kg"
                 outputValue={`$${formatNumber(calculatedValues.rra_price_per_kg)}`}
@@ -327,13 +480,13 @@ export default function FinancialTab({
               />
 
               <HoverInfoCard
-                title={`${t('tin.rra', 'RRA')} (${TinSettingsData?.rra_percentage / 100}%)`}
+                title={`${t('tin.rra', 'RRA')} (${( financialForm.rra_percentage_fee ?? TinSettingsData?.rra_percentage)}%)`}
                 value={`$${formatNumber(calculatedValues.rra)}`}
                 color="amber"
                 formula="(RRA price/kg * RRA %) * net weight"
                 data={[
                   { label: "RRA Price/kg", value: `$${formatNumber(calculatedValues.rra_price_per_kg)}` },
-                  { label: "RRA %", value: `${TinSettingsData?.rra_percentage / 100}%` },
+                  { label: "RRA %", value: `${( financialForm.rra_percentage_fee ?? TinSettingsData?.rra_percentage)}%` },
                   { label: "Net Weight", value: formatNumber(net_weight) },
                 ]}
                 outputLabel="RRA"
@@ -341,12 +494,12 @@ export default function FinancialTab({
               />
 
               <HoverInfoCard
-                title={`${t('tin.rma', 'RMA')} (${TinSettingsData?.rma_per_kg_rwf} RWF)`}
+                title={`${t('tin.rma', 'RMA')} (${financialForm.rma_per_kg_rwf_fee ?? TinSettingsData?.rma_per_kg_rwf} RWF)`}
                 value={`${formatNumber(calculatedValues.rma)} RWF`}
                 color="amber"
                 formula="RMA per kg * net weight"
                 data={[
-                  { label: "RMA per kg", value: `${TinSettingsData?.rma_per_kg_rwf} RWF` },
+                  { label: "RMA per kg", value: `${financialForm.rma_per_kg_rwf_fee ?? TinSettingsData?.rma_per_kg_rwf} RWF` },
                   { label: "Net Weight", value: formatNumber(net_weight) },
                 ]}
                 outputLabel="RMA"
@@ -354,12 +507,12 @@ export default function FinancialTab({
               />
 
               <HoverInfoCard
-                title={`${t('tin.inkomane_fee', 'Inkomane Fee')} (${TinSettingsData?.inkomane_fee_per_kg_rwf} RWF)`}
+                title={`${t('tin.inkomane_fee', 'Inkomane Fee')} (${(financialForm.inkomane_fee_per_kg_rwf_fee ?? TinSettingsData?.inkomane_fee_per_kg_rwf)} RWF)`}
                 value={`${formatNumber(calculatedValues.inkomane_fee)} RWF`}
                 color="amber"
                 formula="inkomane fee * net weight"
                 data={[
-                  { label: "Inkomane fee", value: `${TinSettingsData?.inkomane_fee_per_kg_rwf} RWF` },
+                  { label: "Inkomane fee", value: `${(financialForm.inkomane_fee_per_kg_rwf_fee ?? TinSettingsData?.inkomane_fee_per_kg_rwf)} RWF` },
                   { label: "Net Weight", value: formatNumber(net_weight) },
                 ]}
                 outputLabel="Inkomane Fee"

@@ -152,6 +152,8 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
     updateFinancialsStatus: financeUpdateStatus,
     error 
   } = useSelector((state: RootState) => state.tantalums);
+
+  const [useCustomFees, setUseCustomFees] = useState(false);
   
   const [activeTab, setActiveTab] = useState<'stock' | 'lab' | 'financial'>('stock');
   
@@ -179,7 +181,11 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
     purchase_ta2o5_percentage: null,
     exchange_rate: null,
     price_of_tag_per_kg_rwf: null,
-    finance_status: 'unpaid'
+    finance_status: 'unpaid',
+    rra_percentage_fee: null,
+    rma_usd_per_ton_fee: null,
+    inkomane_fee_per_kg_rwf_fee: null,
+    rra_price_per_percentage_fee: null
   });
 
   const [calculatedValues, setCalculatedValues] = useState({
@@ -237,8 +243,20 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         purchase_ta2o5_percentage: selectedTantalum.purchase_ta2o5_percentage,
         exchange_rate: selectedTantalum.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTantalum.price_of_tag_per_kg_rwf,
-        finance_status: selectedTantalum.finance_status
+        finance_status: selectedTantalum.finance_status,
+
+        rra_percentage_fee: selectedTantalum.rra_percentage_fee,
+        rma_usd_per_ton_fee: selectedTantalum.rma_usd_per_ton_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTantalum.inkomane_fee_per_kg_rwf_fee,
+        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee
       });
+
+      setUseCustomFees(
+        selectedTantalum?.rra_percentage_fee !== null || 
+        selectedTantalum?.rma_usd_per_ton_fee !== null ||
+        selectedTantalum?.inkomane_fee_per_kg_rwf_fee !== null ||
+        selectedTantalum?.rra_price_per_percentage_fee !== null
+      );
 
       setErrors({});
       setHasStockChanges(false);
@@ -261,7 +279,8 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         ...financialForm,
         net_weight: stockForm.net_weight
       },
-      tantalumSetting
+      tantalumSetting,
+      useCustomFees
     );
 
       setCalculatedValues({
@@ -286,17 +305,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         net_amount: null
       });
     }
-  }, [
-    financialForm.price_per_percentage,
-    financialForm.purchase_ta2o5_percentage,
-    financialForm.exchange_rate,
-    financialForm.price_of_tag_per_kg_rwf,
-    stockForm.net_weight,
-    selectedTantalum,
-    stockForm,
-    financialForm,
-    tantalumSetting
-  ]);
+  }, [financialForm.price_per_percentage, financialForm.purchase_ta2o5_percentage, financialForm.exchange_rate, financialForm.price_of_tag_per_kg_rwf, stockForm.net_weight, selectedTantalum, stockForm, financialForm, tantalumSetting, useCustomFees]);
 
   const getFieldDisplayName = (fieldName: string): string => {
     const fieldNames: Record<string, string> = {
@@ -317,6 +326,10 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
       exchange_rate: t('financial.exchange_rate', 'Exchange Rate'),
       price_of_tag_per_kg_rwf: t('financial.price_of_tag_per_kg_rwf', 'Price of Tag per kg (RWF)'),
       finance_status: t('financial.status', 'Finance Status'),
+      rra_percentage_fee: t('financial.rra_percentage_fee', 'RRA Percentage Fee'),
+      rma_usd_per_ton_fee: t('financial.rma_usd_per_ton_fee', 'RMA USD per Ton Fee'),
+      inkomane_fee_per_kg_rwf_fee: t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee per kg (RWF)'),
+      rra_price_per_percentage_fee: t('financial.rra_price_per_percentage_fee', 'RRA Price per Percentage Fee')
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -371,7 +384,12 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         purchase_ta2o5_percentage: selectedTantalum.purchase_ta2o5_percentage,
         exchange_rate: selectedTantalum.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTantalum.price_of_tag_per_kg_rwf,
-        finance_status: selectedTantalum.finance_status
+        finance_status: selectedTantalum.finance_status,
+
+        rra_percentage_fee: selectedTantalum.rra_percentage_fee,
+        rma_usd_per_ton_fee: selectedTantalum.rma_usd_per_ton_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTantalum.inkomane_fee_per_kg_rwf_fee,
+        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee
       };
       setHasFinancialChanges(JSON.stringify(originalFinancial) !== JSON.stringify(financialForm));
     }
@@ -558,7 +576,11 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         purchase_ta2o5_percentage: selectedTantalum.purchase_ta2o5_percentage,
         exchange_rate: selectedTantalum.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTantalum.price_of_tag_per_kg_rwf,
-        finance_status: selectedTantalum.finance_status
+        finance_status: selectedTantalum.finance_status,
+        rra_percentage_fee: selectedTantalum.rra_percentage_fee,
+        rma_usd_per_ton_fee: selectedTantalum.rma_usd_per_ton_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTantalum.inkomane_fee_per_kg_rwf_fee,
+        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee
       };
 
       const changes = getChanges(originalFinancial, financialForm);
@@ -622,7 +644,12 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
             advance: calculatedValues.advance,
             total_charge: calculatedValues.total_charge,
             net_amount: calculatedValues.net_amount,
-            finance_status: financialForm.finance_status
+            finance_status: financialForm.finance_status,
+
+            rra_percentage_fee: financialForm.rra_percentage_fee ?? settings?.rra_percentage ?? null,
+            rma_usd_per_ton_fee: financialForm.rma_usd_per_ton_fee ?? settings?.rma_usd_per_ton ?? null,
+            inkomane_fee_per_kg_rwf_fee: financialForm.inkomane_fee_per_kg_rwf_fee ?? settings?.inkomane_fee_per_kg_rwf ?? null,
+            rra_price_per_percentage_fee: financialForm.rra_price_per_percentage_fee ?? settings?.rra_price_per_percentage ?? null
           };
           
           await dispatch(updateFinancials({
@@ -836,6 +863,8 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                       calculatedValues={calculatedValues}
                       errors={errors}
                       TantalumSettingsData={settings}
+                      setUseCustomFees={setUseCustomFees}
+                      useCustomFees={useCustomFees}
 
                     />
                   )}

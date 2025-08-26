@@ -109,6 +109,8 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
     updateFinancialsStatus: financeUpdateStatus,
     error 
   } = useSelector((state: RootState) => state.tins);
+
+  const [useCustomFees, setUseCustomFees] = useState(false);
   
   const [activeTab, setActiveTab] = useState<'stock' | 'lab' | 'financial'>('stock');
   
@@ -138,7 +140,11 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
     internal_price_per_kg: null,
     exchange_rate: null,
     price_of_tag_per_kg_rwf: null,
-    finance_status: 'unpaid'
+    finance_status: 'unpaid',
+    government_treatment_charge_usd_fee: null,
+    rra_percentage_fee: null,
+    rma_per_kg_rwf_fee: null,
+    inkomane_fee_per_kg_rwf_fee: null
   });
 
   const [calculatedValues, setCalculatedValues] = useState({
@@ -199,8 +205,19 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         internal_price_per_kg: selectedTin.internal_price_per_kg,
         exchange_rate: selectedTin.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTin.price_of_tag_per_kg_rwf,
-        finance_status: selectedTin.finance_status
+        finance_status: selectedTin.finance_status,
+        government_treatment_charge_usd_fee: selectedTin.government_treatment_charge_usd_fee,
+        rra_percentage_fee: selectedTin.rra_percentage_fee,
+        rma_per_kg_rwf_fee: selectedTin.rma_per_kg_rwf_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee
       });
+
+      setUseCustomFees(
+        selectedTin.government_treatment_charge_usd_fee !== null ||
+        selectedTin.rra_percentage_fee !== null ||
+        selectedTin.rma_per_kg_rwf_fee !== null ||
+        selectedTin.inkomane_fee_per_kg_rwf_fee !== null
+      );
 
       setErrors({});
       setHasStockChanges(false);
@@ -227,7 +244,8 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         ...financialForm,
         net_weight: stockForm.net_weight
       },
-      tinSetting
+      tinSetting,
+      useCustomFees
     );
 
       setCalculatedValues({
@@ -254,20 +272,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         net_amount: null
       });
     }
-  }, [
-    financialForm.lme_rate,
-    financialForm.purchase_sn_percentage,
-    financialForm.government_tc,
-    financialForm.fluctuation_fee,
-    financialForm.internal_tc,
-    financialForm.exchange_rate,
-    financialForm.price_of_tag_per_kg_rwf,
-    stockForm.net_weight,
-    selectedTin,
-    stockForm,
-    financialForm,
-    tinSetting
-  ]);
+  }, [financialForm.lme_rate, financialForm.purchase_sn_percentage, financialForm.government_tc, financialForm.fluctuation_fee, financialForm.internal_tc, financialForm.exchange_rate, financialForm.price_of_tag_per_kg_rwf, stockForm.net_weight, selectedTin, stockForm, financialForm, tinSetting, useCustomFees]);
 
   const getFieldDisplayName = (fieldName: string): string => {
     const fieldNames: Record<string, string> = {
@@ -290,6 +295,10 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
       exchange_rate: t('financial.exchange_rate', 'Exchange Rate'),
       price_of_tag_per_kg_rwf: t('financial.price_of_tag_per_kg_rwf', 'Price of Tag per kg (RWF)'),
       finance_status: t('financial.status', 'Finance Status'),
+      government_treatment_charge_usd_fee: t('financial.government_treatment_charge_usd_fee', 'Government Treatment Charge (USD)'),
+      rra_percentage_fee: t('financial.rra_percentage_fee', 'RRA Percentage Fee'),
+      rma_per_kg_rwf_fee: t('financial.rma_per_kg_rwf_fee', 'RMA Per kg (RWF) Fee'),
+      inkomane_fee_per_kg_rwf_fee: t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee Per kg (RWF) Fee'),
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -346,7 +355,11 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         internal_price_per_kg: selectedTin.internal_price_per_kg,
         exchange_rate: selectedTin.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTin.price_of_tag_per_kg_rwf,
-        finance_status: selectedTin.finance_status
+        finance_status: selectedTin.finance_status,
+        government_treatment_charge_usd_fee: selectedTin.government_treatment_charge_usd_fee,
+        rra_percentage_fee: selectedTin.rra_percentage_fee,
+        rma_per_kg_rwf_fee: selectedTin.rma_per_kg_rwf_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee
       };
       setHasFinancialChanges(JSON.stringify(originalFinancial) !== JSON.stringify(financialForm));
     }
@@ -524,7 +537,11 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         internal_price_per_kg: selectedTin.internal_price_per_kg,
         exchange_rate: selectedTin.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTin.price_of_tag_per_kg_rwf,
-        finance_status: selectedTin.finance_status
+        finance_status: selectedTin.finance_status,
+        government_treatment_charge_usd_fee: selectedTin.government_treatment_charge_usd_fee,
+        rra_percentage_fee: selectedTin.rra_percentage_fee,
+        rma_per_kg_rwf_fee: selectedTin.rma_per_kg_rwf_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee
       };
 
       const changes = getChanges(originalFinancial, financialForm);
@@ -574,7 +591,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         case 'financial':
           const financialDataToSubmit: UpdateFinancialsData = {
             lme_rate: financialForm.lme_rate,
-            government_tc: financialForm.government_tc,
+            government_tc: financialForm.government_treatment_charge_usd_fee,
             purchase_sn_percentage: financialForm.purchase_sn_percentage,
             rra_price_per_kg: calculatedValues.rra_price_per_kg,
             fluctuation_fee: financialForm.fluctuation_fee,
@@ -589,7 +606,11 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
             advance: calculatedValues.advance,
             total_charge: calculatedValues.total_charge,
             net_amount: calculatedValues.net_amount,
-            finance_status: financialForm.finance_status
+            finance_status: financialForm.finance_status,
+            government_treatment_charge_usd_fee: financialForm.government_treatment_charge_usd_fee ?? settings?.government_treatment_charge_usd ?? null,
+            rra_percentage_fee: financialForm.rra_percentage_fee ?? settings?.rra_percentage ?? null,
+            rma_per_kg_rwf_fee: financialForm.rma_per_kg_rwf_fee ?? settings?.rma_per_kg_rwf ?? null,
+            inkomane_fee_per_kg_rwf_fee: financialForm.inkomane_fee_per_kg_rwf_fee ?? settings?.inkomane_fee_per_kg_rwf ?? null
           };
           
           await dispatch(updateFinancials({
@@ -837,6 +858,8 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
                       calculatedValues={calculatedValues}
                       errors={errors}
                       TinSettingsData={settings}
+                      setUseCustomFees={setUseCustomFees}
+                      useCustomFees={useCustomFees}
                     />
                   )}
                 </AnimatePresence>

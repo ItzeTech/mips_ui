@@ -30,6 +30,11 @@ export interface FinancialFormData {
   exchange_rate: number | null;
   price_of_tag_per_kg_rwf: number | null;
   finance_status: FinanceStatus;
+
+  rra_percentage_fee: number | null;
+  rma_usd_per_ton_fee: number | null;
+  inkomane_fee_per_kg_rwf_fee: number | null;
+  rra_price_per_percentage_fee: number | null;
 }
 
 export interface Tantalum {
@@ -69,6 +74,11 @@ export interface Tantalum {
   has_alex_stewart: boolean;
   created_at: string;
   updated_at: string;
+
+  rra_percentage_fee: number | null;
+  rma_usd_per_ton_fee: number | null;
+  inkomane_fee_per_kg_rwf_fee: number | null;
+  rra_price_per_percentage_fee: number | null;
 }
 
 export interface CreateTantalumData {
@@ -101,7 +111,12 @@ export interface UpdateFinancialsData {
   advance?: number | null;
   total_charge?: number | null;
   net_amount?: number | null;
-  finance_status?: FinanceStatus
+  finance_status?: FinanceStatus;
+
+  rra_percentage_fee?: number | null;
+  rma_usd_per_ton_fee?: number | null;
+  inkomane_fee_per_kg_rwf_fee?: number | null;
+  rra_price_per_percentage_fee?: number | null;
 }
 
 export interface PaginationParams {
@@ -372,7 +387,7 @@ export const {
 } = tantalumSlice.actions;
 export default tantalumSlice.reducer;
 
-export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, inkomane_fee_per_kg_rwf, rma_usd_per_ton, rra_price_per_percentage}: TantalumSettingsData): Partial<Tantalum> => {
+export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, inkomane_fee_per_kg_rwf, rma_usd_per_ton, rra_price_per_percentage}: TantalumSettingsData, useCustomFees: boolean =false): Partial<Tantalum> => {
   const {
     price_per_percentage,
     purchase_ta2o5_percentage,
@@ -383,6 +398,13 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
 
   let calculatedData: Partial<Tantalum> = { ...data };
 
+
+
+  const rraPercentage = useCustomFees ? (data.rra_percentage_fee) : rra_percentage;
+  const rmaUsdPerKg = useCustomFees ? (data.rma_usd_per_ton_fee ?? 0) / 1000 : rma_usd_per_ton;
+  const inkomaneFeePerKg = useCustomFees ? data.inkomane_fee_per_kg_rwf_fee : inkomane_fee_per_kg_rwf;
+  const rraPricePerPercentage = useCustomFees ? data.rra_price_per_percentage_fee : rra_price_per_percentage;
+
   if (price_per_percentage && purchase_ta2o5_percentage) {
     calculatedData.unit_price = price_per_percentage * purchase_ta2o5_percentage;
   }
@@ -391,21 +413,22 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
     calculatedData.total_amount = calculatedData.unit_price * net_weight;
   }
 
-  if (purchase_ta2o5_percentage && net_weight && rra_price_per_percentage) {
-    let rra_total_amount = purchase_ta2o5_percentage * net_weight * rra_price_per_percentage;
-    calculatedData.rra = rra_total_amount * (rra_percentage / 100);
+  if (purchase_ta2o5_percentage && net_weight && rraPricePerPercentage) {
+    let rra_total_amount = purchase_ta2o5_percentage * net_weight * rraPricePerPercentage;
+    calculatedData.rra = rra_total_amount * ((rraPercentage ?? rra_percentage) / 100);
   }
 
   if (net_weight) {
-    calculatedData.rma = rma_usd_per_ton * net_weight;
+    calculatedData.rma = (rmaUsdPerKg ?? rma_usd_per_ton) * net_weight;
   }
 
   if (net_weight) {
-    calculatedData.inkomane_fee = inkomane_fee_per_kg_rwf * net_weight;
+    calculatedData.inkomane_fee = (inkomaneFeePerKg ?? inkomane_fee_per_kg_rwf) * net_weight;
   }
 
-  if (price_of_tag_per_kg_rwf && net_weight) {
-    calculatedData.advance = price_of_tag_per_kg_rwf * net_weight;
+  if (net_weight) {
+    calculatedData.advance = (price_of_tag_per_kg_rwf ?? 0) * net_weight;
+
   }
 
   if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && 

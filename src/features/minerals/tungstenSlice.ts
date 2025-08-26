@@ -27,6 +27,10 @@ export interface FinancialFormData {
   exchange_rate: number | null;
   price_of_tag_per_kg_rwf: number | null;
   finance_status: FinanceStatus;
+
+  rra_percentage_fee: number | null;
+  rma_usd_per_ton_fee: number | null;
+  inkomane_fee_per_kg_rwf_fee: number | null;
 }
 
 export interface Tungsten {
@@ -54,6 +58,10 @@ export interface Tungsten {
   mtu: number | null;
   price_per_kg: number | null;
   total_amount: number | null;
+
+  rra_percentage_fee: number | null;
+  rma_usd_per_ton_fee: number | null;
+  inkomane_fee_per_kg_rwf_fee: number | null;
   
   // Charges
   rra: number | null;
@@ -103,6 +111,10 @@ export interface UpdateFinancialsData {
   total_charge?: number | null;
   net_amount?: number | null;
   finance_status?: FinanceStatus;
+
+  rra_percentage_fee: number | null;
+  rma_usd_per_ton_fee: number | null;
+  inkomane_fee_per_kg_rwf_fee: number | null;
 }
 
 export interface PaginationParams {
@@ -374,7 +386,7 @@ export const {
 
 export default tungstenSlice.reducer;
 
-export const calculateFinancials = (data: Partial<Tungsten>, settings: TungstenSettingsData): Partial<Tungsten> => {
+export const calculateFinancials = (data: Partial<Tungsten>, settings: TungstenSettingsData, useCustomFees: boolean =false): Partial<Tungsten> => {
   const {
     mtu,
     purchase_wo3_percentage,
@@ -384,6 +396,10 @@ export const calculateFinancials = (data: Partial<Tungsten>, settings: TungstenS
   } = data;
 
   let calculatedData: Partial<Tungsten> = { ...data };
+
+  const rraPercentage = useCustomFees ? (data.rra_percentage_fee ?? 0) / 100 : settings.rra_percentage;
+  const rmaUsdPerKg = useCustomFees ? data.rma_usd_per_ton_fee : settings.rma_usd_per_ton;
+  const inkomaneFeePerKg = useCustomFees ? data.inkomane_fee_per_kg_rwf_fee : settings.inkomane_fee_per_kg_rwf;
 
   // Price/kg = (MTU * Purchase WO3%) / 1000
   if (mtu && purchase_wo3_percentage) {
@@ -396,18 +412,18 @@ export const calculateFinancials = (data: Partial<Tungsten>, settings: TungstenS
   }
 
   // RRA = 3% * total amount
-  if (calculatedData.total_amount && settings.rra_percentage) {
-    calculatedData.rra = calculatedData.total_amount * settings.rra_percentage;
+  if (calculatedData.total_amount && rraPercentage) {
+    calculatedData.rra = calculatedData.total_amount * rraPercentage;
   }
 
   // RMA = 0.125 * net weight (USD 125 per 1,000 kg)
-  if (net_weight) {
-    calculatedData.rma = settings.rma_usd_per_ton * net_weight / 1000;
+  if (net_weight && rmaUsdPerKg) {
+    calculatedData.rma = rmaUsdPerKg * net_weight / 1000;
   }
 
   // Inkomane Fee = settings.inkomane_fee_per_kg_rwf * net weight
-  if (net_weight) {
-    calculatedData.inkomane_fee = settings.inkomane_fee_per_kg_rwf * net_weight;
+  if (net_weight && inkomaneFeePerKg) {
+    calculatedData.inkomane_fee = inkomaneFeePerKg * net_weight;
   }
 
   // Advance = price_of_tag_per_kg_rwf * net_weight

@@ -17,7 +17,7 @@ import { RootState, AppDispatch } from '../../../../store/store';
 import {
   resetUpdateLabAnalysisStatus,
   resetUpdateFinancialsStatus,
-  resetUpdateStockStatus,
+  resetUpdateStockStatus, 
   calculateFinancials,
   StockFormData,
   LabFormData,
@@ -108,6 +108,8 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
     updateFinancialsStatus: financeUpdateStatus,
     error 
   } = useSelector((state: RootState) => state.tungstens);
+
+  const [useCustomFees, setUseCustomFees] = useState(false);
   
   const [activeTab, setActiveTab] = useState<'stock' | 'lab' | 'financial'>('stock');
   
@@ -133,7 +135,10 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
     price_per_kg: null,
     exchange_rate: null,
     price_of_tag_per_kg_rwf: null,
-    finance_status: 'unpaid'
+    finance_status: 'unpaid',
+    rra_percentage_fee: null,
+    rma_usd_per_ton_fee: null,
+    inkomane_fee_per_kg_rwf_fee: null,
   });
 
   const [calculatedValues, setCalculatedValues] = useState({
@@ -189,8 +194,18 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
         price_per_kg: selectedTungsten.price_per_kg,
         exchange_rate: selectedTungsten.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTungsten.price_of_tag_per_kg_rwf,
-        finance_status: selectedTungsten.finance_status
+        finance_status: selectedTungsten.finance_status,
+
+        rra_percentage_fee: selectedTungsten.rra_percentage_fee,
+        rma_usd_per_ton_fee: selectedTungsten.rma_usd_per_ton_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTungsten.inkomane_fee_per_kg_rwf_fee,
       });
+
+      setUseCustomFees(
+        selectedTungsten?.rra_percentage_fee !== null || 
+        selectedTungsten?.rma_usd_per_ton_fee !== null ||
+        selectedTungsten?.inkomane_fee_per_kg_rwf_fee !== null
+      );
 
       setErrors({});
       setHasStockChanges(false);
@@ -213,7 +228,8 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
         ...financialForm,
         net_weight: stockForm.net_weight
       },
-      tungstenSetting
+      tungstenSetting,
+      useCustomFees
     );
 
       setCalculatedValues({
@@ -238,17 +254,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
         net_amount: null
       });
     }
-  }, [
-    financialForm.mtu,
-    financialForm.purchase_wo3_percentage,
-    financialForm.exchange_rate,
-    financialForm.price_of_tag_per_kg_rwf,
-    stockForm.net_weight,
-    selectedTungsten,
-    stockForm,
-    financialForm,
-    tungstenSetting
-  ]);
+  }, [financialForm.mtu, financialForm.purchase_wo3_percentage, financialForm.exchange_rate, financialForm.price_of_tag_per_kg_rwf, stockForm.net_weight, selectedTungsten, stockForm, financialForm, tungstenSetting, useCustomFees]);
 
   const getFieldDisplayName = (fieldName: string): string => {
     const fieldNames: Record<string, string> = {
@@ -267,6 +273,9 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
       exchange_rate: t('financial.exchange_rate', 'Exchange Rate'),
       price_of_tag_per_kg_rwf: t('financial.price_of_tag_per_kg_rwf', 'Price of Tag per kg (RWF)'),
       finance_status: t('financial.status', 'Finance Status'),
+      rra_percentage_fee: t('financial.rra_percentage_fee', 'RRA Percentage Fee'),
+      rma_usd_per_ton_fee: t('financial.rma_usd_per_ton_fee', 'RMA USD per Ton Fee'),
+      inkomane_fee_per_kg_rwf_fee: t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee per kg (RWF)')
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -319,7 +328,11 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
         price_per_kg: selectedTungsten.price_per_kg,
         exchange_rate: selectedTungsten.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTungsten.price_of_tag_per_kg_rwf,
-        finance_status: selectedTungsten.finance_status
+        finance_status: selectedTungsten.finance_status,
+
+        rra_percentage_fee: selectedTungsten.rra_percentage_fee,
+        rma_usd_per_ton_fee: selectedTungsten.rma_usd_per_ton_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTungsten.inkomane_fee_per_kg_rwf_fee
       };
       setHasFinancialChanges(JSON.stringify(originalFinancial) !== JSON.stringify(financialForm));
     }
@@ -490,7 +503,10 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
         price_per_kg: selectedTungsten.price_per_kg,
         exchange_rate: selectedTungsten.exchange_rate,
         price_of_tag_per_kg_rwf: selectedTungsten.price_of_tag_per_kg_rwf,
-        finance_status: selectedTungsten.finance_status
+        finance_status: selectedTungsten.finance_status,
+        rra_percentage_fee: selectedTungsten.rra_percentage_fee,
+        rma_usd_per_ton_fee: selectedTungsten.rma_usd_per_ton_fee,
+        inkomane_fee_per_kg_rwf_fee: selectedTungsten.inkomane_fee_per_kg_rwf_fee,
       };
 
       const changes = getChanges(originalFinancial, financialForm);
@@ -551,7 +567,10 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
             advance: calculatedValues.advance,
             total_charge: calculatedValues.total_charge,
             net_amount: calculatedValues.net_amount,
-            finance_status: financialForm.finance_status
+            finance_status: financialForm.finance_status,
+            rra_percentage_fee: financialForm.rra_percentage_fee ?? settings?.rra_percentage ?? null,
+            rma_usd_per_ton_fee: financialForm.rma_usd_per_ton_fee ?? settings?.rma_usd_per_ton ?? null,
+            inkomane_fee_per_kg_rwf_fee: financialForm.inkomane_fee_per_kg_rwf_fee ?? settings?.inkomane_fee_per_kg_rwf ?? null,
           };
           
           await dispatch(updateFinancials({
@@ -799,6 +818,8 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                       calculatedValues={calculatedValues}
                       errors={errors}
                       TungstenSettingsData={settings}
+                      setUseCustomFees={setUseCustomFees}
+                      useCustomFees={useCustomFees}
                     />
                   )}
                 </AnimatePresence>

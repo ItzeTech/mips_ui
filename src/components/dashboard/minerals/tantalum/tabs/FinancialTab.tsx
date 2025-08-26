@@ -1,4 +1,4 @@
-import { CurrencyDollarIcon, CheckBadgeIcon, DocumentTextIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid';
+import { CurrencyDollarIcon, CheckBadgeIcon, DocumentTextIcon, ExclamationCircleIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 import React from 'react'
 import { FinancialFormData, LabFormData } from '../../../../../features/minerals/tantalumSlice';
@@ -22,7 +22,27 @@ interface FinancialTabInterface {
     labForm: LabFormData;
     calculatedValues: any;
     TantalumSettingsData?: TantalumSettingsData | null;
+    setUseCustomFees: React.Dispatch<React.SetStateAction<boolean>>;
+    useCustomFees: boolean;
 }
+
+const CustomFeeToggle = ({ isEnabled, onChange }: { isEnabled: boolean, onChange: (enabled: boolean) => void }) => {
+  return (
+    <div className="flex items-center space-x-2">
+      <button 
+        onClick={() => onChange(!isEnabled)}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${isEnabled ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'}`}
+      >
+        <span
+          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isEnabled ? 'translate-x-6' : 'translate-x-1'}`}
+        />
+      </button>
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        {isEnabled ? 'Custom fees enabled' : 'Using global settings'}
+      </span>
+    </div>
+  );
+};
 
 export default function FinancialTab({
   financialForm,
@@ -31,10 +51,52 @@ export default function FinancialTab({
   errors = {},
   labForm,
   calculatedValues,
-  TantalumSettingsData
+  TantalumSettingsData,
+  setUseCustomFees,
+  useCustomFees
 }: FinancialTabInterface) {
 
     const { t } = useTranslation();
+
+    
+
+  // Function to handle resetting to global settings
+  const handleResetToGlobalSettings = () => {
+    if(TantalumSettingsData) {
+      setFinancialForm(prev => ({
+        ...prev,
+        rra_percentage_fee: TantalumSettingsData.rra_percentage,
+        rma_usd_per_ton_fee: TantalumSettingsData.rma_usd_per_ton,
+        inkomane_fee_per_kg_rwf_fee: TantalumSettingsData.inkomane_fee_per_kg_rwf,
+        rra_price_per_percentage_fee: TantalumSettingsData.rra_price_per_percentage
+      }));
+    }else{
+      setFinancialForm(prev => ({
+        ...prev,
+        rra_percentage_fee: null,
+        rma_usd_per_ton_fee: null,
+        inkomane_fee_per_kg_rwf_fee: null,
+        rra_price_per_percentage_fee: null
+    }));
+    }
+    
+    setUseCustomFees(false);
+  };
+
+  // Function to handle initializing with global settings
+  const handleInitializeWithGlobalSettings = () => {
+    if (TantalumSettingsData) {
+      setFinancialForm(prev => ({
+        ...prev,
+        rra_percentage_fee: TantalumSettingsData.rra_percentage,
+        rma_usd_per_ton_fee: TantalumSettingsData.rma_usd_per_ton,
+        inkomane_fee_per_kg_rwf_fee: TantalumSettingsData.inkomane_fee_per_kg_rwf,
+        rra_price_per_percentage_fee: TantalumSettingsData.rra_price_per_percentage
+      }));
+      setUseCustomFees(true);
+    }
+  };
+    
 
     if(!TantalumSettingsData) {
       return (
@@ -253,6 +315,100 @@ export default function FinancialTab({
           </div>
         </div>
 
+        <div className="bg-gray-50 dark:bg-gray-700/30 rounded-2xl p-5 shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                <CurrencyDollarIcon className="w-5 h-5 mr-2 text-indigo-500" />
+                {t('tantalum.fee_settings', 'Fee Settings')}
+            </h3>
+            <CustomFeeToggle 
+              isEnabled={useCustomFees}
+              onChange={(enabled) => {
+                setUseCustomFees(enabled);
+                if (enabled && !financialForm.rra_percentage_fee) {
+                  handleInitializeWithGlobalSettings();
+                }
+              }}
+            />
+          </div>
+          
+          {useCustomFees ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <RenderInput
+                  label={t('tantalum.rra_percentage', 'RRA Percentage')}
+                  value={financialForm.rra_percentage_fee}
+                  onChange={(value) => setFinancialForm(prev => ({ ...prev, rra_percentage_fee: value }))}
+                  type="number"
+                  suffix="%"
+                  field="rra_percentage_fee"
+                  errors={errors}
+                />
+
+                <RenderInput
+                  label={t('tantalum.rma_usd_per_kg', 'RMA USD per Kg')}
+                  value={financialForm.rma_usd_per_ton_fee}
+                  onChange={(value) => setFinancialForm(prev => ({ ...prev, rma_usd_per_ton_fee: value }))}
+                  type="number"
+                  suffix="$"
+                  field="rma_usd_per_ton_fee"
+                  errors={errors}
+                />
+
+                <RenderInput
+                  label={t('tantalum.inkomane_fee_per_kg', 'Inkomane Fee per Kg')}
+                  value={financialForm.inkomane_fee_per_kg_rwf_fee}
+                  onChange={(value) => setFinancialForm(prev => ({ ...prev, inkomane_fee_per_kg_rwf_fee: value }))}
+                  type="number"
+                  suffix="RWF"
+                  field="inkomane_fee_per_kg_rwf_fee"
+                  errors={errors}
+                />
+
+                <RenderInput
+                  label={t('tantalum.rra_price_per_percentage', 'RRA Price per Percentage')}
+                  value={financialForm.rra_price_per_percentage_fee}
+                  onChange={(value) => setFinancialForm(prev => ({ ...prev, rra_price_per_percentage_fee: value }))}
+                  type="number"
+                  suffix="$"
+                  field="rra_price_per_percentage_fee"
+                  errors={errors}
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={handleResetToGlobalSettings}
+                  className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                >
+                  {t('tantalum.reset_to_global', 'Reset to global settings')}
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <InformationCircleIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-blue-800 dark:text-blue-300">
+                    {t('tantalum.using_global_settings', 'Using global fee settings')}
+                  </h3>
+                  <div className="mt-2 text-sm text-blue-700 dark:text-blue-400">
+                    <ul className="list-disc pl-5 space-y-1">
+                      <li>{t('tantalum.rra_percentage_label', 'RRA Percentage')}: {TantalumSettingsData?.rra_percentage}%</li>
+                      <li>{t('tantalum.rma_usd_per_kg_label', 'RMA USD per Kg')}: ${TantalumSettingsData?.rma_usd_per_ton ? TantalumSettingsData.rma_usd_per_ton : 0}</li>
+                      <li>{t('tantalum.inkomane_fee_label', 'Inkomane Fee per Kg')}: {TantalumSettingsData?.inkomane_fee_per_kg_rwf} RWF</li>
+                      <li>{t('tantalum.rra_price_label', 'RRA Price per Percentage')}: ${TantalumSettingsData?.rra_price_per_percentage}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          </div>
+
         {/* Calculated Values */}
         <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl p-5 shadow-sm">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
@@ -288,25 +444,25 @@ export default function FinancialTab({
             />
 
             <HoverInfoCard
-              title={`${t('tantalum.rra', 'RRA')} (${TantalumSettingsData?.rra_percentage}%)`}
+              title={`${t('tantalum.rra', 'RRA')} (${(financialForm.rra_percentage_fee ?? TantalumSettingsData?.rra_percentage)}%)`}
               value={`$${formatNumber(calculatedValues.rra)}`}
               color="gray"
               formula="RRA percentage * RRA total amount"
               data={[
-                { label: "RRA Percentage", value: `${TantalumSettingsData?.rra_percentage ? TantalumSettingsData?.rra_percentage / 100 : TantalumSettingsData?.rra_percentage}` },
-                { label: "RRA total Amount", value: `$${formatNumber((TantalumSettingsData.rra_price_per_percentage / 100) * (financialForm.purchase_ta2o5_percentage ?? 0) * (net_weight ?? 0))}` },
+                { label: "RRA Percentage", value: `${(financialForm.rra_percentage_fee ?? TantalumSettingsData?.rra_percentage)}` },
+                { label: "RRA total Amount", value: `$${formatNumber(((financialForm.rra_price_per_percentage_fee ?? TantalumSettingsData.rra_price_per_percentage)) * (financialForm.purchase_ta2o5_percentage ?? 0) * (net_weight ?? 0))}` },
               ]}
               outputLabel="RRA"
               outputValue={`$${formatNumber(calculatedValues.rra)}`}
             />
 
             <HoverInfoCard
-              title={`${t('tantalum.rma', 'RMA')} ($${TantalumSettingsData?.rma_usd_per_ton})`}
+              title={`${t('tantalum.rma', 'RMA')} ($${(financialForm.rma_usd_per_ton_fee ?? TantalumSettingsData?.rma_usd_per_ton)})`}
               value={`$${formatNumber(calculatedValues.rma)}`}
               color="gray"
               formula="RMA USD per ton * net weight"
               data={[
-                { label: "RMA USD per Ton", value: `$${TantalumSettingsData?.rma_usd_per_ton ? TantalumSettingsData?.rma_usd_per_ton / 1000 : TantalumSettingsData?.rma_usd_per_ton}` },
+                { label: "RMA USD per Ton", value: `$${(financialForm.rma_usd_per_ton_fee ?? TantalumSettingsData?.rma_usd_per_ton)}` },
                 { label: "Net Weight", value: formatNumber(net_weight) },
               ]}
               outputLabel="RMA"
@@ -314,12 +470,12 @@ export default function FinancialTab({
             />
 
             <HoverInfoCard
-              title={`${t('tantalum.inkomane_fee', 'Inkomane Fee')} (${TantalumSettingsData?.inkomane_fee_per_kg_rwf} RWF)`}
+              title={`${t('tantalum.inkomane_fee', 'Inkomane Fee')} (${(financialForm.inkomane_fee_per_kg_rwf_fee ?? TantalumSettingsData?.inkomane_fee_per_kg_rwf)} RWF)`}
               value={`${formatNumber(calculatedValues.inkomane_fee)} RWF`}
               color="gray"
               formula="inkomane fee * net weight"
               data={[
-                { label: "Inkomane fee", value: `${TantalumSettingsData?.inkomane_fee_per_kg_rwf} RWF` },
+                { label: "Inkomane fee", value: `${(financialForm.inkomane_fee_per_kg_rwf_fee ?? TantalumSettingsData?.inkomane_fee_per_kg_rwf)} RWF` },
                 { label: "Net Weight", value: formatNumber(net_weight) },
               ]}
               outputLabel="Inkomane Fee"
