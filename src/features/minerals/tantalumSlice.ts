@@ -3,7 +3,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../config/axiosInstance';
 import { TantalumSettingsData } from '../settings/tantalumSettingSlice';
 
-export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled';
+export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled' | 'exported';
 export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'exported';
 
 export interface StockFormData {
@@ -136,6 +136,7 @@ export interface PaginationParams {
 export interface TantalumSearchParams extends PaginationParams {
   search?: string;
   stockStatus?: StockStatus;
+  financeStatus: FinanceStatus;
 }
 
 export interface TantalumsResponse {

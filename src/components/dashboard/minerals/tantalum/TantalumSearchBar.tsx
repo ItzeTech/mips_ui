@@ -1,3 +1,4 @@
+// TantalumSearchBar.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -5,15 +6,18 @@ import {
   MagnifyingGlassIcon,
   XMarkIcon,
   FunnelIcon,
-  ChevronLeftIcon
+  ChevronLeftIcon,
+  BanknotesIcon
 } from '@heroicons/react/24/outline';
-import { StockStatus } from '../../../../features/minerals/tantalumSlice';
+import { StockStatus, FinanceStatus } from '../../../../features/minerals/tantalumSlice';
 
 interface TantalumSearchBarProps {
   searchTerm: string;
   onSearchChange: (term: string) => void;
   stockStatusFilter: 'all' | StockStatus;
   onStatusFilterChange: (status: 'all' | StockStatus) => void;
+  financeStatusFilter: 'all' | FinanceStatus;
+  onFinanceStatusFilterChange: (status: 'all' | FinanceStatus) => void;
   serverSideSearch: boolean;
   onServerSideSearchChange: (value: boolean) => void;
 }
@@ -23,6 +27,8 @@ const TantalumSearchBar: React.FC<TantalumSearchBarProps> = ({
   onSearchChange,
   stockStatusFilter,
   onStatusFilterChange,
+  financeStatusFilter,
+  onFinanceStatusFilterChange,
   serverSideSearch,
   onServerSideSearchChange
 }) => {
@@ -75,6 +81,7 @@ const TantalumSearchBar: React.FC<TantalumSearchBarProps> = ({
           </div>
         </div>
         
+        {/* Stock Status Filter */}
         <div className="relative w-full md:w-auto md:min-w-[140px]">
           <div className="flex items-center">
             <FunnelIcon className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -87,6 +94,28 @@ const TantalumSearchBar: React.FC<TantalumSearchBarProps> = ({
               <option value="in-stock">{t('tantalum.status_in_stock', 'In Stock')}</option>
               <option value="withdrawn">{t('tantalum.status_withdrawn', 'Withdrawn')}</option>
               <option value="resampled">{t('tantalum.status_resampled', 'Resampled')}</option>
+              <option value="exported">{t('tantalum.status_exported', 'Exported')}</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+              <ChevronLeftIcon className="w-3.5 h-3.5 transform rotate-90" />
+            </div>
+          </div>
+        </div>
+
+        {/* Finance Status Filter */}
+        <div className="relative w-full md:w-auto md:min-w-[140px]">
+          <div className="flex items-center">
+            <BanknotesIcon className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <select
+              value={financeStatusFilter}
+              onChange={(e) => onFinanceStatusFilterChange(e.target.value as any)}
+              className="w-full pl-9 pr-8 py-2.5 text-sm sm:text-base border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white appearance-none"
+            >
+              <option value="all">{t('tantalum.finance_all', 'All Finance')}</option>
+              <option value="paid">{t('tantalum.finance_paid', 'Paid')}</option>
+              <option value="unpaid">{t('tantalum.finance_unpaid', 'Unpaid')}</option>
+              <option value="invoiced">{t('tantalum.finance_invoiced', 'Invoiced')}</option>
+              <option value="exported">{t('tantalum.finance_exported', 'Exported')}</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
               <ChevronLeftIcon className="w-3.5 h-3.5 transform rotate-90" />

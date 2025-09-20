@@ -9,6 +9,7 @@ import {
   setSelectedTantalum, 
   setPagination,
   StockStatus,
+  FinanceStatus,
   TantalumSearchParams
 } from '../../features/minerals/tantalumSlice';
 
@@ -41,6 +42,7 @@ const TantalumPage: React.FC = () => {
   
   const [searchTerm, setSearchTerm] = useState('');
   const [stockStatusFilter, setStockStatusFilter] = useState<'all' | StockStatus>('all');
+  const [financeStatusFilter, setFinanceStatusFilter] = useState<'all' | FinanceStatus>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
@@ -60,7 +62,7 @@ useEffect(() => {
   if (searchTimeout) clearTimeout(searchTimeout);
   
   const fetchData = () => {
-    const params: TantalumSearchParams = {
+    const params: Partial<TantalumSearchParams> = {
       page: pagination.page,
       limit: pagination.limit
     };
@@ -74,20 +76,24 @@ useEffect(() => {
       if (stockStatusFilter !== 'all') {
         params.stockStatus = stockStatusFilter;
       }
+
+      if (financeStatusFilter !== 'all') {
+        params.financeStatus = financeStatusFilter;
+      }
     }
     
-    dispatch(fetchTantalums(params));
+    dispatch(fetchTantalums(params as TantalumSearchParams));
   };
   
   // If server-side search is enabled, set page to 1 when search params change
-  if (serverSideSearch && (searchTerm || stockStatusFilter !== 'all')) {
+  if (serverSideSearch && (searchTerm || stockStatusFilter !== 'all' || financeStatusFilter !== 'all')) {
     dispatch(setPagination({ page: 1 }));
     // Small delay to allow pagination state to update
     setTimeout(fetchData, 0);
   } else {
     fetchData();
   }
-}, [dispatch, pagination.page, pagination.limit, serverSideSearch, searchTerm, stockStatusFilter, searchTimeout]);
+}, [dispatch, pagination.page, pagination.limit, serverSideSearch, searchTerm, stockStatusFilter, searchTimeout, financeStatusFilter]);
 
 // Update handleSearch with debounce
 const handleSearch = (term: string) => {
@@ -99,7 +105,7 @@ const handleSearch = (term: string) => {
     const timeout = setTimeout(() => {
       dispatch(setPagination({ page: 1 }));
       
-      const params: TantalumSearchParams = {
+      const params: Partial<TantalumSearchParams> = {
         page: 1,
         limit: pagination.limit
       };
@@ -112,7 +118,11 @@ const handleSearch = (term: string) => {
         params.stockStatus = stockStatusFilter;
       }
       
-      dispatch(fetchTantalums(params));
+      if (financeStatusFilter !== 'all') {
+        params.financeStatus = financeStatusFilter;
+      }
+      
+      dispatch(fetchTantalums(params as TantalumSearchParams));
     }, 500);
     
     setSearchTimeout(timeout);
@@ -129,7 +139,7 @@ const handleStatusFilter = (status: 'all' | StockStatus) => {
     const timeout = setTimeout(() => {
       dispatch(setPagination({ page: 1 }));
       
-      const params: TantalumSearchParams = {
+      const params: Partial<TantalumSearchParams> = {
         page: 1,
         limit: pagination.limit
       };
@@ -142,20 +152,56 @@ const handleStatusFilter = (status: 'all' | StockStatus) => {
         params.stockStatus = status;
       }
       
-      dispatch(fetchTantalums(params));
+      if (financeStatusFilter !== 'all') {
+        params.financeStatus = financeStatusFilter;
+      }
+      
+      dispatch(fetchTantalums(params as TantalumSearchParams));
     }, 0);
     
     setSearchTimeout(timeout);
   }
 };
 
-// Also update handlePageChange to include search parameters when using serverSideSearch
+const handleFinanceStatusFilter = (status: 'all' | FinanceStatus) => {
+  setFinanceStatusFilter(status);
+  
+  if (serverSideSearch) {
+    if (searchTimeout) clearTimeout(searchTimeout);
+    
+    const timeout = setTimeout(() => {
+      dispatch(setPagination({ page: 1 }));
+      
+      const params: Partial<TantalumSearchParams> = {
+        page: 1,
+        limit: pagination.limit
+      };
+      
+      if (searchTerm) {
+        params.search = searchTerm;
+      }
+      
+      if (stockStatusFilter !== 'all') {
+        params.stockStatus = stockStatusFilter;
+      }
+      
+      if (status !== 'all') {
+        params.financeStatus = status;
+      }
+      
+      dispatch(fetchTantalums(params as TantalumSearchParams));
+    }, 0);
+    
+    setSearchTimeout(timeout);
+  }
+};
+
 const handlePageChange = (newPage: number) => {
   dispatch(setPagination({ page: newPage }));
   
   // If server-side search is enabled, include the search parameters in the fetch
   if (serverSideSearch) {
-    const params: TantalumSearchParams = {
+    const params: Partial<TantalumSearchParams> = {
       page: newPage,
       limit: pagination.limit
     };
@@ -168,16 +214,20 @@ const handlePageChange = (newPage: number) => {
       params.stockStatus = stockStatusFilter;
     }
     
-    dispatch(fetchTantalums(params));
+    if (financeStatusFilter !== 'all') {
+      params.financeStatus = financeStatusFilter;
+    }
+    
+    dispatch(fetchTantalums(params as TantalumSearchParams));
   }
 };
 
-// Similarly update handlePageSizeChange
+// Update handlePageSizeChange too
 const handlePageSizeChange = (newLimit: number) => {
   dispatch(setPagination({ page: 1, limit: newLimit }));
   
   if (serverSideSearch) {
-    const params: TantalumSearchParams = {
+    const params: Partial<TantalumSearchParams> = {
       page: 1,
       limit: newLimit
     };
@@ -190,27 +240,36 @@ const handlePageSizeChange = (newLimit: number) => {
       params.stockStatus = stockStatusFilter;
     }
     
-    dispatch(fetchTantalums(params));
+    if (financeStatusFilter !== 'all') {
+      params.financeStatus = financeStatusFilter;
+    }
+    
+    dispatch(fetchTantalums(params as TantalumSearchParams));
   }
 };
 
+
   // Filter tantalums based on search and filter (client-side)
-  const filteredTantalums = useMemo(() => {
-    if (serverSideSearch) return tantalums;
+const filteredTantalums = useMemo(() => {
+  if (serverSideSearch) return tantalums;
+  
+  return tantalums.filter((tantalum) => {
+    const matchesSearch = 
+      tantalum.lot_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (tantalum.supplier_name && tantalum.supplier_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      tantalum.net_weight.toString().includes(searchTerm);
     
-    return tantalums.filter((tantalum) => {
-      const matchesSearch = 
-        tantalum.lot_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (tantalum.supplier_name && tantalum.supplier_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        tantalum.net_weight.toString().includes(searchTerm);
+    const matchesStockStatus = 
+      stockStatusFilter === 'all' || 
+      tantalum.stock_status === stockStatusFilter;
       
-      const matchesStatus = 
-        stockStatusFilter === 'all' || 
-        tantalum.stock_status === stockStatusFilter;
-        
-      return matchesSearch && matchesStatus;
-    });
-  }, [tantalums, searchTerm, stockStatusFilter, serverSideSearch]);
+    const matchesFinanceStatus =
+      financeStatusFilter === 'all' ||
+      tantalum.finance_status === financeStatusFilter;
+      
+    return matchesSearch && matchesStockStatus && matchesFinanceStatus;
+  });
+}, [tantalums, searchTerm, stockStatusFilter, financeStatusFilter, serverSideSearch]);
 
   // Calculate selected tantalums
   const selectedTantalums = useMemo(() => {
@@ -256,13 +315,15 @@ const handlePageSizeChange = (newLimit: number) => {
           onSearchChange={handleSearch}
           stockStatusFilter={stockStatusFilter}
           onStatusFilterChange={handleStatusFilter}
+          financeStatusFilter={financeStatusFilter}
+          onFinanceStatusFilterChange={handleFinanceStatusFilter}
           serverSideSearch={serverSideSearch}
           onServerSideSearchChange={setServerSideSearch}
         />
 
         {/* Stats */}
         <TantalumStats
-          tantalums={tantalums}
+          tantalums={filteredTantalums}
           selectedTantalums={selectedTantalums}
         />
 
@@ -275,7 +336,7 @@ const handlePageSizeChange = (newLimit: number) => {
           />
         ) : (
           <TantalumEmptyState
-            hasSearch={!!searchTerm || stockStatusFilter !== 'all'}
+            hasSearch={!!searchTerm || stockStatusFilter !== 'all' || financeStatusFilter !== 'all'}
             onCreateClick={() => setShowCreateModal(true)}
           />
         )}

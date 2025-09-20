@@ -3,7 +3,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../config/axiosInstance';
 import { TinSettingsData } from '../settings/tinSettingSlice';
 
-export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled';
+export type StockStatus = 'in-stock' | 'withdrawn' | 'resampled' | 'exported';
 export type FinanceStatus = 'paid' | 'unpaid' | 'invoiced' | 'exported';
 
 export interface StockFormData {
