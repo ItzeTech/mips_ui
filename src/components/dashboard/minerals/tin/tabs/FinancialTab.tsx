@@ -313,6 +313,25 @@ export default function FinancialTab({
               field="exchange_rate"
               errors={errors}
             />
+            <RenderInput
+              label={t('tantalum.transport_charge', 'Transport Charge in USD')}
+              value={financialForm.transport_charge}
+              onChange={(value) => setFinancialForm(prev => ({ ...prev, transport_charge: value }))}
+              type="number"
+              suffix="$"
+              field="transport_charge"
+              errors={errors}
+            />
+
+            <RenderInput
+              label={t('tantalum.alex_stewart_charge', 'Alex Stewart Charge in USD')}
+              value={financialForm.alex_stewart_charge}
+              onChange={(value) => setFinancialForm(prev => ({ ...prev, alex_stewart_charge: value }))}
+              type="number"
+              suffix="$"
+              field="alex_stewart_charge"
+              errors={errors}
+            />
 
           </div>
         </div>
@@ -536,12 +555,14 @@ export default function FinancialTab({
                 title={t('tin.total_charge', 'Total Charge')}
                 value={`$${formatNumber(calculatedValues.total_charge)}`}
                 color="amber"
-                formula="RRA + (RMA / Exchange Rate) + (Inkomane / Exchange Rate) + (Advance / Exchange Rate)"
+                formula="RRA + (RMA / Exchange Rate) + (Inkomane / Exchange Rate) + (Advance / Exchange Rate) + Transport Charge + Alex Stewart Charge"
                 data={[
                   { label: "RRA", value: `$${formatNumber(calculatedValues.rra)}` },
                   { label: "RMA / Exchange Rate", value: `(${formatNumber(calculatedValues.rma)} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? formatNumber(calculatedValues.rma / financialForm?.exchange_rate): '...'}` },
                   { label: "Inkomane / Exchange Rate", value: `(${formatNumber(calculatedValues.inkomane_fee)} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? formatNumber(calculatedValues.inkomane_fee / financialForm?.exchange_rate): '...'}` },
                   { label: "Advance / Exchange Rate", value: `(${(formatNumber(calculatedValues.advance ?? 0))} / ${financialForm?.exchange_rate}) = $${financialForm?.exchange_rate ? formatNumber((calculatedValues.advance ?? 0) / financialForm?.exchange_rate): '...'}` },
+                  { label: "Transport Charge", value: `$${financialForm.transport_charge ?? 0}` },
+                  { label: "Alex Stewart Charge", value: `$${financialForm.alex_stewart_charge ?? 0}` },
                 ]}
                 outputLabel="Total Charge"
                 outputValue={`$${formatNumber(calculatedValues.total_charge)}`}

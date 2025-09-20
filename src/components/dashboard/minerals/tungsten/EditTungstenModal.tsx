@@ -139,6 +139,8 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
     rra_percentage_fee: null,
     rma_usd_per_ton_fee: null,
     inkomane_fee_per_kg_rwf_fee: null,
+    transport_charge: null,
+    alex_stewart_charge: null
   });
 
   const [calculatedValues, setCalculatedValues] = useState({
@@ -199,6 +201,8 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
         rra_percentage_fee: selectedTungsten.rra_percentage_fee,
         rma_usd_per_ton_fee: selectedTungsten.rma_usd_per_ton_fee,
         inkomane_fee_per_kg_rwf_fee: selectedTungsten.inkomane_fee_per_kg_rwf_fee,
+        transport_charge: selectedTungsten.transport_charge,
+        alex_stewart_charge: selectedTungsten.alex_stewart_charge
       });
 
       setUseCustomFees(
@@ -275,7 +279,9 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
       finance_status: t('financial.status', 'Finance Status'),
       rra_percentage_fee: t('financial.rra_percentage_fee', 'RRA Percentage Fee'),
       rma_usd_per_ton_fee: t('financial.rma_usd_per_ton_fee', 'RMA USD per Ton Fee'),
-      inkomane_fee_per_kg_rwf_fee: t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee per kg (RWF)')
+      inkomane_fee_per_kg_rwf_fee: t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee per kg (RWF)'),
+      transport_charge: t('financial.transport_charge', 'Transport Charge'),
+      alex_stewart_charge: t('financial.alex_stewart_charge', 'Alex Stewart Charge')
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -332,7 +338,10 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
 
         rra_percentage_fee: selectedTungsten.rra_percentage_fee,
         rma_usd_per_ton_fee: selectedTungsten.rma_usd_per_ton_fee,
-        inkomane_fee_per_kg_rwf_fee: selectedTungsten.inkomane_fee_per_kg_rwf_fee
+        inkomane_fee_per_kg_rwf_fee: selectedTungsten.inkomane_fee_per_kg_rwf_fee,
+
+        transport_charge: selectedTungsten.transport_charge,
+        alex_stewart_charge: selectedTungsten.alex_stewart_charge
       };
       setHasFinancialChanges(JSON.stringify(originalFinancial) !== JSON.stringify(financialForm));
     }
@@ -507,6 +516,8 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
         rra_percentage_fee: selectedTungsten.rra_percentage_fee,
         rma_usd_per_ton_fee: selectedTungsten.rma_usd_per_ton_fee,
         inkomane_fee_per_kg_rwf_fee: selectedTungsten.inkomane_fee_per_kg_rwf_fee,
+        transport_charge: selectedTungsten.transport_charge,
+        alex_stewart_charge: selectedTungsten.alex_stewart_charge
       };
 
       const changes = getChanges(originalFinancial, financialForm);
@@ -571,6 +582,8 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
             rra_percentage_fee: financialForm.rra_percentage_fee ?? settings?.rra_percentage ?? null,
             rma_usd_per_ton_fee: financialForm.rma_usd_per_ton_fee ?? settings?.rma_usd_per_ton ?? null,
             inkomane_fee_per_kg_rwf_fee: financialForm.inkomane_fee_per_kg_rwf_fee ?? settings?.inkomane_fee_per_kg_rwf ?? null,
+            transport_charge: financialForm.transport_charge ?? null,
+            alex_stewart_charge: financialForm.alex_stewart_charge ?? null
           };
           
           await dispatch(updateFinancials({

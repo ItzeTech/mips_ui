@@ -35,10 +35,13 @@ export interface FinancialFormData {
   rma_usd_per_ton_fee: number | null;
   inkomane_fee_per_kg_rwf_fee: number | null;
   rra_price_per_percentage_fee: number | null;
+  transport_charge: number | null;
+  alex_stewart_charge: number | null;
 }
 
 export interface Tantalum {
   id: string;
+  tantalum_id: string | null;
   date_of_delivery: string;
   date_of_sampling: string;
   date_of_alex_stewart: string | null;
@@ -79,6 +82,9 @@ export interface Tantalum {
   rma_usd_per_ton_fee: number | null;
   inkomane_fee_per_kg_rwf_fee: number | null;
   rra_price_per_percentage_fee: number | null;
+
+  transport_charge: number | null;
+  alex_stewart_charge: number | null;
 }
 
 export interface CreateTantalumData {
@@ -117,6 +123,9 @@ export interface UpdateFinancialsData {
   rma_usd_per_ton_fee?: number | null;
   inkomane_fee_per_kg_rwf_fee?: number | null;
   rra_price_per_percentage_fee?: number | null;
+
+  transport_charge: number | null;
+  alex_stewart_charge: number | null;
 }
 
 export interface PaginationParams {
@@ -433,7 +442,7 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
 
   if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && exchange_rate) {
     calculatedData.total_charge = calculatedData.rra + calculatedData.rma + 
-      (calculatedData.inkomane_fee / exchange_rate) + ((calculatedData.advance ?? 0) / exchange_rate);
+      (calculatedData.inkomane_fee / exchange_rate) + ((calculatedData.advance ?? 0) / exchange_rate) + ((data.transport_charge ?? 0)) + ((data.alex_stewart_charge ?? 0));
   }
 
   if (calculatedData.total_amount && calculatedData.total_charge) {

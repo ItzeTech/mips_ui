@@ -185,7 +185,9 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
     rra_percentage_fee: null,
     rma_usd_per_ton_fee: null,
     inkomane_fee_per_kg_rwf_fee: null,
-    rra_price_per_percentage_fee: null
+    rra_price_per_percentage_fee: null,
+    transport_charge: null,
+    alex_stewart_charge: null
   });
 
   const [calculatedValues, setCalculatedValues] = useState({
@@ -248,7 +250,9 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         rra_percentage_fee: selectedTantalum.rra_percentage_fee,
         rma_usd_per_ton_fee: selectedTantalum.rma_usd_per_ton_fee,
         inkomane_fee_per_kg_rwf_fee: selectedTantalum.inkomane_fee_per_kg_rwf_fee,
-        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee
+        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee,
+        transport_charge: selectedTantalum.transport_charge,
+        alex_stewart_charge: selectedTantalum.alex_stewart_charge
       });
 
       setUseCustomFees(
@@ -329,7 +333,9 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
       rra_percentage_fee: t('financial.rra_percentage_fee', 'RRA Percentage Fee'),
       rma_usd_per_ton_fee: t('financial.rma_usd_per_ton_fee', 'RMA USD per Ton Fee'),
       inkomane_fee_per_kg_rwf_fee: t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee per kg (RWF)'),
-      rra_price_per_percentage_fee: t('financial.rra_price_per_percentage_fee', 'RRA Price per Percentage Fee')
+      rra_price_per_percentage_fee: t('financial.rra_price_per_percentage_fee', 'RRA Price per Percentage Fee'),
+      transport_charge: t('financial.transport_charge', 'Transport Charge'),
+      alex_stewart_charge: t('financial.alex_stewart_charge', 'Alex Stewart Charge')
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -389,7 +395,10 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         rra_percentage_fee: selectedTantalum.rra_percentage_fee,
         rma_usd_per_ton_fee: selectedTantalum.rma_usd_per_ton_fee,
         inkomane_fee_per_kg_rwf_fee: selectedTantalum.inkomane_fee_per_kg_rwf_fee,
-        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee
+        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee,
+
+        transport_charge: selectedTantalum.transport_charge,
+        alex_stewart_charge: selectedTantalum.alex_stewart_charge
       };
       setHasFinancialChanges(JSON.stringify(originalFinancial) !== JSON.stringify(financialForm));
     }
@@ -580,7 +589,9 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         rra_percentage_fee: selectedTantalum.rra_percentage_fee,
         rma_usd_per_ton_fee: selectedTantalum.rma_usd_per_ton_fee,
         inkomane_fee_per_kg_rwf_fee: selectedTantalum.inkomane_fee_per_kg_rwf_fee,
-        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee
+        rra_price_per_percentage_fee: selectedTantalum.rra_price_per_percentage_fee,
+        transport_charge: selectedTantalum.transport_charge,
+        alex_stewart_charge: selectedTantalum.alex_stewart_charge
       };
 
       const changes = getChanges(originalFinancial, financialForm);
@@ -649,7 +660,9 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
             rra_percentage_fee: financialForm.rra_percentage_fee ?? settings?.rra_percentage ?? null,
             rma_usd_per_ton_fee: financialForm.rma_usd_per_ton_fee ?? settings?.rma_usd_per_ton ?? null,
             inkomane_fee_per_kg_rwf_fee: financialForm.inkomane_fee_per_kg_rwf_fee ?? settings?.inkomane_fee_per_kg_rwf ?? null,
-            rra_price_per_percentage_fee: financialForm.rra_price_per_percentage_fee ?? settings?.rra_price_per_percentage ?? null
+            rra_price_per_percentage_fee: financialForm.rra_price_per_percentage_fee ?? settings?.rra_price_per_percentage ?? null,
+            transport_charge: financialForm.transport_charge ?? null,
+            alex_stewart_charge: financialForm.alex_stewart_charge ?? null
           };
           
           await dispatch(updateFinancials({

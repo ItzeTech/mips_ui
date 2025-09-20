@@ -144,7 +144,9 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
     government_treatment_charge_usd_fee: null,
     rra_percentage_fee: null,
     rma_per_kg_rwf_fee: null,
-    inkomane_fee_per_kg_rwf_fee: null
+    inkomane_fee_per_kg_rwf_fee: null,
+    transport_charge: null,
+    alex_stewart_charge: null
   });
 
   const [calculatedValues, setCalculatedValues] = useState({
@@ -209,7 +211,9 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         government_treatment_charge_usd_fee: selectedTin.government_treatment_charge_usd_fee,
         rra_percentage_fee: selectedTin.rra_percentage_fee,
         rma_per_kg_rwf_fee: selectedTin.rma_per_kg_rwf_fee,
-        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee
+        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee,
+        transport_charge: selectedTin.transport_charge,
+        alex_stewart_charge: selectedTin.alex_stewart_charge
       });
 
       setUseCustomFees(
@@ -230,11 +234,11 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
 
   // Calculate financial values when relevant fields change
   useEffect(() => {
-    console.log(financialForm.fluctuation_fee)
+    console.log(financialForm)
     if (selectedTin && stockForm.net_weight && 
         financialForm.lme_rate !== null && 
         financialForm.purchase_sn_percentage !== null && 
-        financialForm.government_tc !== null &&
+        financialForm.government_treatment_charge_usd_fee !== null &&
         financialForm.fluctuation_fee !== null &&
         financialForm.internal_tc !== null &&
         financialForm.exchange_rate !== null && 
@@ -299,6 +303,8 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
       rra_percentage_fee: t('financial.rra_percentage_fee', 'RRA Percentage Fee'),
       rma_per_kg_rwf_fee: t('financial.rma_per_kg_rwf_fee', 'RMA Per kg (RWF) Fee'),
       inkomane_fee_per_kg_rwf_fee: t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee Per kg (RWF) Fee'),
+      transport_charge: t('financial.transport_charge', 'Transport Charge'),
+      alex_stewart_charge: t('financial.alex_stewart_charge', 'Alex Stewart Charge')
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -359,7 +365,9 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         government_treatment_charge_usd_fee: selectedTin.government_treatment_charge_usd_fee,
         rra_percentage_fee: selectedTin.rra_percentage_fee,
         rma_per_kg_rwf_fee: selectedTin.rma_per_kg_rwf_fee,
-        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee
+        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee,
+        transport_charge: selectedTin.transport_charge,
+        alex_stewart_charge: selectedTin.alex_stewart_charge
       };
       setHasFinancialChanges(JSON.stringify(originalFinancial) !== JSON.stringify(financialForm));
     }
@@ -541,7 +549,9 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         government_treatment_charge_usd_fee: selectedTin.government_treatment_charge_usd_fee,
         rra_percentage_fee: selectedTin.rra_percentage_fee,
         rma_per_kg_rwf_fee: selectedTin.rma_per_kg_rwf_fee,
-        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee
+        inkomane_fee_per_kg_rwf_fee: selectedTin.inkomane_fee_per_kg_rwf_fee,
+        transport_charge: selectedTin.transport_charge,
+        alex_stewart_charge: selectedTin.alex_stewart_charge
       };
 
       const changes = getChanges(originalFinancial, financialForm);
@@ -610,7 +620,9 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
             government_treatment_charge_usd_fee: financialForm.government_treatment_charge_usd_fee ?? settings?.government_treatment_charge_usd ?? null,
             rra_percentage_fee: financialForm.rra_percentage_fee ?? settings?.rra_percentage ?? null,
             rma_per_kg_rwf_fee: financialForm.rma_per_kg_rwf_fee ?? settings?.rma_per_kg_rwf ?? null,
-            inkomane_fee_per_kg_rwf_fee: financialForm.inkomane_fee_per_kg_rwf_fee ?? settings?.inkomane_fee_per_kg_rwf ?? null
+            inkomane_fee_per_kg_rwf_fee: financialForm.inkomane_fee_per_kg_rwf_fee ?? settings?.inkomane_fee_per_kg_rwf ?? null,
+            transport_charge: financialForm.transport_charge ?? null,
+            alex_stewart_charge: financialForm.alex_stewart_charge ?? null
           };
           
           await dispatch(updateFinancials({

@@ -37,10 +37,13 @@ export interface FinancialFormData {
   rra_percentage_fee: number | null;
   rma_per_kg_rwf_fee: number | null;
   inkomane_fee_per_kg_rwf_fee: number | null;
+  transport_charge: number | null;
+  alex_stewart_charge: number | null;
 }
 
 export interface Tin {
   id: string;
+  tin_id: string | null;
   date_of_delivery: string;
   date_of_sampling: string;
   date_of_alex_stewart: string | null;
@@ -88,6 +91,9 @@ export interface Tin {
   finance_status_changed_date: string;
   stock_status_changed_date: string;
   has_alex_stewart: boolean;
+
+  transport_charge: number | null;
+  alex_stewart_charge: number | null;
   
   created_at: string;
   updated_at: string;
@@ -130,6 +136,8 @@ export interface UpdateFinancialsData {
   rra_percentage_fee: number | null;
   rma_per_kg_rwf_fee: number | null;
   inkomane_fee_per_kg_rwf_fee: number | null;
+  transport_charge: number | null;
+  alex_stewart_charge: number | null;
 }
 
 export interface PaginationParams {
@@ -482,9 +490,11 @@ export const calculateFinancials = (
   if (exchange_rate && exchange_rate !== 0) {
     calculatedData.total_charge =
       (calculatedData.rra ?? 0) +
-      (calculatedData.rma ?? 0) / exchange_rate +
-      (calculatedData.inkomane_fee ?? 0) / exchange_rate +
-      (calculatedData.advance ?? 0) / exchange_rate;
+      ((calculatedData.rma ?? 0) / exchange_rate) +
+      ((calculatedData.inkomane_fee ?? 0) / exchange_rate) +
+      ((calculatedData.advance ?? 0) / exchange_rate) +
+      (data.transport_charge ?? 0) +
+      (data.alex_stewart_charge ?? 0);
   } else {
     calculatedData.total_charge = 0;
   }

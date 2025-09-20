@@ -31,10 +31,13 @@ export interface FinancialFormData {
   rra_percentage_fee: number | null;
   rma_usd_per_ton_fee: number | null;
   inkomane_fee_per_kg_rwf_fee: number | null;
+  transport_charge: number | null;
+  alex_stewart_charge: number | null;
 }
 
 export interface Tungsten {
   id: string;
+  tungsten_id: string | null;
   date_of_delivery: string;
   date_of_sampling: string;
   date_of_alex_stewart: string | null;
@@ -78,6 +81,8 @@ export interface Tungsten {
   stock_status: StockStatus;
   finance_status: FinanceStatus;
   previous_finance_status: FinanceStatus;
+  transport_charge: number | null;
+  alex_stewart_charge: number | null;
   
   created_at: string;
   updated_at: string;
@@ -115,6 +120,8 @@ export interface UpdateFinancialsData {
   rra_percentage_fee: number | null;
   rma_usd_per_ton_fee: number | null;
   inkomane_fee_per_kg_rwf_fee: number | null;
+  transport_charge?: number | null;
+  alex_stewart_charge?: number | null;
 }
 
 export interface PaginationParams {
@@ -435,8 +442,10 @@ export const calculateFinancials = (data: Partial<Tungsten>, settings: TungstenS
   if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && calculatedData.advance && exchange_rate) {
     calculatedData.total_charge = calculatedData.rra + 
       calculatedData.rma + 
-      (calculatedData.inkomane_fee / exchange_rate) + 
-      (calculatedData.advance / exchange_rate);
+      ((calculatedData.inkomane_fee ?? 0) / exchange_rate) + 
+      ((calculatedData.advance ?? 0) / exchange_rate) +
+      (data.transport_charge ?? 0) +
+      (data.alex_stewart_charge ?? 0);
   }
 
   // Net amount = Total amount - Total charge
