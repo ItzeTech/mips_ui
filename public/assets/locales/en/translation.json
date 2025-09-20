@@ -691,7 +691,8 @@
     "stockStatus": {
       "in-stock": "In Stock",
       "withdrawn": "Withdrawn",
-      "resampled": "Resampled"
+      "resampled": "Resampled",
+      "exported": "Exported"
     },
     "financeStatus": {
       "paid": "Paid",

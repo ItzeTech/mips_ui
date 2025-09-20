@@ -132,6 +132,7 @@ export interface PaginationParams {
 export interface TungstenSearchParams extends PaginationParams {
   search?: string;
   stockStatus?: StockStatus;
+  financeStatus: FinanceStatus;
 }
 
 export interface TungstensResponse {

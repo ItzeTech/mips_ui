@@ -2,7 +2,8 @@
 export const STOCK_STATUS_OPTIONS = {
   'in-stock': 'stockStatus.in-stock',
   'withdrawn': 'stockStatus.withdrawn',
-  'resampled': 'stockStatus.resampled'
+  'resampled': 'stockStatus.resampled',
+  'exported': 'stockStatus.exported',
 };
 
 export const FINANCE_STATUS_OPTIONS = {

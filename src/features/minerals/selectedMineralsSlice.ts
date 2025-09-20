@@ -15,28 +15,8 @@ interface SelectedMineralsState {
   items: SelectedMineral[];
 }
 
-// Load initial state from localStorage if available
-const loadFromStorage = (): SelectedMineral[] => {
-  try {
-    const savedItems = localStorage.getItem('selectedMinerals');
-    return savedItems ? JSON.parse(savedItems) : [];
-  } catch (error) {
-    console.error('Error loading selected minerals from storage:', error);
-    return [];
-  }
-};
-
-// Save state to localStorage
-const saveToStorage = (items: SelectedMineral[]) => {
-  try {
-    localStorage.setItem('selectedMinerals', JSON.stringify(items));
-  } catch (error) {
-    console.error('Error saving selected minerals to storage:', error);
-  }
-};
-
 const initialState: SelectedMineralsState = {
-  items: loadFromStorage(),
+  items: [], // No longer loading from localStorage
 };
 
 const selectedMineralsSlice = createSlice({
@@ -51,22 +31,22 @@ const selectedMineralsSlice = createSlice({
       
       if (!exists) {
         state.items.push(action.payload);
-        saveToStorage(state.items);
+        // Removed saveToStorage call
       }
     },
     removeMineral: (state, action: PayloadAction<{id: string, type: MineralType}>) => {
       state.items = state.items.filter(
         item => !(item.id === action.payload.id && item.type === action.payload.type)
       );
-      saveToStorage(state.items);
+      // Removed saveToStorage call
     },
     clearAllMinerals: (state) => {
       state.items = [];
-      saveToStorage(state.items);
+      // Removed saveToStorage call
     },
     clearMineralsByType: (state, action: PayloadAction<MineralType>) => {
       state.items = state.items.filter(item => item.type !== action.payload);
-      saveToStorage(state.items);
+      // Removed saveToStorage call
     }
   },
 });

@@ -9,6 +9,7 @@ import {
   setSelectedTin, 
   setPagination,
   StockStatus,
+  FinanceStatus,
   TinSearchParams
 } from '../../features/minerals/tinSlice';
 
@@ -41,6 +42,7 @@ const TinPage: React.FC = () => {
   
   const [searchTerm, setSearchTerm] = useState('');
   const [stockStatusFilter, setStockStatusFilter] = useState<'all' | StockStatus>('all');
+  const [financeStatusFilter, setFinanceStatusFilter] = useState<'all' | FinanceStatus>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
@@ -60,7 +62,7 @@ const TinPage: React.FC = () => {
     if (searchTimeout) clearTimeout(searchTimeout);
     
     const fetchData = () => {
-      const params: TinSearchParams = {
+      const params: Partial<TinSearchParams> = {
         page: pagination.page,
         limit: pagination.limit
       };
@@ -74,20 +76,24 @@ const TinPage: React.FC = () => {
         if (stockStatusFilter !== 'all') {
           params.stockStatus = stockStatusFilter;
         }
+        
+        if (financeStatusFilter !== 'all') {
+          params.financeStatus = financeStatusFilter;
+        }
       }
       
-      dispatch(fetchTins(params));
+      dispatch(fetchTins(params as TinSearchParams));
     };
     
     // If server-side search is enabled, set page to 1 when search params change
-    if (serverSideSearch && (searchTerm || stockStatusFilter !== 'all')) {
+    if (serverSideSearch && (searchTerm || stockStatusFilter !== 'all' || financeStatusFilter !== 'all')) {
       dispatch(setPagination({ page: 1 }));
       // Small delay to allow pagination state to update
       setTimeout(fetchData, 0);
     } else {
       fetchData();
     }
-  }, [dispatch, pagination.page, pagination.limit, serverSideSearch, searchTerm, stockStatusFilter, searchTimeout]);
+  }, [dispatch, pagination.page, pagination.limit, serverSideSearch, searchTerm, stockStatusFilter, financeStatusFilter, searchTimeout]);
 
   // Update handleSearch with debounce
   const handleSearch = (term: string) => {
@@ -99,7 +105,7 @@ const TinPage: React.FC = () => {
       const timeout = setTimeout(() => {
         dispatch(setPagination({ page: 1 }));
         
-        const params: TinSearchParams = {
+        const params: Partial<TinSearchParams> = {
           page: 1,
           limit: pagination.limit
         };
@@ -112,7 +118,11 @@ const TinPage: React.FC = () => {
           params.stockStatus = stockStatusFilter;
         }
         
-        dispatch(fetchTins(params));
+        if (financeStatusFilter !== 'all') {
+          params.financeStatus = financeStatusFilter;
+        }
+        
+        dispatch(fetchTins(params as TinSearchParams));
       }, 500);
       
       setSearchTimeout(timeout);
@@ -129,7 +139,7 @@ const TinPage: React.FC = () => {
       const timeout = setTimeout(() => {
         dispatch(setPagination({ page: 1 }));
         
-        const params: TinSearchParams = {
+        const params: Partial<TinSearchParams> = {
           page: 1,
           limit: pagination.limit
         };
@@ -142,20 +152,58 @@ const TinPage: React.FC = () => {
           params.stockStatus = status;
         }
         
-        dispatch(fetchTins(params));
+        if (financeStatusFilter !== 'all') {
+          params.financeStatus = financeStatusFilter;
+        }
+        
+        dispatch(fetchTins(params as TinSearchParams));
+      }, 0);
+      
+      setSearchTimeout(timeout);
+    }
+  };
+  
+  // Add handleFinanceStatusFilter
+  const handleFinanceStatusFilter = (status: 'all' | FinanceStatus) => {
+    setFinanceStatusFilter(status);
+    
+    if (serverSideSearch) {
+      if (searchTimeout) clearTimeout(searchTimeout);
+      
+      const timeout = setTimeout(() => {
+        dispatch(setPagination({ page: 1 }));
+        
+        const params: Partial<TinSearchParams> = {
+          page: 1,
+          limit: pagination.limit
+        };
+        
+        if (searchTerm) {
+          params.search = searchTerm;
+        }
+        
+        if (stockStatusFilter !== 'all') {
+          params.stockStatus = stockStatusFilter;
+        }
+        
+        if (status !== 'all') {
+          params.financeStatus = status;
+        }
+        
+        dispatch(fetchTins(params as TinSearchParams));
       }, 0);
       
       setSearchTimeout(timeout);
     }
   };
 
-  // Also update handlePageChange to include search parameters when using serverSideSearch
+  // Update handlePageChange
   const handlePageChange = (newPage: number) => {
     dispatch(setPagination({ page: newPage }));
     
     // If server-side search is enabled, include the search parameters in the fetch
     if (serverSideSearch) {
-      const params: TinSearchParams = {
+      const params: Partial<TinSearchParams> = {
         page: newPage,
         limit: pagination.limit
       };
@@ -168,16 +216,20 @@ const TinPage: React.FC = () => {
         params.stockStatus = stockStatusFilter;
       }
       
-      dispatch(fetchTins(params));
+      if (financeStatusFilter !== 'all') {
+        params.financeStatus = financeStatusFilter;
+      }
+      
+      dispatch(fetchTins(params as TinSearchParams));
     }
   };
 
-  // Similarly update handlePageSizeChange
+  // Update handlePageSizeChange
   const handlePageSizeChange = (newLimit: number) => {
     dispatch(setPagination({ page: 1, limit: newLimit }));
     
     if (serverSideSearch) {
-      const params: TinSearchParams = {
+      const params: Partial<TinSearchParams> = {
         page: 1,
         limit: newLimit
       };
@@ -190,11 +242,15 @@ const TinPage: React.FC = () => {
         params.stockStatus = stockStatusFilter;
       }
       
-      dispatch(fetchTins(params));
+      if (financeStatusFilter !== 'all') {
+        params.financeStatus = financeStatusFilter;
+      }
+      
+      dispatch(fetchTins(params as TinSearchParams));
     }
   };
 
-  // Filter tins based on search and filter (client-side)
+  // Update filteredTins to include finance status filtering
   const filteredTins = useMemo(() => {
     if (serverSideSearch) return tins;
     
@@ -204,13 +260,17 @@ const TinPage: React.FC = () => {
         (tin.supplier_name && tin.supplier_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
         tin.net_weight.toString().includes(searchTerm);
       
-      const matchesStatus = 
+      const matchesStockStatus = 
         stockStatusFilter === 'all' || 
         tin.stock_status === stockStatusFilter;
         
-      return matchesSearch && matchesStatus;
+      const matchesFinanceStatus =
+        financeStatusFilter === 'all' ||
+        tin.finance_status === financeStatusFilter;
+        
+      return matchesSearch && matchesStockStatus && matchesFinanceStatus;
     });
-  }, [tins, searchTerm, stockStatusFilter, serverSideSearch]);
+  }, [tins, searchTerm, stockStatusFilter, financeStatusFilter, serverSideSearch]);
 
   // Calculate selected tins
   const selectedTins = useMemo(() => {
@@ -256,13 +316,15 @@ const TinPage: React.FC = () => {
           onSearchChange={handleSearch}
           stockStatusFilter={stockStatusFilter}
           onStatusFilterChange={handleStatusFilter}
+          financeStatusFilter={financeStatusFilter}
+          onFinanceStatusFilterChange={handleFinanceStatusFilter}
           serverSideSearch={serverSideSearch}
           onServerSideSearchChange={setServerSideSearch}
         />
 
         {/* Stats */}
         <TinStats
-          tins={tins}
+          tins={filteredTins}
           selectedTins={selectedTins}
         />
 
@@ -275,7 +337,7 @@ const TinPage: React.FC = () => {
           />
         ) : (
           <TinEmptyState
-            hasSearch={!!searchTerm || stockStatusFilter !== 'all'}
+            hasSearch={!!searchTerm || stockStatusFilter !== 'all' || financeStatusFilter !== 'all'}
             onCreateClick={() => setShowCreateModal(true)}
           />
         )}

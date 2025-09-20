@@ -148,6 +148,7 @@ export interface PaginationParams {
 export interface TinSearchParams extends PaginationParams {
   search?: string;
   stockStatus?: StockStatus;
+  financeStatus: FinanceStatus;
 }
 
 export interface TinsResponse {
