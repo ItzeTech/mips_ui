@@ -51,7 +51,7 @@ export const useSales = () => {
     const result = await dispatch(createSale(saleData));
     if (createSale.fulfilled.match(result)) {
       // Clear selected minerals of the type that was added to sale
-      if (saleData.mineral_ids && saleData.mineral_ids.length > 0) {
+      if (saleData.minerals && saleData.minerals.length > 0) {
         clearByType(saleData.mineral_type.toLowerCase() as any);
       }
       return result.payload;

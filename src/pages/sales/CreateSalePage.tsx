@@ -1,5 +1,5 @@
 // pages/CreateSalePage.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -9,14 +9,80 @@ import {
   XCircleIcon,
   PlusCircleIcon,
   UserIcon,
-  CurrencyDollarIcon
+  CurrencyDollarIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 
 import { useSelectedMinerals } from '../../hooks/useSelectedMinerals';
 import { useSales } from '../../hooks/useSales';
 import SelectedMineralsList from '../../components/dashboard/sales/SelectedMineralsList';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store'
+import { RootState } from '../../store/store';
+import { SaleMineralInput } from '../../components/dashboard/sales/SelectedMineralsList';
+
+// Add a confirmation dialog component
+const ConfirmationDialog = ({ isOpen, onClose, onConfirm, replenishedMinerals, minerals }: any) => {
+  const { t } = useTranslation();
+  
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="flex items-center justify-center min-h-screen p-4 text-center sm:p-0">
+        <div className="bg-white dark:bg-gray-800" onClick={onClose}></div>
+        
+        <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 p-2 bg-amber-100 dark:bg-amber-900/30 rounded-full">
+              <ExclamationTriangleIcon className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+            </div>
+            <h3 className="ml-3 text-lg font-medium leading-6 text-gray-900 dark:text-white">
+              {t('sales.confirm_replenish', 'Confirm Replenishment')}
+            </h3>
+          </div>
+          
+          <div className="mt-4">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+              {t('sales.replenish_confirmation_text', 'The following minerals will be partially replenished. This will create new records with the specified amounts.')}
+            </p>
+            
+            <div className="mt-3 space-y-3 max-h-60 overflow-y-auto">
+              {replenishedMinerals.map((item: { mineral_id: React.Key | null | undefined; replenish_kgs: number; }) => {
+                const mineral = minerals.find((m: { id: React.Key | null | undefined; }) => m.id === item.mineral_id);
+                return (
+                  <div key={item.mineral_id} className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700/50 text-sm">
+                    <div className="font-medium text-gray-900 dark:text-white">{mineral?.lotNumber}</div>
+                    <div className="text-gray-600 dark:text-gray-300 text-xs mt-1">
+                      {t('sales.replenish_amount_of', 'Replenish')}: {item.replenish_kgs.toFixed(2)} kg / {mineral?.netWeight.toFixed(2)} kg
+                      ({((item.replenish_kgs / mineral?.netWeight) * 100).toFixed(0)}%)
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          <div className="mt-6 flex justify-end space-x-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors"
+            >
+              {t('common.cancel', 'Cancel')}
+            </button>
+            <button
+              type="button"
+              onClick={onConfirm}
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 transition-colors"
+            >
+              {t('common.confirm', 'Confirm')}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const CreateSalePage: React.FC = () => {
   const { t } = useTranslation();
@@ -32,6 +98,14 @@ const CreateSalePage: React.FC = () => {
   const [netSalesAmount, setNetSalesAmount] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [summaryUpdateTrigger, setSummaryUpdateTrigger] = useState(0);
+  
+  // Reference to the SelectedMineralsList component to access its methods
+  const mineralsListRef = useRef<any>(null);
+  
+  // Store prepared minerals for confirmation dialog
+  const [preparedMinerals, setPreparedMinerals] = useState<SaleMineralInput[]>([]);
   
   const validMineralType = mineralType?.toUpperCase() === 'TANTALUM' || 
                           mineralType?.toUpperCase() === 'TIN' || 
@@ -45,45 +119,77 @@ const CreateSalePage: React.FC = () => {
     }
   }, [validMineralType, navigate]);
 
-  useEffect(()=> {
-    setError(err ? err.replace("_", " "): '');
-  }, [err])
+  useEffect(() => {
+    setError(err ? err.replace("_", ""): '');
+  }, [err]);
+  
+  // Set up periodic updates for the summary
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSummaryUpdateTrigger(prev => prev + 1);
+    }, 500); // Update every half second
+    
+    return () => clearInterval(interval);
+  }, []);
   
   const selectedMineralsForType = getByType(validMineralType?.toLowerCase() as any);
   
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Calculate the effective total weight considering replenished amounts
+  const calculateTotalWeight = () => {
+    if (!mineralsListRef.current) return "0.00";
+    return mineralsListRef.current.calculateTotalWeight().toFixed(2);
+  };
+  
+  const handleSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
     
     if (!validMineralType) {
       setError('Invalid mineral type');
-      setIsSubmitting(false);
       return;
     }
     
     if (selectedMineralsForType.length === 0) {
       setError('Please select at least one mineral');
-      setIsSubmitting(false);
       return;
     }
     
+    // Get prepared minerals from the SelectedMineralsList component
+    const minerals = mineralsListRef.current.getPrepairedMinerals();
+    setPreparedMinerals(minerals);
+    
+    // Check if any minerals have replenish enabled
+    const hasReplenishedMinerals = minerals.some((item: { replenish_kgs: number; }) => item.replenish_kgs > 0);
+    
+    if (hasReplenishedMinerals) {
+      // Show confirmation dialog for replenished minerals
+      setShowConfirmation(true);
+    } else {
+      // No replenished minerals, proceed with submission
+      submitSale(minerals);
+    }
+  };
+  
+  const submitSale = async (minerals: SaleMineralInput[]) => {
+    setIsSubmitting(true);
+    
     try {
       const result = await handleCreateSale({
-        mineral_type: validMineralType,
-        mineral_ids: selectedMineralsForType.map(mineral => mineral.id),
+        mineral_type: validMineralType as any,
+        minerals: minerals,
         buyer: buyer || undefined,
         net_sales_amount: netSalesAmount || undefined
       });
       
       if (result) {
-        clearByType(validMineralType.toLowerCase() as any);
+        clearByType(validMineralType!.toLowerCase() as any);
         navigate(`/sales/${result.id}`);
       }
     } catch (err: any) {
       setError(err.message || 'Failed to create sale');
     } finally {
       setIsSubmitting(false);
+      setShowConfirmation(false);
     }
   };
   
@@ -100,6 +206,9 @@ const CreateSalePage: React.FC = () => {
       navigate('/minerals/tungsten');
     }
   };
+  
+  // Filter out minerals with replenish_kgs > 0 for the confirmation dialog
+  const replenishedMinerals = preparedMinerals.filter(item => item.replenish_kgs > 0);
   
   if (!validMineralType) return null;
   
@@ -150,6 +259,7 @@ const CreateSalePage: React.FC = () => {
               <div className="p-4">
                 {selectedMineralsForType.length > 0 ? (
                   <SelectedMineralsList 
+                    ref={mineralsListRef}
                     minerals={selectedMineralsForType}
                     mineralType={validMineralType}
                   />
@@ -182,7 +292,7 @@ const CreateSalePage: React.FC = () => {
               </div>
               
               <div className="p-4">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmitForm}>
                   <div className="mb-4">
                     <label htmlFor="buyer" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       {t('sales.buyer', 'Buyer')}
@@ -245,7 +355,7 @@ const CreateSalePage: React.FC = () => {
                       <div className="flex justify-between">
                         <span className="text-gray-600 dark:text-gray-400">{t('sales.total_weight', 'Total Weight')}:</span>
                         <span className="font-medium text-gray-900 dark:text-white">
-                          {selectedMineralsForType.reduce((sum, item) => sum + item.netWeight, 0).toFixed(2)} kg
+                          {selectedMineralsForType.length > 0 ? calculateTotalWeight() : "0.00"} kg
                         </span>
                       </div>
                     </div>
@@ -268,6 +378,15 @@ const CreateSalePage: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={() => submitSale(preparedMinerals)}
+        replenishedMinerals={replenishedMinerals}
+        minerals={selectedMineralsForType}
+      />
     </div>
   );
 };

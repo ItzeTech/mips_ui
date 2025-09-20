@@ -7,6 +7,11 @@ import axiosInstance from '../../config/axiosInstance';
 
 export type SaleMineralType = 'TANTALUM' | 'TIN' | 'TUNGSTEN';
 
+export interface SaleMineralInput {
+  mineral_id: string;
+  replenish_kgs: number;
+}
+
 export interface SaleMineral {
   id: string;
   net_weight: number;
@@ -36,7 +41,7 @@ export interface Sale {
 
 export interface CreateSaleData {
   mineral_type: SaleMineralType;
-  mineral_ids?: string[];
+  minerals: SaleMineralInput[];
   buyer?: string;
   net_sales_amount?: number;
 }
