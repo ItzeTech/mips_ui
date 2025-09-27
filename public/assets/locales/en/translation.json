@@ -25,6 +25,61 @@
       "update_financial_success": "Financial data updated successfully.",
       "update_financial_error": "Failed to update financial data. Please try again."
     },
+    "dashboard": {
+      "minerals_dashboard": "Minerals Dashboard",
+      "overview": "Overview",
+      "analytics": "Analytics",
+      "loading": "Loading dashboard data...",
+      "retry": "Retry",
+      
+      "total_minerals": "Total Minerals",
+      "total_weight": "Total Weight",
+      "total_advance": "Total Advance",
+      "exported_minerals": "Exported Minerals",
+      "payments": "payments",
+      "paid": "Paid",
+      "invoiced": "Invoiced",
+      "unpaid": "Unpaid",
+      "exported": "Exported",
+      "in_stock": "in stock",
+      "of_total": "of total",
+      
+      "minerals_inventory": "Minerals Inventory",
+      "all_minerals": "All Minerals",
+      "tantalum": "Tantalum",
+      "tin": "Tin",
+      "tungsten": "Tungsten",
+      
+      "mineral_type": "Mineral Type",
+      "items_count": "Items Count",
+      "mineral_distribution": "Mineral Distribution",
+      "minerals_count": "Minerals Count",
+      "detailed_breakdown": "Detailed Breakdown",
+      "exported_comparison": "Exported Comparison",
+      
+      "weight_breakdown": "Weight Breakdown",
+      "count_breakdown": "Count Breakdown",
+      "total_count": "Total Count",
+      "paid_count": "Paid Count",
+      "invoiced_count": "Invoiced Count",
+      "unpaid_count": "Unpaid Count",
+      "exported_count": "Exported Count",
+      "paid_weight": "Paid Weight",
+      "invoiced_weight": "Invoiced Weight", 
+      "unpaid_weight": "Unpaid Weight",
+      "exported_weight": "Exported Weight",
+      "total": "Total",
+      
+      "item_count_legend": "Count Legend",
+      
+      "filter_by_type": "Filter by Type",
+      "export_dashboard": "Export Dashboard",
+      "refresh_data": "Refresh Data",
+      "last_updated": "Last Updated",
+      
+      "no_data": "No data available",
+      "error_loading": "Error loading data"
+    },
     "menu":{
       "users": "Users",
       "dashboard": "Dashboard",
