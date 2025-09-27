@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { XMarkIcon, PencilIcon, UserIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, PencilIcon, UserIcon, CurrencyDollarIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 import { useSales } from '../../../hooks/useSales';
 
 interface EditSaleModalProps {
@@ -18,12 +18,14 @@ const EditSaleModal: React.FC<EditSaleModalProps> = ({ isOpen, onClose, sale }) 
   
   const [buyer, setBuyer] = useState('');
   const [netSalesAmount, setNetSalesAmount] = useState<number | null>(null);
+  const [paidAmount, setPaidAmount] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     if (isOpen && sale) {
       setBuyer(sale.buyer || '');
       setNetSalesAmount(sale.net_sales_amount);
+      setPaidAmount(sale.paid_amount || 0);
     }
   }, [isOpen, sale]);
   
@@ -38,7 +40,8 @@ const EditSaleModal: React.FC<EditSaleModalProps> = ({ isOpen, onClose, sale }) 
     try {
       await handleUpdateSale(sale.id, {
         buyer: buyer || undefined,
-        net_sales_amount: netSalesAmount || undefined
+        net_sales_amount: netSalesAmount || undefined,
+        paid_amount: paidAmount ?? undefined
       });
       handleClose();
     } catch (err: any) {
@@ -133,6 +136,40 @@ const EditSaleModal: React.FC<EditSaleModalProps> = ({ isOpen, onClose, sale }) 
                         placeholder={t('sales.amount_placeholder', 'Enter amount')}
                       />
                     </div>
+                  </div>
+                  
+                  {/* New field for paid amount */}
+                  <div className="mb-4">
+                    <label htmlFor="paidAmount" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      {t('sales.paid_amount', 'Paid Amount')}
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <CreditCardIcon className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <input
+                        type="number"
+                        id="paidAmount"
+                        value={paidAmount === null ? '' : paidAmount}
+                        onChange={(e) => setPaidAmount(e.target.value === '' ? null : Number(e.target.value))}
+                        step="0.01"
+                        min="0"
+                        className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+                        placeholder={t('sales.paid_amount_placeholder', 'Enter paid amount')}
+                      />
+                    </div>
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      {t('sales.payment_status', 'Payment Status')}: 
+                      <span className={`ml-1 font-medium ${
+                        sale?.payment_status === 'FULLY_PAID' ? 'text-green-600 dark:text-green-400' :
+                        sale?.payment_status === 'PARTIALLY_PAID' ? 'text-yellow-600 dark:text-yellow-400' :
+                        'text-red-600 dark:text-red-400'
+                      }`}>
+                        {sale?.payment_status === 'FULLY_PAID' ? t('sales.fully_paid', 'Fully Paid') :
+                         sale?.payment_status === 'PARTIALLY_PAID' ? t('sales.partially_paid', 'Partially Paid') :
+                         t('sales.unpaid', 'Unpaid')}
+                      </span>
+                    </p>
                   </div>
                   
                   <div className="mt-6 flex justify-end space-x-3">

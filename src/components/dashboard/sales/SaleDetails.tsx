@@ -1,10 +1,12 @@
+// components/dashboard/sales/SaleDetails.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   UserIcon,
   CurrencyDollarIcon,
   ChartBarIcon,
-  CalendarIcon
+  CalendarIcon,
+  CreditCardIcon
 } from '@heroicons/react/24/outline';
 
 interface SaleDetailsProps {
@@ -21,6 +23,18 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
       month: 'short',
       day: 'numeric'
     });
+  };
+
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case 'FULLY_PAID':
+        return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
+      case 'PARTIALLY_PAID':
+        return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300';
+      case 'UNPAID':
+      default:
+        return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+    }
   };
 
   return (
@@ -41,6 +55,61 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
               {t('sales.no_buyer_specified', 'No buyer specified')}
             </p>
           )}
+        </div>
+      </div>
+      
+      {/* Payment Status - New Section */}
+      <div className="space-y-2">
+        <div className="flex items-center text-gray-700 dark:text-gray-300 mb-1">
+          <div className="p-1.5 rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 mr-2">
+            <CreditCardIcon className="w-4 h-4" />
+          </div>
+          <h3 className="text-sm font-semibold">{t('sales.payment', 'Payment')}</h3>
+        </div>
+        <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div className="flex flex-col space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600 dark:text-gray-400">{t('sales.status', 'Status')}:</span>
+              <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPaymentStatusColor(sale.payment_status)}`}>
+                {sale.payment_status === 'FULLY_PAID' ? t('sales.fully_paid', 'Fully Paid') :
+                 sale.payment_status === 'PARTIALLY_PAID' ? t('sales.partially_paid', 'Partially Paid') :
+                 t('sales.unpaid', 'Unpaid')}
+              </span>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                  {t('sales.paid_amount', 'Paid Amount')}
+                </p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  ${sale.paid_amount?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}
+                </p>
+              </div>
+              
+              {sale.net_sales_amount !== null && (
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                    {t('sales.remaining', 'Remaining')}
+                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    ${Math.max(0, (sale.net_sales_amount - (sale.paid_amount || 0))).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+              )}
+            </div>
+            
+            {sale.last_payment_date && (
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                  {t('sales.last_payment_date', 'Last Payment Date')}
+                </p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  {formatDate(sale.last_payment_date)}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       
@@ -125,7 +194,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
       {/* Dates */}
       <div className="space-y-2">
         <div className="flex items-center text-gray-700 dark:text-gray-300 mb-1">
-          <div className="p-1.5 rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 mr-2">
+          <div className="p-1.5 rounded-md bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 mr-2">
             <CalendarIcon className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-semibold">{t('sales.dates', 'Dates')}</h3>

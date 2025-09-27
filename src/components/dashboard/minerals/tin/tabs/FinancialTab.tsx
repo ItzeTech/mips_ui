@@ -24,7 +24,8 @@ interface FinancialTabInterface {
     calculatedValues: any;
     TinSettingsData?: TinSettingsData | null;
     setUseCustomFees: React.Dispatch<React.SetStateAction<boolean>>;
-        useCustomFees: boolean;
+    useCustomFees: boolean;
+    isFinancialDisabled?: boolean;
 }
 
 const CustomFeeToggle = ({ isEnabled, onChange }: { isEnabled: boolean, onChange: (enabled: boolean) => void }) => {
@@ -55,7 +56,8 @@ export default function FinancialTab({
   calculatedValues,
   TinSettingsData,
   setUseCustomFees,
-  useCustomFees
+  useCustomFees,
+  isFinancialDisabled
 }: FinancialTabInterface) {
 
     const { t } = useTranslation();

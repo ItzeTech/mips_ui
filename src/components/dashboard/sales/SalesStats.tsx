@@ -7,7 +7,7 @@ import {
   ShoppingCartIcon,
   ChartBarIcon,
   CurrencyDollarIcon,
-  UserIcon
+  CreditCardIcon
 } from '@heroicons/react/24/outline';
 
 interface SalesStatsProps {
@@ -51,13 +51,17 @@ const SalesStats: React.FC<SalesStatsProps> = ({ sales }) => {
     const totalAmount = sales.reduce((sum, sale) => sum + sale.total_amount, 0);
     const totalNetSalesAmount = sales.reduce((sum, sale) => sum + (sale.net_sales_amount || 0), 0);
     
+    // New payment stats
+    const totalPaidAmount = sales.reduce((sum, sale) => sum + (sale.paid_amount || 0), 0);
+    const unpaidSales = sales.filter(sale => sale.payment_status === 'UNPAID').length;
+    const partiallyPaidSales = sales.filter(sale => sale.payment_status === 'PARTIALLY_PAID').length;
+    const fullyPaidSales = sales.filter(sale => sale.payment_status === 'FULLY_PAID').length;
+    const paymentPercentage = totalNetSalesAmount > 0 
+      ? (totalPaidAmount / totalNetSalesAmount) * 100 
+      : 0;
+    
     // Count minerals
     const totalMinerals = sales.reduce((sum, sale) => sum + (sale.minerals ? sale.minerals.length : 0), 0);
-    
-    // Count unique buyers
-    const uniqueBuyers = new Set(
-      sales.filter(sale => sale.buyer).map(sale => sale.buyer)
-    ).size;
     
     return {
       totalSales,
@@ -66,7 +70,12 @@ const SalesStats: React.FC<SalesStatsProps> = ({ sales }) => {
       totalAmount,
       totalNetSalesAmount,
       totalMinerals,
-      uniqueBuyers
+      // New payment stats
+      totalPaidAmount,
+      unpaidSales,
+      partiallyPaidSales,
+      fullyPaidSales,
+      paymentPercentage
     };
   }, [sales]);
 
@@ -144,19 +153,48 @@ const SalesStats: React.FC<SalesStatsProps> = ({ sales }) => {
         </div>
       </motion.div>
       
-      {/* Unique Buyers */}
+      {/* Payment Stats - New card */}
       <motion.div
         whileHover={{ scale: 1.02 }}
-        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-md border border-gray-200 dark:border-gray-700"
+        className="col-span-2 sm:col-span-3 lg:col-span-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-md border border-gray-200 dark:border-gray-700 mt-2"
       >
-        <div className="flex items-center space-x-2 sm:space-x-3">
-          <div className="p-2 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg">
-            <UserIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+        <div className="flex items-center space-x-2 sm:space-x-3 mb-2">
+          <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg">
+            <CreditCardIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('sales.unique_buyers', 'Unique Buyers')}</p>
-            <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              {stats.uniqueBuyers}
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
+              {t('sales.payment_stats', 'Payment Statistics')}
+            </p>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+          <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg">
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t('sales.paid_amount', 'Paid Amount')}</p>
+            <p className="text-sm font-bold text-gray-900 dark:text-white">
+              ${formatNumber(stats.totalPaidAmount)}
+            </p>
+          </div>
+          
+          <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg">
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t('sales.payment_progress', 'Payment Progress')}</p>
+            <p className="text-sm font-bold text-gray-900 dark:text-white">
+              {formatNumber(stats.paymentPercentage)}%
+            </p>
+          </div>
+          
+          <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg">
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t('sales.fully_paid', 'Fully Paid')}</p>
+            <p className="text-sm font-bold text-green-600 dark:text-green-400">
+              {stats.fullyPaidSales} / {stats.totalSales}
+            </p>
+          </div>
+          
+          <div className="bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg">
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t('sales.outstanding', 'Outstanding')}</p>
+            <p className="text-sm font-bold text-red-600 dark:text-red-400">
+              ${formatNumber(stats.totalNetSalesAmount - stats.totalPaidAmount)}
             </p>
           </div>
         </div>

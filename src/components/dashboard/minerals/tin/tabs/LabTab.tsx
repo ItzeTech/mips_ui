@@ -11,10 +11,11 @@ import { useTranslation } from 'react-i18next'
 interface LabTabInterface {
     labForm: LabFormData;
     setLabForm: React.Dispatch<React.SetStateAction<LabFormData>>;
-    errors?: Record<string, string>
+    errors?: Record<string, string>;
+    isLabDisabled?: boolean;
 }
 
-export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface) {
+export default function LabTab({labForm, setLabForm, errors={}, isLabDisabled}: LabTabInterface) {
     const { t } = useTranslation();
   return (
     <motion.div
@@ -42,6 +43,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 field="internal_sn_percentage"
                 errors={errors}
                 canHaveZero={true}
+                disabled={isLabDisabled}
             />
 
             <RenderInput
@@ -53,6 +55,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 field="bal_percentage"
                 errors={errors}
                 canHaveZero={true}
+                disabled={isLabDisabled}
             />
 
             <RenderInput
@@ -64,6 +67,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 field="fe_percentage"
                 errors={errors}
                 canHaveZero={true}
+                disabled={isLabDisabled}
             />
 
             <RenderInput
@@ -75,6 +79,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 field="w_percentage"
                 errors={errors}
                 canHaveZero={true}
+                disabled={isLabDisabled}
             />
         </div>
         </div>
@@ -98,6 +103,7 @@ export default function LabTab({labForm, setLabForm, errors={}}: LabTabInterface
                 field="alex_stewart_sn_percentage"
                 errors={errors}
                 canHaveZero={true}
+                disabled={isLabDisabled}
             />
         </div>
         </div>

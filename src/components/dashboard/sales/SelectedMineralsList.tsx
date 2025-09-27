@@ -9,7 +9,6 @@ import {
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 import { useSelectedMinerals } from '../../../hooks/useSelectedMinerals';
-import RenderInput from '../minerals/common/RenderInput';
 import { NumericFormat } from 'react-number-format';
 
 interface SelectedMineralsListProps {
@@ -196,14 +195,6 @@ const SelectedMineralsList = forwardRef<
                   </label>
                   
                   <div className="flex items-center space-x-2">
-                    {/* <input
-                      type="number"
-                      max={mineral.netWeight}
-                      step="0.01"
-                      value={replenishValues[mineral.id] || 0}
-                      onChange={(e) => handleReplenishChange(mineral.id, parseFloat(e.target.value) || 0, mineral.netWeight)}
-                      className="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    /> */}
                     <NumericFormat
                         value={replenishValues[mineral.id] || 0}
                         max={mineral.netWeight}

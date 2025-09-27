@@ -254,6 +254,19 @@ const SalesTable: React.FC<SalesTableProps> = ({ sales, onView }) => {
                             Net: ${formatNumber(sale.net_sales_amount)}
                           </div>
                         )}
+                        
+                        {/* Payment Status Badge */}
+                        <div className="mt-1">
+                          <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                            sale.payment_status === 'FULLY_PAID' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' :
+                            sale.payment_status === 'PARTIALLY_PAID' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300' :
+                            'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                          }`}>
+                            {sale.payment_status === 'FULLY_PAID' ? t('sales.paid', 'Paid') :
+                            sale.payment_status === 'PARTIALLY_PAID' ? t('sales.partial', 'Partial') :
+                            t('sales.unpaid', 'Unpaid')}
+                          </span>
+                        </div>
                       </div>
                     </td>
                     

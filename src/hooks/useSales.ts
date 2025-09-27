@@ -19,7 +19,8 @@ import {
   Sale,
   CreateSaleData,
   UpdateSaleData,
-  PaginationParams
+  PaginationParams,
+  SaleMineralInput
 } from '../features/finance/salesSlice';
 import { useSelectedMinerals } from './useSelectedMinerals';
 
@@ -82,8 +83,8 @@ export const useSales = () => {
     return null;
   }, [dispatch]);
   
-  const handleAddMineralsToSale = useCallback(async (saleId: string, mineralIds: string[]) => {
-    const result = await dispatch(addMineralsToSale({ saleId, mineralIds }));
+  const handleAddMineralsToSale = useCallback(async (saleId: string, salesData: SaleMineralInput[]) => {
+    const result = await dispatch(addMineralsToSale({ saleId, salesData }));
     if (addMineralsToSale.fulfilled.match(result)) {
       if (selectedSale?.mineral_type) {
         clearByType(selectedSale.mineral_type.toLowerCase() as any);

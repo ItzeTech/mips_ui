@@ -24,6 +24,7 @@ interface FinancialTabInterface {
     TantalumSettingsData?: TantalumSettingsData | null;
     setUseCustomFees: React.Dispatch<React.SetStateAction<boolean>>;
     useCustomFees: boolean;
+    isFinancialDisabled?: boolean;
 }
 
 const CustomFeeToggle = ({ isEnabled, onChange }: { isEnabled: boolean, onChange: (enabled: boolean) => void }) => {
@@ -53,7 +54,8 @@ export default function FinancialTab({
   calculatedValues,
   TantalumSettingsData,
   setUseCustomFees,
-  useCustomFees
+  useCustomFees,
+  isFinancialDisabled
 }: FinancialTabInterface) {
 
     const { t } = useTranslation();

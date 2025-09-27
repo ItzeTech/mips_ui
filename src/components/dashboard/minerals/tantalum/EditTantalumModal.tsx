@@ -61,8 +61,10 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
   const [labResultPrintModalOpen, setLabResultPrintModalOpen] = useState(false);
 
   const [printModalOpen, setPrintModalOpen] = useState(false);
+  const [isStockDisabled, setIsStockDisabled] = useState(false);
+  const [isLabDisabled, setIsLabDisabled] = useState(false);
+  const [isFinancialDisabled, setIsFinancialDisabled] = useState(false);
 
- 
   const handlePrint = () => {
     if (selectedTantalum) {
       setPrintModalOpen(true);
@@ -280,6 +282,10 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
         selectedTantalum?.inkomane_fee_per_kg_rwf_fee !== null ||
         selectedTantalum?.rra_price_per_percentage_fee !== null
       );
+
+      setIsStockDisabled(selectedTantalum.finance_status !== 'unpaid');
+      setIsLabDisabled(selectedTantalum.finance_status !== 'unpaid');
+      setIsFinancialDisabled(selectedTantalum.finance_status === 'exported' || selectedTantalum.finance_status === 'paid' || selectedTantalum.internal_ta2o5 === null);
 
       setErrors({});
       setHasStockChanges(false);
@@ -873,6 +879,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                       stockForm={stockForm}
                       setStockForm={setStockForm}
                       errors={errors}
+                      isStockDisabled={isStockDisabled}
                     />
                   )}
                   
@@ -882,6 +889,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                       labForm={labForm}
                       setLabForm={setLabForm}
                       errors={errors}
+                      isLabDisabled={isLabDisabled}
                     />
                   )}
                   
@@ -897,6 +905,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                       TantalumSettingsData={settings}
                       setUseCustomFees={setUseCustomFees}
                       useCustomFees={useCustomFees}
+                      isFinancialDisabled={isFinancialDisabled}
 
                     />
                   )}
@@ -941,7 +950,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                   {activeTab === 'lab' && canAccessLab() && (
                     <SaveFormButton
                       onClick={handleLabSubmit}
-                      disabled={!hasLabChanges || isLoading}
+                      disabled={!hasLabChanges || isLoading || isLabDisabled}
                       isLoading={isLoading}
                       hasChanges={hasLabChanges}
                       label={t('tantalum.save_lab', 'Save Lab Data')}
@@ -951,7 +960,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
                   {activeTab === 'financial' && canAccessFinancial() && (
                     <SaveFormButton
                       onClick={handleFinancialSubmit}
-                      disabled={!hasFinancialChanges || isLoading}
+                      disabled={!hasFinancialChanges || isLoading || isFinancialDisabled}
                       isLoading={isLoading}
                       hasChanges={hasFinancialChanges}
                       label={t('tantalum.save_financial', 'Save Financial')}

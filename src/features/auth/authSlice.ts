@@ -99,7 +99,7 @@ const authSlice = createSlice({
       state.status = 'idle';
       state.error = null;
       removeState(AUTH_STATE_KEY);
-      // Optionally, remove other persisted states like theme if needed on logout
+      localStorage.clear();
     },
     setAuthError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;

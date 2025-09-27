@@ -61,6 +61,9 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
   const [labResultPrintModalOpen, setLabResultPrintModalOpen] = useState(false);
 
   const [printModalOpen, setPrintModalOpen] = useState(false);
+  const [isStockDisabled, setIsStockDisabled] = useState(false);
+  const [isLabDisabled, setIsLabDisabled] = useState(false);
+  const [isFinancialDisabled, setIsFinancialDisabled] = useState(false);
 
   const handleLabResultPrint = () => {
     if (selectedTin) {
@@ -230,6 +233,10 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
         selectedTin.rma_per_kg_rwf_fee !== null ||
         selectedTin.inkomane_fee_per_kg_rwf_fee !== null
       );
+
+      setIsStockDisabled(selectedTin.finance_status !== 'unpaid');
+      setIsLabDisabled(selectedTin.finance_status !== 'unpaid');
+      setIsFinancialDisabled(selectedTin.finance_status === 'exported' || selectedTin.finance_status === 'paid' || selectedTin.internal_sn_percentage === null);
 
       setErrors({});
       setHasStockChanges(false);
@@ -867,6 +874,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
                       stockForm={stockForm}
                       setStockForm={setStockForm}
                       errors={errors}
+                      isStockDisabled={isStockDisabled}
                     />
                   )}
                   
@@ -876,6 +884,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
                       labForm={labForm}
                       setLabForm={setLabForm}
                       errors={errors}
+                      isLabDisabled={isLabDisabled}
                     />
                   )}
                   
@@ -891,6 +900,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
                       TinSettingsData={settings}
                       setUseCustomFees={setUseCustomFees}
                       useCustomFees={useCustomFees}
+                      isFinancialDisabled={isFinancialDisabled}
                     />
                   )}
                 </AnimatePresence>
@@ -934,7 +944,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
                   {activeTab === 'lab' && canAccessLab() && (
                     <SaveFormButton
                       onClick={handleLabSubmit}
-                      disabled={!hasLabChanges || isLoading}
+                      disabled={!hasLabChanges || isLoading || isLabDisabled}
                       isLoading={isLoading}
                       hasChanges={hasLabChanges}
                       label={t('tin.save_lab', 'Save Lab Data')}
@@ -944,7 +954,7 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
                   {activeTab === 'financial' && canAccessFinancial() && (
                     <SaveFormButton
                       onClick={handleFinancialSubmit}
-                      disabled={!hasFinancialChanges || isLoading}
+                      disabled={!hasFinancialChanges || isLoading || isFinancialDisabled}
                       isLoading={isLoading}
                       hasChanges={hasFinancialChanges}
                       label={t('tin.save_financial', 'Save Financial')}

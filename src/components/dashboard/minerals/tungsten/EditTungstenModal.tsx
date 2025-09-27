@@ -62,6 +62,9 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
 
 
   const [printModalOpen, setPrintModalOpen] = useState(false);
+  const [isStockDisabled, setIsStockDisabled] = useState(false);
+  const [isLabDisabled, setIsLabDisabled] = useState(false);
+  const [isFinancialDisabled, setIsFinancialDisabled] = useState(false);
   
    
   const handlePrint = () => {
@@ -218,6 +221,10 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
         selectedTungsten?.rma_usd_per_ton_fee !== null ||
         selectedTungsten?.inkomane_fee_per_kg_rwf_fee !== null
       );
+
+      setIsStockDisabled(selectedTungsten.finance_status !== 'unpaid');
+      setIsLabDisabled(selectedTungsten.finance_status !== 'unpaid');
+      setIsFinancialDisabled(selectedTungsten.finance_status === 'exported' || selectedTungsten.finance_status === 'paid' || selectedTungsten.wo3_percentage === null);
 
       setErrors({});
       setHasStockChanges(false);
@@ -828,6 +835,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                       stockForm={stockForm}
                       setStockForm={setStockForm}
                       errors={errors}
+                      isStockDisabled={isStockDisabled}
                     />
                   )}
                   
@@ -837,6 +845,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                       labForm={labForm}
                       setLabForm={setLabForm}
                       errors={errors}
+                      isLabDisabled={isLabDisabled}
                     />
                   )}
                   
@@ -852,6 +861,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                       TungstenSettingsData={settings}
                       setUseCustomFees={setUseCustomFees}
                       useCustomFees={useCustomFees}
+                      isFinancialDisabled={isFinancialDisabled}
                     />
                   )}
                 </AnimatePresence>
@@ -895,7 +905,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                   {activeTab === 'lab' && canAccessLab() && (
                     <SaveFormButton
                       onClick={handleLabSubmit}
-                      disabled={!hasLabChanges || isLoading}
+                      disabled={!hasLabChanges || isLoading || isLabDisabled}
                       isLoading={isLoading}
                       hasChanges={hasLabChanges}
                       label={t('tungsten.save_lab', 'Save Lab Data')}
@@ -905,7 +915,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                   {activeTab === 'financial' && canAccessFinancial() && (
                     <SaveFormButton
                       onClick={handleFinancialSubmit}
-                      disabled={!hasFinancialChanges || isLoading}
+                      disabled={!hasFinancialChanges || isLoading || isFinancialDisabled}
                       isLoading={isLoading}
                       hasChanges={hasFinancialChanges}
                       label={t('tungsten.save_financial', 'Save Financial')}

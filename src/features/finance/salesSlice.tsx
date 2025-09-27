@@ -34,6 +34,10 @@ export interface Sale {
   total_amount: number;
   buyer: string | null;
   net_sales_amount: number | null;
+  paid_amount: number;
+  is_fully_paid: boolean;
+  payment_status: 'UNPAID' | 'PARTIALLY_PAID' | 'FULLY_PAID';
+  last_payment_date: string | null;
   created_at: string;
   updated_at: string;
   minerals: SaleMineral[];
@@ -44,11 +48,13 @@ export interface CreateSaleData {
   minerals: SaleMineralInput[];
   buyer?: string;
   net_sales_amount?: number;
+  paid_amount: number;
 }
 
 export interface UpdateSaleData {
   buyer?: string;
   net_sales_amount?: number;
+  paid_amount?: number;
 }
 
 export interface PaginationParams {
@@ -168,7 +174,7 @@ export const updateSale = createAsyncThunk(
 
 export const addMineralsToSale = createAsyncThunk(
   'sales/addMineralsToSale',
-  async ({ saleId, mineralIds }: { saleId: string; mineralIds: string[] }, { rejectWithValue, dispatch, getState }) => {
+  async ({ saleId, salesData }: { saleId: string; salesData: SaleMineralInput[] }, { rejectWithValue, dispatch, getState }) => {
     try {
       const state: any = getState();
       const sale = state.sales.sales.find((s: Sale) => s.id === saleId) || state.sales.selectedSale;
@@ -177,7 +183,7 @@ export const addMineralsToSale = createAsyncThunk(
         return rejectWithValue('Sale not found');
       }
       
-      const response = await axiosInstance.post(`/sales/${saleId}/minerals`, { mineral_ids: mineralIds });
+      const response = await axiosInstance.post(`/sales/${saleId}/minerals`, { minerals: salesData });
       
       // Update minerals' finance status to 'exported'
       // mineralIds.forEach(id => {
@@ -198,65 +204,6 @@ export const addMineralsToSale = createAsyncThunk(
     }
   }
 );
-
-// export const removeMineralFromSale = createAsyncThunk(
-//   'sales/removeMineralFromSale',
-//   async ({ saleId, mineralId }: { saleId: string; mineralId: string }, { rejectWithValue, dispatch, getState }) => {
-//     try {
-//       const state: any = getState();
-//       const sale = state.sales.sales.find((s: Sale) => s.id === saleId) || state.sales.selectedSale;
-      
-//       if (!sale) {
-//         return rejectWithValue('Sale not found');
-//       }
-      
-//       // Get the current mineral to store its previous finance status
-//       let previousStatus = 'unpaid'; // Default fallback
-//       const mineral = sale.minerals.find((m: { id: string; }) => m.id === mineralId);
-//       if (mineral) {
-//         previousStatus = mineral.finance_status === 'exported' ? 'unpaid' : mineral.finance_status;
-//       }
-      
-//       const response = await axiosInstance.delete(`/sales/${saleId}/minerals/${mineralId}`);
-      
-//       // Update the mineral's finance status to its previous status
-//       // The backend handles this automatically, but we need to update our Redux store
-//       setTimeout(async () => {
-//         // Fetch the latest mineral data to get the correct status
-//         try {
-//           let endpoint = '';
-//           if (sale.mineral_type === 'TIN') {
-//             endpoint = `/tin/${mineralId}`;
-//           } else if (sale.mineral_type === 'TANTALUM') {
-//             endpoint = `/tantalum/${mineralId}`;
-//           } else if (sale.mineral_type === 'TUNGSTEN') {
-//             endpoint = `/tungsten/${mineralId}`;
-//           }
-          
-//           const mineralResponse = await axiosInstance.get(endpoint);
-//           const updatedMineral = mineralResponse.data.data;
-          
-//           // Update our Redux store with the current finance status
-//           const updateData = { finance_status: updatedMineral.finance_status };
-          
-//           if (sale.mineral_type === 'TIN') {
-//             dispatch(updateTinFinancials({ id: mineralId, financialData: updateData }));
-//           } else if (sale.mineral_type === 'TANTALUM') {
-//             dispatch(updateTantalumFinancials({ id: mineralId, financialData: updateData }));
-//           } else if (sale.mineral_type === 'TUNGSTEN') {
-//             dispatch(updateTungstenFinancials({ id: mineralId, financialData: updateData }));
-//           }
-//         } catch (error) {
-//           console.error('Error updating mineral status after removal:', error);
-//         }
-//       }, 500); // Small delay to ensure backend processing completes
-      
-//       return response.data.data;
-//     } catch (error: any) {
-//       return rejectWithValue(error.response?.data?.detail || 'Failed to remove mineral from sale');
-//     }
-//   }
-// );
 
 // In salesSlice.tsx
 export const removeMineralFromSale = createAsyncThunk(

@@ -178,7 +178,8 @@ const CreateSalePage: React.FC = () => {
         mineral_type: validMineralType as any,
         minerals: minerals,
         buyer: buyer || undefined,
-        net_sales_amount: netSalesAmount || undefined
+        net_sales_amount: netSalesAmount || undefined,
+        paid_amount: 0
       });
       
       if (result) {

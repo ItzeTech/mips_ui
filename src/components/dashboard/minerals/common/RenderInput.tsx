@@ -49,8 +49,9 @@ const RenderInput: React.FC<RenderInputProps> = ({
             onValueChange={(values) => {
                 onChange(values.floatValue || (canHaveZero ? 0 : null))
             }}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
-            placeholder={`Enter ${label.toLowerCase()}`}    
+            className={`w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+            placeholder={`Enter ${label.toLowerCase()}`}
+            disabled={disabled}    
         />
         :
 

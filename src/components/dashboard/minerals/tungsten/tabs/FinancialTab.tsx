@@ -25,6 +25,7 @@ interface FinancialTabInterface {
     TungstenSettingsData?: TungstenSettingsData | null;
     setUseCustomFees: React.Dispatch<React.SetStateAction<boolean>>;
     useCustomFees: boolean;
+    isFinancialDisabled?: boolean;
 }
 
 const CustomFeeToggle = ({ isEnabled, onChange }: { isEnabled: boolean, onChange: (enabled: boolean) => void }) => {
@@ -54,7 +55,8 @@ export default function FinancialTab({
   calculatedValues,
   TungstenSettingsData,
   setUseCustomFees,
-  useCustomFees
+  useCustomFees,
+  isFinancialDisabled
 }: FinancialTabInterface) {
 
     const { t } = useTranslation();

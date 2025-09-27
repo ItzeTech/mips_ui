@@ -11,10 +11,11 @@ import { contentVariants, formatDate, STOCK_STATUS_OPTIONS } from '../../../../.
 interface StockTabInterface {
     stockForm: StockFormData;
     setStockForm: React.Dispatch<React.SetStateAction<StockFormData>>;
-    errors?: Record<string, string>
+    errors?: Record<string, string>;
+    isStockDisabled?: boolean;
 }
 
-export default function StockTab({stockForm, setStockForm, errors = {}}: StockTabInterface) {
+export default function StockTab({stockForm, setStockForm, errors = {}, isStockDisabled}: StockTabInterface) {
 
   const { t } = useTranslation();
   return (
@@ -41,6 +42,7 @@ export default function StockTab({stockForm, setStockForm, errors = {}}: StockTa
                 suffix="kg"
                 field="net_weight"
                 errors={errors}
+                disabled={isStockDisabled}
             />
 
             <RenderInput
