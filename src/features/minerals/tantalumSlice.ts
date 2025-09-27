@@ -442,7 +442,7 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
   }
 
   if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && exchange_rate) {
-    calculatedData.total_charge = calculatedData.rra + calculatedData.rma + 
+    calculatedData.total_charge = calculatedData.rra + ((calculatedData.rma ?? 0) / exchange_rate) + 
       (calculatedData.inkomane_fee / exchange_rate) + ((calculatedData.advance ?? 0) / exchange_rate) + ((data.transport_charge ?? 0)) + ((data.alex_stewart_charge ?? 0));
   }
 

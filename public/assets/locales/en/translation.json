@@ -128,7 +128,7 @@
       "tin_saved_successfully": "Tin settings saved successfully", 
       "tungsten_saved_successfully": "Tungsten settings saved successfully",
       "rra_percentage": "RRA Percentage",
-      "rma_usd_per_ton": "RMA USD per Ton",
+      "rma_usd_per_ton": "RMA per Ton RWF",
       "rma_per_kg_rwf": "RMA per KG RWF",
       "inkomane_fee_per_kg_rwf": "Inkomane Fee per KG RWF",
       "rra_price_per_percentage": "RRA Price",
@@ -423,7 +423,8 @@
       "print_options": "Print Options",
       "print_description": "Choose how you would like to access the mineral report",
       "view_report": "View Report",
-      "download_report": "Download Report"
+      "download_report": "Download Report",
+      "avg_Nb": "Avg Nb %"
     },
     "tin": {
       "title": "Tin Management",

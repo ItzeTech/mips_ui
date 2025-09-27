@@ -36,6 +36,7 @@ import { fetchTungstenSettings, TungstenSettingsData } from '../../../../feature
 import ConfirmationDialog from '../common/ConfirmationDialog';
 import toast from 'react-hot-toast';
 import TungstenPrintModal from './TungstenPrintModal';
+import TungstenLabResultPrintModal from './TungstenLabResultPrintModal';
 
 type UserRole = "Stock Manager" | "Boss" | "Manager" | "Lab Technician" | "Finance Officer";
 
@@ -57,6 +58,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
   const { t } = useTranslation();
   const { settings, isFetched } = useSelector((state: RootState) => state.tungstenSettings);
   const dispatch = useDispatch<AppDispatch>();
+  const [labResultPrintModalOpen, setLabResultPrintModalOpen] = useState(false);
 
 
   const [printModalOpen, setPrintModalOpen] = useState(false);
@@ -67,6 +69,12 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
       setPrintModalOpen(true);
     }
   };
+
+  const handleLabResultPrint = () => {
+  if (selectedTungsten) {
+    setLabResultPrintModalOpen(true);
+  }
+};
 
   const [tungstenSetting, setTungstenSetting] = useState<TungstenSettingsData>({
       rra_percentage: 0,
@@ -278,7 +286,7 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
       price_of_tag_per_kg_rwf: t('financial.price_of_tag_per_kg_rwf', 'Price of Tag per kg (RWF)'),
       finance_status: t('financial.status', 'Finance Status'),
       rra_percentage_fee: t('financial.rra_percentage_fee', 'RRA Percentage Fee'),
-      rma_usd_per_ton_fee: t('financial.rma_usd_per_ton_fee', 'RMA USD per Ton Fee'),
+      rma_usd_per_ton_fee: t('financial.rma_usd_per_ton_fee', 'RMA per Ton Fee'),
       inkomane_fee_per_kg_rwf_fee: t('financial.inkomane_fee_per_kg_rwf_fee', 'Inkomane Fee per kg (RWF)'),
       transport_charge: t('financial.transport_charge', 'Transport Charge'),
       alex_stewart_charge: t('financial.alex_stewart_charge', 'Alex Stewart Charge')
@@ -730,6 +738,17 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={handleLabResultPrint}
+                    className="p-2 rounded-full text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+                    title={t('tungsten.print_lab_result', 'Print Lab Result')}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={handlePrint}
                     className="p-2 rounded-full text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors"
                     title={t('tungsten.print_report', 'Print Report')}
@@ -910,11 +929,18 @@ const EditTungstenModal: React.FC<EditTungstenModalProps> = ({ isOpen, onClose, 
             cancelText={t('common.cancel', 'Cancel')}
           />
           {selectedTungsten && (
-            <TungstenPrintModal
-              isOpen={printModalOpen}
-              onClose={() => setPrintModalOpen(false)}
-              tungstenId={selectedTungsten.id}
-            />
+            <>
+              <TungstenPrintModal
+                isOpen={printModalOpen}
+                onClose={() => setPrintModalOpen(false)}
+                tungstenId={selectedTungsten.id}
+              />
+              <TungstenLabResultPrintModal
+                isOpen={labResultPrintModalOpen}
+                onClose={() => setLabResultPrintModalOpen(false)}
+                tungstenId={selectedTungsten.id}
+              />
+            </>
           )}
         </>
         

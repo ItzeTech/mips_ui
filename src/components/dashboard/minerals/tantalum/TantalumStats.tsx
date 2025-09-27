@@ -40,8 +40,8 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
     let totalWeightWithTa2O5 = 0;
     
     tantalums.forEach(item => {
-      if (item.internal_ta2o5 !== null) {
-        weightedSumTa2O5 += item.internal_ta2o5 * item.net_weight;
+      if (item.internal_ta2o5 !== null || item.alex_stewart_ta2o5 !== null) {
+        weightedSumTa2O5 += (item.alex_stewart_ta2o5 ?? item.internal_ta2o5) * item.net_weight;
         totalWeightWithTa2O5 += item.net_weight;
       }
     });
@@ -51,18 +51,18 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
       : 0;
     
     // Calculate average Alex Stewart Ta2O5
-    let alexStewartSum = 0;
-    let totalWeightAlexStewart = 0;
+    let nb_percentageSum = 0;
+    let totalWeightNb = 0;
     
     tantalums.forEach(item => {
-      if (item.alex_stewart_ta2o5 !== null) {
-        alexStewartSum += item.alex_stewart_ta2o5 * item.net_weight;
-        totalWeightAlexStewart += item.net_weight;
+      if (item.nb_percentage !== null || item.alex_stewart_nb2o5 !== null) {
+        nb_percentageSum += (item.alex_stewart_nb2o5 ?? item.nb_percentage) * item.net_weight;
+        totalWeightNb += item.net_weight;
       }
     });
     
-    const avgAlexStewartTa2O5 = totalWeightAlexStewart > 0 
-      ? alexStewartSum / totalWeightAlexStewart 
+    const avgNbPercentage = totalWeightNb > 0 
+      ? nb_percentageSum / totalWeightNb 
       : 0;
     
     // Calculate total net amount
@@ -77,8 +77,8 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
     let selectedTotalWeightWithTa2O5 = 0;
     
     selectedTantalums.forEach(item => {
-      if (item.internal_ta2o5 !== null) {
-        selectedWeightedSumTa2O5 += item.internal_ta2o5 * item.net_weight;
+      if (item.internal_ta2o5 !== null || item.alex_stewart_ta2o5 !== null) {
+        selectedWeightedSumTa2O5 += (item.alex_stewart_ta2o5 ?? item.internal_ta2o5) * item.net_weight;
         selectedTotalWeightWithTa2O5 += item.net_weight;
       }
     });
@@ -86,19 +86,19 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
     const selectedAvgTa2O5Percentage = selectedTotalWeightWithTa2O5 > 0 
       ? selectedWeightedSumTa2O5 / selectedTotalWeightWithTa2O5 
       : 0;
-    
-    let selectedWeightedSumASTa2o5 = 0;
-    let selectedTotalWeightWithASTa2o5 = 0;
+
+    let selectedWeightedSumNb = 0;
+    let selectedTotalWeightWithNb = 0;
 
     selectedTantalums.forEach(item => {
-      if (item.alex_stewart_ta2o5 !== null) {
-        selectedWeightedSumASTa2o5 += item.alex_stewart_ta2o5 * item.net_weight;
-        selectedTotalWeightWithASTa2o5 += item.net_weight;
+      if (item.nb_percentage !== null || item.alex_stewart_nb2o5 !== null) {
+        selectedWeightedSumNb += (item.alex_stewart_nb2o5 ?? item.nb_percentage) * item.net_weight;
+        selectedTotalWeightWithNb += item.net_weight;
       }
     });
 
-    const selectedAvgASTa2o5Percentage = selectedTotalWeightWithASTa2o5 > 0 
-      ? selectedWeightedSumASTa2o5 / selectedTotalWeightWithASTa2o5 
+    const selectedAvgNbPercentage = selectedTotalWeightWithNb > 0 
+      ? selectedWeightedSumNb / selectedTotalWeightWithNb 
       : 0;
 
     const selectedTotalNetAmount = selectedTantalums.reduce(
@@ -108,11 +108,11 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
       totalItems,
       totalNetWeight,
       avgTa2O5Percentage,
-      avgAlexStewartTa2O5,
+      avgNbPercentage,
       totalNetAmount,
       selectedTotalNetWeight,
       selectedAvgTa2O5Percentage,
-      selectedAvgASTa2o5Percentage,
+      selectedAvgNbPercentage,
       selectedTotalNetAmount,
       selectedCount: selectedTantalums.length
     };
@@ -224,13 +224,13 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
             <CheckBadgeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tantalum.avg_alex_stewart', 'Avg A.S. Ta₂O₅')}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tantalum.avg_Nb', 'Avg Nb %')}</p>
             <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              {formatNumber(stats.avgAlexStewartTa2O5)}%
+              {formatNumber(stats.avgNbPercentage)}%
             </p>
             {hasSelected && (
               <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                Sel: {formatNumber(stats.selectedAvgASTa2o5Percentage)}%
+                Sel: {formatNumber(stats.selectedAvgNbPercentage)}%
               </p>
             )}
           </div>

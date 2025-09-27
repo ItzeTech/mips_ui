@@ -418,7 +418,7 @@ export default function FinancialTab({
                   <div className="mt-2 text-sm text-blue-700 dark:text-blue-400">
                     <ul className="list-disc pl-5 space-y-1">
                       <li>{t('tantalum.rra_percentage_label', 'RRA Percentage')}: {TantalumSettingsData?.rra_percentage}%</li>
-                      <li>{t('tantalum.rma_usd_per_kg_label', 'RMA USD per Kg')}: ${TantalumSettingsData?.rma_usd_per_ton ? TantalumSettingsData.rma_usd_per_ton : 0}</li>
+                      <li>{t('tantalum.rma_usd_per_kg_label', 'RMA per Kg')}: ${TantalumSettingsData?.rma_usd_per_ton ? TantalumSettingsData.rma_usd_per_ton : 0}</li>
                       <li>{t('tantalum.inkomane_fee_label', 'Inkomane Fee per Kg')}: {TantalumSettingsData?.inkomane_fee_per_kg_rwf} RWF</li>
                       <li>{t('tantalum.rra_price_label', 'RRA Price per Percentage')}: ${TantalumSettingsData?.rra_price_per_percentage}</li>
                     </ul>
@@ -480,9 +480,9 @@ export default function FinancialTab({
               title={`${t('tantalum.rma', 'RMA')} ($${(financialForm.rma_usd_per_ton_fee ?? TantalumSettingsData?.rma_usd_per_ton)})`}
               value={`$${formatNumber(calculatedValues.rma)}`}
               color="gray"
-              formula="RMA USD per ton * net weight"
+              formula="RMA per ton * net weight"
               data={[
-                { label: "RMA USD per Ton", value: `$${(financialForm.rma_usd_per_ton_fee ?? TantalumSettingsData?.rma_usd_per_ton)}` },
+                { label: "RMA per Ton", value: `$${(financialForm.rma_usd_per_ton_fee ?? TantalumSettingsData?.rma_usd_per_ton)}` },
                 { label: "Net Weight", value: formatNumber(net_weight) },
               ]}
               outputLabel="RMA"
