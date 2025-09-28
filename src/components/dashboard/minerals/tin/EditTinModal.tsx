@@ -37,12 +37,10 @@ import toast from 'react-hot-toast';
 import TinPrintModal from './TinPrintModal';
 import TinLabResultPrintModal from './TinLabResultPrintModal';
 
-type UserRole = "Stock Manager" | "Boss" | "Manager" | "Lab Technician" | "Finance Officer";
-
 interface EditTinModalProps {
   isOpen: boolean;
   onClose: () => void;
-  userRole: UserRole;
+  userRoles: any[];
 }
 
 interface ConfirmationState {
@@ -53,7 +51,7 @@ interface ConfirmationState {
   changes: Array<{ field: string; oldValue: any; newValue: any }>;
 }
 
-const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }) => {
+const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRoles }) => {
   const { t } = useTranslation();
   const { settings, isFetched } = useSelector((state: RootState) => state.tinSettings);
   const dispatch = useDispatch<AppDispatch>();
@@ -178,9 +176,9 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
   const [hasFinancialChanges, setHasFinancialChanges] = useState(false);
 
   // Role-based access control
-  const canAccessStock = () => ['Stock Manager', 'Boss', 'Manager'].includes(userRole);
-  const canAccessLab = () => ['Lab Technician', 'Boss', 'Manager'].includes(userRole);
-  const canAccessFinancial = () => ['Finance Officer', 'Boss', 'Manager'].includes(userRole);
+  const canAccessStock = () => ['Stock Manager'].some(role => userRoles.includes(role));
+  const canAccessLab = () => ['Lab Technician'].some(role => userRoles.includes(role));
+  const canAccessFinancial = () => ['Finance Officer'].some(role => userRoles.includes(role));
 
   const getDefaultTab = (): 'stock' | 'lab' | 'financial' => {
     if (canAccessStock()) return 'stock';
@@ -779,26 +777,34 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleLabResultPrint}
-                    className="p-2 rounded-full text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
-                    title={t('tin.print_lab_result', 'Print Lab Result')}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handlePrint}
-                    className="p-2 rounded-full text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors"
-                    title={t('tin.print_report', 'Print Report')}
-                  >
-                    <PrinterIcon className="w-5 h-5" />
-                  </motion.button>
+                  {
+                    canAccessLab() && (
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleLabResultPrint}
+                        className="p-2 rounded-full text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+                        title={t('tin.print_lab_result', 'Print Lab Result')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </motion.button>
+                      )
+                  }
+                  {
+                    canAccessFinancial() && (
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handlePrint}
+                        className="p-2 rounded-full text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors"
+                        title={t('tin.print_report', 'Print Report')}
+                      >
+                        <PrinterIcon className="w-5 h-5" />
+                      </motion.button>
+                      )
+                  }
                   <motion.button
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}

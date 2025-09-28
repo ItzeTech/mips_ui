@@ -165,10 +165,10 @@ const MixedMineralsPage: React.FC = () => {
                   <Square3Stack3DIcon className="w-8 h-8 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                     {t('mixedMinerals.title')}
                   </h1>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                     {t('mixedMinerals.subtitle')}
                   </p>
                 </div>
@@ -182,7 +182,7 @@ const MixedMineralsPage: React.FC = () => {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowCreateModal(true)}
-              className="mt-4 sm:mt-0 inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-700 hover:via-violet-700 hover:to-indigo-700 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="mt-4 text-xs sm:text-sm sm:mt-0 inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-700 hover:via-violet-700 hover:to-indigo-700 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <PlusIcon className="w-5 h-5 mr-2" />
               {t('mixedMinerals.create_new')}
@@ -205,7 +205,7 @@ const MixedMineralsPage: React.FC = () => {
                 placeholder={t('mixedMinerals.search_placeholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-12 py-4 text-lg border-2 border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-200 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full pl-12 pr-12 py-2.5 text-sm sm:text-base border-2 border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-200 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               />
               <AnimatePresence>
                 {searchTerm && (
@@ -224,11 +224,11 @@ const MixedMineralsPage: React.FC = () => {
             
             <div className="relative">
               <div className="flex items-center">
-                <FunnelIcon className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FunnelIcon className="w-4 h-4 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className="pl-12 pr-10 py-4 text-lg border-2 border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-200 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white appearance-none"
+                  className="pl-9 pr-8 py-2.5 text-sm sm:text-base border-2 border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-200 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white appearance-none"
                 >
                   <option value="all">{t('mixedMinerals.status_all')}</option>
                   <option value="processed">{t('mixedMinerals.status_processed')}</option>
@@ -245,10 +245,10 @@ const MixedMineralsPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
-              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200 dark:border-gray-700"
             >
-              <div className="flex items-center space-x-3">
-                <div className="p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="p-2 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg">
                   <Square3Stack3DIcon className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -260,10 +260,10 @@ const MixedMineralsPage: React.FC = () => {
             
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
-              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200 dark:border-gray-700"
             >
-              <div className="flex items-center space-x-3">
-                <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg">
                   <CheckBadgeIcon className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -277,10 +277,10 @@ const MixedMineralsPage: React.FC = () => {
             
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
-              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200 dark:border-gray-700"
             >
-              <div className="flex items-center space-x-3">
-                <div className="p-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="p-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg">
                   <ArrowPathIcon className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -297,25 +297,25 @@ const MixedMineralsPage: React.FC = () => {
         {/* Minerals Table */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+          className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-4 md:mb-5"
         >
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
                 <tr>
-                  <th className="px-6 py-5 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     {t('mixedMinerals.lot_info')}
                   </th>
-                  <th className="px-6 py-5 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     {t('mixedMinerals.delivery_info')}
                   </th>
-                  <th className="px-6 py-5 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     {t('mixedMinerals.supplier')}
                   </th>
-                  <th className="px-6 py-5 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     {t('mixedMinerals.status')}
                   </th>
-                  <th className="px-6 py-5 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     {t('mixedMinerals.actions')}
                   </th>
                 </tr>
@@ -347,7 +347,7 @@ const MixedMineralsPage: React.FC = () => {
                       }}
                       className="group hover:shadow-lg transition-all duration-200"
                     >
-                      <td className="px-6 py-5 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap">
                         <div className="flex items-center">
                           <motion.div 
                             className="flex-shrink-0 h-12 w-12"
@@ -372,7 +372,7 @@ const MixedMineralsPage: React.FC = () => {
                         </div>
                       </td>
                       
-                      <td className="px-6 py-5 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap">
                         <div className="space-y-1">
                           <div className="text-sm text-gray-900 dark:text-white font-medium flex items-center">
                             <CalendarDaysIcon className="w-4 h-4 mr-2 text-purple-500" />
@@ -384,7 +384,7 @@ const MixedMineralsPage: React.FC = () => {
                         </div>
                       </td>
                       
-                      <td className="px-6 py-5">
+                      <td className="px-3 py-3">
                         <div className="space-y-1">
                           {mineral.supplier_name ? (
                             <div className="text-sm text-gray-900 dark:text-white font-medium flex items-center">
@@ -399,7 +399,7 @@ const MixedMineralsPage: React.FC = () => {
                         </div>
                       </td>
                       
-                      <td className="px-6 py-5 whitespace-nowrap">
+                      <td className="px-3 py-3 whitespace-nowrap">
                         <span className={`px-3 py-1.5 inline-flex text-xs leading-5 font-medium rounded-full ${
                           mineral.status === 'processed' 
                             ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
@@ -411,7 +411,7 @@ const MixedMineralsPage: React.FC = () => {
                         </span>
                       </td>
                       
-                      <td className="px-6 py-5 whitespace-nowrap text-sm font-medium">
+                      <td className="px-3 py-3 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-3">
                           <motion.button
                             whileHover={{ scale: 1.2, rotate: 5 }}
@@ -507,7 +507,7 @@ const MixedMineralsPage: React.FC = () => {
 
           {/* Pagination */}
           {pagination.total > 0 && (
-            <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
+            <div className="px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-gray-700 dark:text-gray-300">
@@ -516,7 +516,7 @@ const MixedMineralsPage: React.FC = () => {
                   <select
                     value={pagination.limit}
                     onChange={(e) => handlePageSizeChange(parseInt(e.target.value))}
-                    className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                    className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
                     <option value={5}>5 per page</option>
                     <option value={10}>10 per page</option>
@@ -531,9 +531,9 @@ const MixedMineralsPage: React.FC = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handlePageChange(pagination.page - 1)}
                     disabled={pagination.page === 1}
-                    className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                    className="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
                   >
-                    <ChevronLeftIcon className="w-5 h-5" />
+                    <ChevronLeftIcon className="w-4 h-4" />
                   </motion.button>
                   
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -544,7 +544,7 @@ const MixedMineralsPage: React.FC = () => {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => handlePageChange(pageNum)}
-                        className={`px-3 py-2 text-sm rounded-lg transition-all duration-200 ${
+                        className={`px-2.5 py-1 text-sm rounded-lg transition-all duration-200 ${
                           pageNum === pagination.page
                             ? 'bg-purple-600 text-white shadow-lg'
                             : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -562,7 +562,7 @@ const MixedMineralsPage: React.FC = () => {
                     disabled={pagination.page === totalPages}
                     className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
                   >
-                    <ChevronRightIcon className="w-5 h-5" />
+                    <ChevronRightIcon className="w-4 h-4" />
                   </motion.button>
                 </div>
               </div>

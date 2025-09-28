@@ -6,8 +6,7 @@ import {
   ScaleIcon,
   CubeIcon,
   ChartBarIcon,
-  CurrencyDollarIcon,
-  CheckBadgeIcon
+  CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
 
@@ -40,8 +39,8 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
     let totalWeightWithSn = 0;
     
     tins.forEach(item => {
-      if (item.internal_sn_percentage !== null) {
-        weightedSumSn += item.internal_sn_percentage * item.net_weight;
+      if (item.internal_sn_percentage !== null || item.alex_stewart_sn_percentage !== null) {
+        weightedSumSn += (item.alex_stewart_sn_percentage ?? item.internal_sn_percentage) * item.net_weight;
         totalWeightWithSn += item.net_weight;
       }
     });
@@ -49,21 +48,7 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
     const avgSnPercentage = totalWeightWithSn > 0 
       ? weightedSumSn / totalWeightWithSn 
       : 0;
-    
-    // Calculate average Alex Stewart Sn
-    let alexStewartSum = 0;
-    let totalWeightAlexStewart = 0;
-    
-    tins.forEach(item => {
-      if (item.alex_stewart_sn_percentage !== null) {
-        alexStewartSum += item.alex_stewart_sn_percentage;
-        totalWeightAlexStewart += item.net_weight;
-      }
-    });
-    
-    const avgAlexStewartSn = totalWeightAlexStewart > 0 
-      ? alexStewartSum / totalWeightAlexStewart 
-      : 0;
+        
     
     // Calculate total net amount
     const totalNetAmount = tins.reduce((sum, item) => 
@@ -77,28 +62,14 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
     let selectedTotalWeightWithSn = 0;
     
     selectedTins.forEach(item => {
-      if (item.internal_sn_percentage !== null) {
-        selectedWeightedSumSn += item.internal_sn_percentage * item.net_weight;
+      if (item.internal_sn_percentage !== null || item.alex_stewart_sn_percentage !== null) {
+        selectedWeightedSumSn += (item.alex_stewart_sn_percentage ?? item.internal_sn_percentage) * item.net_weight;
         selectedTotalWeightWithSn += item.net_weight;
       }
     });
     
     const selectedAvgSnPercentage = selectedTotalWeightWithSn > 0 
       ? selectedWeightedSumSn / selectedTotalWeightWithSn 
-      : 0;
-    
-    let selectedWeightedSumASsn = 0;
-    let selectedTotalWeightWithASsn = 0;
-
-    selectedTins.forEach(item => {
-      if (item.alex_stewart_sn_percentage !== null) {
-        selectedWeightedSumASsn += item.alex_stewart_sn_percentage * item.net_weight;
-        selectedTotalWeightWithASsn += item.net_weight;
-      }
-    });
-
-    const selectedAvgASSNPercentage = selectedTotalWeightWithASsn > 0 
-      ? selectedWeightedSumASsn / selectedTotalWeightWithASsn 
       : 0;
     
     const selectedTotalNetAmount = selectedTins.reduce(
@@ -108,11 +79,9 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
       totalItems,
       totalNetWeight,
       avgSnPercentage,
-      avgAlexStewartSn,
       totalNetAmount,
       selectedTotalNetWeight,
       selectedAvgSnPercentage,
-      selectedAvgASSNPercentage,
       selectedTotalNetAmount,
       selectedCount: selectedTins.length
     };
@@ -208,29 +177,6 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
             {hasSelected && (
               <p className="text-xs text-amber-600 dark:text-amber-400">
                 Sel: ${formatNumber(stats.selectedTotalNetAmount)}
-              </p>
-            )}
-          </div>
-        </div>
-      </motion.div>
-      
-      {/* Average Alex Stewart Sn */}
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-md border border-gray-200 dark:border-gray-700"
-      >
-        <div className="flex items-center space-x-2 sm:space-x-3">
-          <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
-            <CheckBadgeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-          </div>
-          <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tin.avg_alex_stewart', 'Avg A.S. Sn %')}</p>
-            <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              {formatNumber(stats.avgAlexStewartSn)}%
-            </p>
-            {hasSelected && (
-              <p className="text-xs text-amber-600 dark:text-amber-400">
-                Sel: {formatNumber(stats.selectedAvgASSNPercentage)}%
               </p>
             )}
           </div>

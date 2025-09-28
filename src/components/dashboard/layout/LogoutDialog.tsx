@@ -8,6 +8,8 @@ import { logout, logoutUserApi } from '../../../features/auth/authSlice';
 import { AppDispatch } from '../../../store/store';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useUserInfo } from '../../../hooks/useUserInfo';
+
 
 interface LogoutDialogProps {
   isOpen: boolean;
@@ -20,9 +22,12 @@ const LogoutDialog: React.FC<LogoutDialogProps> = ({ isOpen, onClose, onConfirm 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+  const { clearUser } = useUserInfo();
+
   const handleLogout = async () => {
-    await dispatch(logoutUserApi()); // Call API to logout (optional)
-    dispatch(logout()); // Clear client-side state
+    await dispatch(logoutUserApi());
+    dispatch(logout());
+    clearUser();
     navigate('/login');
   };
 

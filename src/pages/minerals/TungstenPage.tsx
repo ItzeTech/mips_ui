@@ -27,9 +27,12 @@ import TungstenEmptyState from '../../components/dashboard/minerals/tungsten/Tun
 import TungstenPagination from '../../components/dashboard/minerals/tungsten/TungstenPagination';
 
 import { useSelectedMinerals } from '../../hooks/useSelectedMinerals';
+import { useAuth } from '../../hooks/useAuth';
 
 const TungstenPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { roles } = useAuth();
+  
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { 
     stiffness: 100, 
@@ -363,7 +366,7 @@ const TungstenPage: React.FC = () => {
       <EditTungstenModal
         isOpen={showEditModal} 
         onClose={() => setShowEditModal(false)} 
-        userRole='Manager'
+        userRoles={roles}
       />
       
       <ViewTungstenModal 

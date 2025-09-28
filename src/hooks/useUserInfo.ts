@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import type { RootState, AppDispatch } from '../store/store'; // Adjust path as needed
+import type { RootState, AppDispatch } from '../store/store';
 import { fetchUser, updateUser, clearUser, UserState } from '../features/user/userSlice';
 
 export function useUserInfo() {

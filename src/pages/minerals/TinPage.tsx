@@ -27,9 +27,12 @@ import TinEmptyState from '../../components/dashboard/minerals/tin/TinEmptyState
 import TinPagination from '../../components/dashboard/minerals/tin/TinPagination';
 
 import { useSelectedMinerals } from '../../hooks/useSelectedMinerals';
+import { useAuth } from '../../hooks/useAuth';
 
 const TinPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { roles } = useAuth();
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { 
     stiffness: 100, 
@@ -363,7 +366,7 @@ const TinPage: React.FC = () => {
       <EditTinModal
         isOpen={showEditModal} 
         onClose={() => setShowEditModal(false)} 
-        userRole='Manager'
+        userRoles={roles}
       />
       
       <ViewTinModal 

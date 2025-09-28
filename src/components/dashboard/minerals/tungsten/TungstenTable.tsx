@@ -6,6 +6,7 @@ import { EyeIcon, PencilIcon, CalendarDaysIcon, ScaleIcon, UserIcon, RectangleGr
 import { StockStatus, FinanceStatus } from '../../../../features/minerals/tungstenSlice';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
 import TungstenPrintModal from './TungstenPrintModal';
+import { RoleGuard } from '../../../common/RoleGuard';
 
 interface TungstenTableProps {
   tungstens: any[];
@@ -264,15 +265,17 @@ const TungstenTable: React.FC<TungstenTableProps> = ({ tungstens, onView, onEdit
                           <PencilIcon className="w-3.5 h-3.5" />
                         </motion.button>
 
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => handlePrintClick(tungsten.id)}
-                          className="p-1.5 text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-100 dark:bg-purple-900/30 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all duration-200"
-                          title={t('tungsten.print', 'Print Report')}
-                        >
-                          <PrinterIcon className="w-3.5 h-3.5" />
-                        </motion.button>
+                        <RoleGuard allowedRoles={['Finance Officer', 'Manager']}>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => handlePrintClick(tungsten.id)}
+                            className="p-1.5 text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-100 dark:bg-purple-900/30 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all duration-200"
+                            title={t('tungsten.print', 'Print Report')}
+                          >
+                            <PrinterIcon className="w-3.5 h-3.5" />
+                          </motion.button>
+                        </RoleGuard>
                       </div>
                     </td>
                   </motion.tr>
