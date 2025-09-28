@@ -10,7 +10,6 @@ import {
   Bars3Icon,
   UsersIcon,
   Cog6ToothIcon,
-  ChartBarIcon,
   CubeIcon,
   RectangleGroupIcon,
   Square3Stack3DIcon,
@@ -42,36 +41,29 @@ const navItems: NavItem[] = [
     icon: HomeIcon, 
     label: 'Dashboard', 
     path: '/dashboard', 
-    allowedRoles: ['Manager', 'Boss', 'Lab Technician', 'Finance Officer'],
+    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
     color: 'from-blue-500 to-purple-600'
   },
   { 
     icon: UsersIcon, 
     label: 'Manage Users', 
     path: '/manage-users', 
-    allowedRoles: ['Manager', 'Boss'],
+    allowedRoles: ['Finance Officer', 'Manager', 'Boss'],
     color: 'from-green-500 to-teal-600'
   },
   { 
     icon: UsersIcon, 
     label: 'Suppliers', 
     path: '/suppliers', 
-    allowedRoles: ['Manager', 'Boss'],
+    allowedRoles: ['Stock Manager'],
     color: 'from-green-500 to-teal-600'
-  },
-  { 
-    icon: ChartBarIcon, 
-    label: 'Reports', 
-    path: '/reports', 
-    allowedRoles: ['Finance Officer'],
-    color: 'from-orange-500 to-red-600'
   },
   // Minerals Category
   { 
     icon: Square3Stack3DIcon, 
     label: 'Mixed Minerals', 
     path: '/minerals/mixed', 
-    allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+    allowedRoles: ['Stock Manager', 'Manager'],
     category: 'Minerals',
     color: 'from-indigo-500 to-purple-600'
   },
@@ -79,7 +71,7 @@ const navItems: NavItem[] = [
     icon: CircleStackIcon, 
     label: 'Tantalum', 
     path: '/minerals/tantalum', 
-    allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+    allowedRoles: ['Stock Manager', 'Manager', 'Lab Technician', 'Finance Officer'],
     category: 'Minerals',
     color: 'from-blue-600 to-indigo-600'
   },
@@ -87,7 +79,7 @@ const navItems: NavItem[] = [
     icon: CubeIcon, 
     label: 'Tin', 
     path: '/minerals/tin', 
-    allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+    allowedRoles: ['Stock Manager', 'Manager', 'Lab Technician', 'Finance Officer'],
     category: 'Minerals',
     color: 'from-amber-500 via-orange-500 to-red-500'
   },
@@ -95,7 +87,7 @@ const navItems: NavItem[] = [
     icon: RectangleGroupIcon, 
     label: 'Tungsten', 
     path: '/minerals/tungsten', 
-    allowedRoles: ['Manager', 'Boss', 'Lab Technician'],
+    allowedRoles: ['Stock Manager', 'Manager', 'Lab Technician', 'Finance Officer'],
     category: 'Minerals',
     color: 'from-emerald-500 via-emerald-500 to-green-600'
   },
@@ -104,7 +96,7 @@ const navItems: NavItem[] = [
     icon: ShoppingCartIcon, 
     label: 'Sales', 
     path: '/sales', 
-    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    allowedRoles: ['Finance Officer'],
     category: 'Finance',
     color: 'from-blue-500 via-indigo-500 to-purple-500'
   },
@@ -112,7 +104,7 @@ const navItems: NavItem[] = [
     icon: CreditCardIcon, 
     label: 'Payments', 
     path: '/payments', 
-    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    allowedRoles: ['Finance Officer'],
     category: 'Finance',
     color: 'from-green-500 via-teal-500 to-emerald-500'
   },
@@ -120,7 +112,7 @@ const navItems: NavItem[] = [
     icon: BanknotesIcon, 
     label: 'Advance Payments', 
     path: '/advance-payments', 
-    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    allowedRoles: ['Finance Officer'],
     category: 'Finance',
     color: 'from-amber-500 via-orange-500 to-yellow-500'
   },
@@ -128,7 +120,7 @@ const navItems: NavItem[] = [
     icon: ReceiptRefundIcon, 
     label: 'Expenses', 
     path: '/expenses', 
-    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    allowedRoles: ['Finance Officer'],
     category: 'Finance',
     color: 'from-rose-500 via-red-500 to-pink-500'
   },

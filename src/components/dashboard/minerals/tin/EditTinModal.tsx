@@ -1,4 +1,3 @@
-// components/dashboard/minerals/tin/EditTinModal.tsx
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -245,15 +244,14 @@ const EditTinModal: React.FC<EditTinModalProps> = ({ isOpen, onClose, userRole }
       setActiveTab(getDefaultTab());
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTin, isOpen, userRole]);
+  }, [selectedTin, isOpen]);
 
   // Calculate financial values when relevant fields change
   useEffect(() => {
-    console.log(financialForm)
+
     if (selectedTin && stockForm.net_weight && 
         financialForm.lme_rate !== null && 
-        financialForm.purchase_sn_percentage !== null && 
-        financialForm.government_treatment_charge_usd_fee !== null &&
+        financialForm.purchase_sn_percentage !== null &&
         financialForm.fluctuation_fee !== null &&
         financialForm.internal_tc !== null &&
         financialForm.exchange_rate !== null && 
