@@ -27,9 +27,12 @@ import TantalumEmptyState from '../../components/dashboard/minerals/tantalum/Tan
 import TantalumPagination from '../../components/dashboard/minerals/tantalum/TantalumPagination';
 
 import { useSelectedMinerals } from '../../hooks/useSelectedMinerals';
+import { useAuth } from '../../hooks/useAuth';
 
 const TantalumPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { roles } = useAuth();
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { 
     stiffness: 100, 
@@ -362,7 +365,7 @@ const filteredTantalums = useMemo(() => {
       <EditTantalumModal
         isOpen={showEditModal} 
         onClose={() => setShowEditModal(false)} 
-        userRole='Manager'
+        userRoles={roles}
       />
       
       <ViewTantalumModal 

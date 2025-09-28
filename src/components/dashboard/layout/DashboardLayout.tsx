@@ -1,6 +1,4 @@
-// DashboardLayoutWithOutlet.tsx
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -11,6 +9,8 @@ export const DashboardLayoutWithOutlet: React.FC = () => {
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
     const navigate = useNavigate();
+
+    
 
     // Handle responsive sidebar behavior
     useEffect(() => {
@@ -53,16 +53,11 @@ export const DashboardLayoutWithOutlet: React.FC = () => {
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
         <Sidebar expanded={sidebarExpanded} toggleSidebar={toggleSidebar} />
         
-        <motion.div
-          className="flex-1 flex flex-col overflow-hidden w-full md:w-auto"
-          animate={{ 
-            marginLeft: window.innerWidth >= 768 ? (sidebarExpanded ? '0px' : '0px') : '0px'
-          }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-        >
+        <div className="flex-1 flex flex-col overflow-hidden w-full md:w-auto">
           <TopBar 
             sidebarExpanded={sidebarExpanded} 
-            onLogout={() => setShowLogoutDialog(true)} 
+            onLogout={() => setShowLogoutDialog(true)}
+            toggleSidebar={toggleSidebar} 
           />
           
           {/* Use Outlet to render nested routes */}
@@ -80,7 +75,7 @@ export const DashboardLayoutWithOutlet: React.FC = () => {
             onClose={() => setShowLogoutDialog(false)}
             onConfirm={handleLogout}
           />
-        </motion.div>
+        </div>
       </div>
     );
 };

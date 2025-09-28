@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
 // Pages
@@ -39,7 +38,6 @@ import ExpensesPage from '../pages/expenses/ExpensesPage';
 import CreateExpensePage from '../pages/expenses/CreateExpensePage';
 import ViewExpensePage from '../pages/expenses/ViewExpensePage';
 
-
 // Route Protectors
 import ProtectedRoute from './ProtectedRoutes';
 import RoleBasedRoute from './RoleBasedRoute';
@@ -47,123 +45,107 @@ import { useAuth } from '../hooks/useAuth';
 import { DashboardLayoutWithOutlet } from '../components/dashboard/layout/DashboardLayout';
 import Unauthorized from '../pages/Unauthorized';
 
-
-const AnimatedOutlet: React.FC = () => {
+const AppRoutes: React.FC = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        {/* Auth routes */}
-        <Route 
-          path="/login" 
-          element={isAuthenticated ? <Navigate to="/dashboard" /> : <MotionPage><LoginPage /></MotionPage>} 
-        />
-        <Route path="/forgot-password" element={<MotionPage><ForgotPasswordPage /></MotionPage>} />
-        <Route path="/reset-password" element={<MotionPage><ResetPasswordPage /></MotionPage>} />
+    <Routes location={location} key={location.pathname}>
+      {/* Auth routes */}
+      <Route 
+        path="/login" 
+        element={isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />} 
+      />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-        {/* Protected Dashboard Routes */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<DashboardLayoutWithOutlet />}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<MotionPage><DashboardOverviewPage /></MotionPage>} />
-            <Route path="profile" element={<MotionPage><ProfilePage /></MotionPage>} />
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="settings" element={<MotionPage><SettingsPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="manage-users" element={<MotionPage><UsersPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="suppliers" element={<MotionPage><SuppliersPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/minerals/mixed" element={<MotionPage><MixedMineralsPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/minerals/tantalum" element={<MotionPage><TantalumPage/></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/minerals/tin" element={<MotionPage><TinPage/></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/minerals/tungsten" element={<MotionPage><TungstenPage/></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/profile/change-password" element={<MotionPage><ChangePasswordPage/></MotionPage>} />
-            </Route>
-            
-            {/* Sales Routes */}
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/sales" element={<MotionPage><SalesPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/sales/create/:mineralType" element={<MotionPage><CreateSalePage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/sales/:saleId" element={<MotionPage><ViewSalePage /></MotionPage>} />
-            </Route>
+      {/* Protected Dashboard Routes */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<DashboardLayoutWithOutlet />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="/profile/change-password" element={<ChangePasswordPage/>} />
 
-            {/* Advance Payment Routes */}
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/advance-payments" element={<MotionPage><AdvancePaymentsPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/advance-payments/create" element={<MotionPage><CreateAdvancePaymentPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/advance-payments/:paymentId" element={<MotionPage><ViewAdvancePaymentPage /></MotionPage>} />
-            </Route>
-
-            {/* Payment Routes */}
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/payments" element={<MotionPage><PaymentsPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/payments/create" element={<MotionPage><CreatePaymentPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss']} />}>
-              <Route path="/payments/:paymentId" element={<MotionPage><ViewPaymentPage /></MotionPage>} />
-            </Route>
-
-             {/* Expenses Routes */}
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss', 'Finance Officer']} />}>
-              <Route path="/expenses" element={<MotionPage><ExpensesPage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss', 'Finance Officer']} />}>
-              <Route path="/expenses/create" element={<MotionPage><CreateExpensePage /></MotionPage>} />
-            </Route>
-            <Route element={<RoleBasedRoute allowedRoles={['Manager', 'Boss', 'Finance Officer']} />}>
-              <Route path="/expenses/:expenseId" element={<MotionPage><ViewExpensePage /></MotionPage>} />
-            </Route>
-
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager', 'Boss', 'Stock Manager', 'Lab Technician']} />}>
+            <Route path="dashboard" element={<DashboardOverviewPage />} />
+          </Route>
+          
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager', 'Boss']} />}>
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager', 'Boss']} />}>
+            <Route path="manage-users" element={<UsersPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Stock Manager', 'Manager']} />}>
+            <Route path="suppliers" element={<SuppliersPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Stock Manager', 'Manager']} />}>
+            <Route path="/minerals/mixed" element={<MixedMineralsPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Stock Manager', 'Manager', 'Lab Technician', 'Finance Officer']} />}>
+            <Route path="/minerals/tantalum" element={<TantalumPage/>} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Stock Manager', 'Manager', 'Lab Technician', 'Finance Officer']} />}>
+            <Route path="/minerals/tin" element={<TinPage/>} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Stock Manager', 'Manager', 'Lab Technician', 'Finance Officer']} />}>
+            <Route path="/minerals/tungsten" element={<TungstenPage/>} />
+          </Route>
+          
+          {/* Sales Routes */}
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/sales" element={<SalesPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/sales/create/:mineralType" element={<CreateSalePage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/sales/:saleId" element={<ViewSalePage />} />
           </Route>
 
-        </Route>
+          {/* Advance Payment Routes */}
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/advance-payments" element={<AdvancePaymentsPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/advance-payments/create" element={<CreateAdvancePaymentPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/advance-payments/:paymentId" element={<ViewAdvancePaymentPage />} />
+          </Route>
 
-        {/* Fallbacks */}
-        <Route 
-          path="/" 
-          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
-        />
-        <Route path="/unauthorized" element={<MotionPage><Unauthorized /></MotionPage>} />
-        <Route path="*" element={<MotionPage><NotFoundPage /></MotionPage>} />
-      </Routes>
-    </AnimatePresence>
+          {/* Payment Routes */}
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/payments" element={<PaymentsPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/payments/create" element={<CreatePaymentPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/payments/:paymentId" element={<ViewPaymentPage />} />
+          </Route>
+
+           {/* Expenses Routes */}
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/expenses" element={<ExpensesPage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/expenses/create" element={<CreateExpensePage />} />
+          </Route>
+          <Route element={<RoleBasedRoute allowedRoles={['Finance Officer', 'Manager']} />}>
+            <Route path="/expenses/:expenseId" element={<ViewExpensePage />} />
+          </Route>
+        </Route>
+      </Route>
+
+      {/* Fallbacks */}
+      <Route 
+        path="/" 
+        element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
+      />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 };
 
-// Wrapper for page animations
-const MotionPage: React.FC<{children: React.ReactNode}> = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -20 }}
-    transition={{ duration: 0.3 }}
-  >
-    {children}
-  </motion.div>
-);
-
-
-export default AnimatedOutlet;
+export default AppRoutes;

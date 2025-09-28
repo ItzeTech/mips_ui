@@ -1,4 +1,3 @@
-// Sidebar.tsx
 import React, { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -41,7 +40,7 @@ const navItems: NavItem[] = [
     icon: HomeIcon, 
     label: 'Dashboard', 
     path: '/dashboard', 
-    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
+    allowedRoles: ['Manager', 'Boss', 'Finance Officer', 'Stock Manager', 'Lab Technician'],
     color: 'from-blue-500 to-purple-600'
   },
   { 
@@ -55,7 +54,7 @@ const navItems: NavItem[] = [
     icon: UsersIcon, 
     label: 'Suppliers', 
     path: '/suppliers', 
-    allowedRoles: ['Stock Manager'],
+    allowedRoles: ['Stock Manager', 'Manager'],
     color: 'from-green-500 to-teal-600'
   },
   // Minerals Category
@@ -96,7 +95,7 @@ const navItems: NavItem[] = [
     icon: ShoppingCartIcon, 
     label: 'Sales', 
     path: '/sales', 
-    allowedRoles: ['Finance Officer'],
+    allowedRoles: ['Finance Officer', 'Manager'],
     category: 'Finance',
     color: 'from-blue-500 via-indigo-500 to-purple-500'
   },
@@ -104,7 +103,7 @@ const navItems: NavItem[] = [
     icon: CreditCardIcon, 
     label: 'Payments', 
     path: '/payments', 
-    allowedRoles: ['Finance Officer'],
+    allowedRoles: ['Finance Officer', 'Manager'],
     category: 'Finance',
     color: 'from-green-500 via-teal-500 to-emerald-500'
   },
@@ -112,7 +111,7 @@ const navItems: NavItem[] = [
     icon: BanknotesIcon, 
     label: 'Advance Payments', 
     path: '/advance-payments', 
-    allowedRoles: ['Finance Officer'],
+    allowedRoles: ['Finance Officer', 'Manager'],
     category: 'Finance',
     color: 'from-amber-500 via-orange-500 to-yellow-500'
   },
@@ -120,7 +119,7 @@ const navItems: NavItem[] = [
     icon: ReceiptRefundIcon, 
     label: 'Expenses', 
     path: '/expenses', 
-    allowedRoles: ['Finance Officer'],
+    allowedRoles: ['Finance Officer', 'Manager'],
     category: 'Finance',
     color: 'from-rose-500 via-red-500 to-pink-500'
   },
@@ -128,7 +127,7 @@ const navItems: NavItem[] = [
     icon: Cog6ToothIcon, 
     label: 'Settings', 
     path: '/settings', 
-    allowedRoles: ['Manager', 'Boss'],
+    allowedRoles: ['Manager', 'Boss', 'Finance Officer'],
     color: 'from-gray-500 to-slate-600'
   },
 ];
@@ -139,18 +138,16 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
   const { t } = useTranslation();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  // Filter nav items based on user roles
-  const visibleNavItems = useMemo(() => {
-    return navItems.filter(item => {
-      return item.allowedRoles.some(role => roles.includes(role));
-    });
-  }, [roles]);
+  // Check if user has access to nav item
+  const hasAccess = (item: NavItem) => {
+    return item.allowedRoles.some(role => roles.includes(role));
+  };
 
   // Group items by category
   const groupedNavItems = useMemo(() => {
     const grouped: { [key: string]: NavItem[] } = { main: [] };
     
-    visibleNavItems.forEach(item => {
+    navItems.forEach(item => {
       if (item.category) {
         if (!grouped[item.category]) {
           grouped[item.category] = [];
@@ -162,140 +159,81 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
     });
     
     return grouped;
-  }, [visibleNavItems]);
-
-  const sidebarVariants = {
-    expanded: {
-      width: window.innerWidth < 768 ? '100vw' : 280,
-      transition: {
-        duration: 0.3,
-        ease: [0.4, 0.0, 0.2, 1],
-      },
-    },
-    collapsed: {
-      width: window.innerWidth < 768 ? 0 : 80,
-      transition: {
-        duration: 0.3,
-        ease: [0.4, 0.0, 0.2, 1],
-      },
-    },
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { x: -20, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-      },
-    },
-  };
+  }, []);
 
   return (
     <>
       {/* Mobile Overlay */}
       {expanded && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-20 md:hidden"
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-20 md:hidden z-60"
           onClick={toggleSidebar}
         />
       )}
 
-      <motion.div
+      {/* Mobile Menu Button - Only visible on small screens when sidebar is collapsed */}
+      {!expanded && (
+        <button
+          onClick={toggleSidebar}
+          className="fixed top-4 left-4 z-40 p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 md:hidden"
+        >
+          <Bars3Icon className="w-5 h-5" />
+        </button>
+      )}
+
+      <div
         className={`${expanded && window.innerWidth < 768 ? 'fixed' : 'relative'} bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-r border-gray-200 dark:border-gray-700 shadow-2xl z-30 h-screen overflow-hidden`}
-        variants={sidebarVariants}
-        animate={expanded ? 'expanded' : 'collapsed'}
+        style={{
+          width: expanded ? (window.innerWidth < 768 ? '280px' : '280px') : (window.innerWidth < 768 ? '0' : '80px'),
+          transition: 'width 0.3s ease'
+        }}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full z-60">
           {/* Logo Area */}
           <div className="p-3 sm:p-6 flex items-center h-16 sm:h-20 border-b border-gray-200/50 dark:border-gray-700/50 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5"></div>
             
-            <AnimatePresence mode="wait">
-              {expanded ? (
-                <motion.div
-                  key="expanded-logo"
-                  className="flex items-center justify-between w-full relative z-10"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.3 }}
+            {expanded ? (
+              <div className="flex items-center justify-between w-full relative z-10">
+                <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
+                    <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
+                      {t('sidebar.app_name', 'RwandaMining')}
+                    </h1>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      {t('sidebar.app_subtitle', 'Management System')}
+                    </p>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={toggleSidebar}
+                  className="p-1.5 sm:p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 flex-shrink-0 ml-2"
                 >
-                  <motion.div
-                    className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0"
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <div className="p-2 sm:p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 flex-shrink-0">
-                      <Bars3Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
-                        {t('sidebar.app_name', 'RwandaMining')}
-                      </h1>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                        {t('sidebar.app_subtitle', 'Management System')}
-                      </p>
-                    </div>
-                  </motion.div>
-                  
-                  <motion.button
-                    onClick={toggleSidebar}
-                    className="p-1.5 sm:p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 flex-shrink-0 ml-2"
-                    whileHover={{ scale: 1.1, rotate: 180 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <ChevronLeftIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </motion.button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="collapsed-logo"
-                  className="flex items-center justify-center w-full relative z-10"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.3 }}
+                  <ChevronLeftIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                </button>
+              </div>
+            ) : (
+              // Only show this on desktop when collapsed
+              <div className="hidden md:flex items-center justify-center w-full relative z-10">
+                {/* <button
+                  className="p-2 sm:p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                  onClick={toggleSidebar}
                 >
-                  <motion.button
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="p-2 sm:p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                    onClick={toggleSidebar}
-                  >
-                    <Bars3Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  <Bars3Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button> */}
+              </div>
+            )}
           </div>
 
           {/* Navigation */}
-          <motion.div 
+          <div 
             className="py-4 sm:py-6 flex-grow overflow-y-auto custom-scrollbar"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
           >
             <div className="px-2 sm:px-4 space-y-6 sm:space-y-8">
               {/* Main Navigation */}
               {groupedNavItems.main.length > 0 && (
-                <motion.div variants={itemVariants}>
+                <div>
                   <ul className="space-y-1 sm:space-y-2">
                     {groupedNavItems.main.map((item) => (
                       <NavItemComponent
@@ -305,33 +243,27 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                         hoveredItem={hoveredItem}
                         setHoveredItem={setHoveredItem}
                         location={location}
+                        hasAccess={hasAccess(item)}
                       />
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               )}
 
               {/* Minerals Section */}
               {groupedNavItems.Minerals && groupedNavItems.Minerals.length > 0 && (
-                <motion.div variants={itemVariants}>
-                  <AnimatePresence>
-                    {expanded && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="mb-3 sm:mb-4"
-                      >
-                        <div className="flex items-center space-x-2 px-2 sm:px-3 py-2">
-                          <div className="w-6 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
-                          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            {t('sidebar.minerals_category', 'Minerals')}
-                          </span>
-                          <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                <div>
+                  {expanded && (
+                    <div className="mb-3 sm:mb-4">
+                      <div className="flex items-center space-x-2 px-2 sm:px-3 py-2">
+                        <div className="w-6 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
+                        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          {t('sidebar.minerals_category', 'Minerals')}
+                        </span>
+                        <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
+                      </div>
+                    </div>
+                  )}
                   
                   <ul className="space-y-1 sm:space-y-2">
                     {groupedNavItems.Minerals.map((item) => (
@@ -342,33 +274,27 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                         hoveredItem={hoveredItem}
                         setHoveredItem={setHoveredItem}
                         location={location}
+                        hasAccess={hasAccess(item)}
                       />
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               )}
 
               {/* Finance Section */}
               {groupedNavItems.Finance && groupedNavItems.Finance.length > 0 && (
-                <motion.div variants={itemVariants}>
-                  <AnimatePresence>
-                    {expanded && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="mb-3 sm:mb-4"
-                      >
-                        <div className="flex items-center space-x-2 px-2 sm:px-3 py-2">
-                          <div className="w-6 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
-                          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            {t('sidebar.finance_category', 'Finance')}
-                          </span>
-                          <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                <div>
+                  {expanded && (
+                    <div className="mb-3 sm:mb-4">
+                      <div className="flex items-center space-x-2 px-2 sm:px-3 py-2">
+                        <div className="w-6 sm:w-8 h-[1px] bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
+                        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          {t('sidebar.finance_category', 'Finance')}
+                        </span>
+                        <div className="flex-1 h-[1px] bg-gradient-to-r from-gray-300 to-transparent dark:from-gray-600"></div>
+                      </div>
+                    </div>
+                  )}
                   
                   <ul className="space-y-1 sm:space-y-2">
                     {groupedNavItems.Finance.map((item) => (
@@ -379,38 +305,32 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
                         hoveredItem={hoveredItem}
                         setHoveredItem={setHoveredItem}
                         location={location}
+                        hasAccess={hasAccess(item)}
                       />
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               )}
             </div>
-          </motion.div>
+          </div>
 
           {/* Sidebar Footer */}
           <div className="p-3 sm:p-4 border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-900/50">
             <div className={`flex justify-center items-center`}>
-              <AnimatePresence>
-                {expanded && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    className="text-center"
-                  >
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                      {t('sidebar.version', 'Version')} 2.0.1
-                    </span>
-                    <div className="text-xs text-gray-400 dark:text-gray-500">
-                      {t('sidebar.edition', 'Mining Pro')}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {expanded && (
+                <div className="text-center">
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                    {t('sidebar.version', 'Version')} 2.0.1
+                  </span>
+                  <div className="text-xs text-gray-400 dark:text-gray-500">
+                    {t('sidebar.edition', 'Mining Pro')}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </>
   );
 };
@@ -422,31 +342,41 @@ const NavItemComponent: React.FC<{
   hoveredItem: string | null;
   setHoveredItem: (item: string | null) => void;
   location: any;
-}> = ({ item, expanded, hoveredItem, setHoveredItem, location }) => {
+  hasAccess: boolean;
+}> = ({ item, expanded, hoveredItem, setHoveredItem, location, hasAccess }) => {
   const { t } = useTranslation();
-  const isActive = location.pathname === item.path;
+  const isActive = location.pathname === item.path && hasAccess;
   const isHovered = hoveredItem === item.path;
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (!hasAccess) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <li>
       <Link
-        to={item.path}
+        to={hasAccess ? item.path : '#'}
+        onClick={handleClick}
         onMouseEnter={() => setHoveredItem(item.path)}
         onMouseLeave={() => setHoveredItem(null)}
-        className="group relative block"
+        className={`group relative block ${!hasAccess ? 'cursor-not-allowed' : 'cursor-pointer'}`}
       >
         <motion.div
           className={`relative flex items-center px-3 sm:px-4 py-2 sm:py-3 rounded-2xl transition-all duration-300 overflow-hidden ${
             isActive
               ? 'bg-gradient-to-r ' + (item.color || 'from-blue-500 to-purple-600') + ' text-white shadow-lg'
-              : 'text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
+              : hasAccess
+              ? 'text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
+              : 'text-gray-400 dark:text-gray-600 bg-gray-50/50 dark:bg-gray-800/20 opacity-50'
           }`}
-          whileHover={{ scale: 1.02, x: 4 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={hasAccess ? { scale: 1.02, x: 4 } : {}}
+          whileTap={hasAccess ? { scale: 0.98 } : {}}
         >
           {/* Background Gradient for Hover */}
           <AnimatePresence>
-            {isHovered && !isActive && (
+            {isHovered && !isActive && hasAccess && (
               <motion.div
                 className={`absolute inset-0 bg-gradient-to-r ${item.color || 'from-blue-500 to-purple-600'} opacity-10`}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -457,38 +387,47 @@ const NavItemComponent: React.FC<{
             )}
           </AnimatePresence>
 
+          {/* Disabled overlay */}
+          {!hasAccess && (
+            <div className="absolute inset-0 bg-gray-200/20 dark:bg-gray-800/20 rounded-2xl" />
+          )}
+
           {/* Icon */}
           <motion.div
-            className={`relative z-10 ${isActive ? 'text-white' : ''}`}
-            whileHover={{ rotate: 5, scale: 1.1 }}
+            className={`relative z-10 ${
+              isActive ? 'text-white' : hasAccess ? '' : 'text-gray-400 dark:text-gray-600'
+            }`}
+            whileHover={hasAccess ? { rotate: 5, scale: 1.1 } : {}}
             transition={{ duration: 0.2 }}
           >
             <item.icon className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.div>
 
           {/* Label */}
-          <AnimatePresence mode="wait">
-            {expanded && (
-              <motion.span
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.2 }}
-                className={`ml-3 sm:ml-4 font-medium relative z-10 text-sm sm:text-base ${isActive ? 'text-white' : ''} truncate`}
-              >
-                {t(`sidebar.menu.${item.label.toLowerCase().replace(/\s+/g, '_')}`, item.label)}
-              </motion.span>
-            )}
-          </AnimatePresence>
+          {expanded && (
+            <span
+              className={`ml-3 sm:ml-4 font-medium relative z-10 text-sm sm:text-base ${
+                isActive ? 'text-white' : hasAccess ? '' : 'text-gray-400 dark:text-gray-600'
+              } truncate`}
+              style={{ 
+                transition: 'opacity 0.2s, transform 0.2s',
+                opacity: 1,
+                transform: 'translateX(0)'
+              }}
+            >
+              {t(`sidebar.menu.${item.label.toLowerCase().replace(/\s+/g, '_')}`, item.label)}
+            </span>
+          )}
 
           {/* Active Indicator */}
           {isActive && expanded && (
-            <motion.div
-              layoutId="activeIndicator"
+            <div
               className="absolute right-2 w-1.5 h-3 sm:w-2 sm:h-4 bg-white/30 rounded-full"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
+              style={{
+                transition: 'opacity 0.3s, transform 0.3s',
+                opacity: 1,
+                transform: 'scale(1)'
+              }}
             />
           )}
 
@@ -499,10 +438,18 @@ const NavItemComponent: React.FC<{
                 initial={{ opacity: 0, x: -10, scale: 0.8 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: -10, scale: 0.8 }}
-                className="absolute left-full ml-4 px-2 sm:px-3 py-1.5 sm:py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs sm:text-sm rounded-xl shadow-xl border border-gray-200 dark:border-gray-600 whitespace-nowrap z-50"
+                className={`absolute left-full ml-4 px-2 sm:px-3 py-1.5 sm:py-2 text-white text-xs sm:text-sm rounded-xl shadow-xl border whitespace-nowrap z-50 ${
+                  hasAccess
+                    ? 'bg-gray-900 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                    : 'bg-gray-600 dark:bg-gray-800 border-gray-300 dark:border-gray-700'
+                }`}
               >
                 {t(`sidebar.menu.${item.label.toLowerCase().replace(/\s+/g, '_')}`, item.label)}
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900 dark:bg-gray-700 rotate-45"></div>
+                <div className={`absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 rotate-45 ${
+                  hasAccess
+                    ? 'bg-gray-900 dark:bg-gray-700'
+                    : 'bg-gray-600 dark:bg-gray-800'
+                }`}></div>
               </motion.div>
             )}
           </AnimatePresence>
