@@ -1,0 +1,92 @@
+/* Toast custom styles */
+.toast-dashboard {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.toast-payment {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.toast-analysis {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.toast-export {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.toast-quality {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.toast-system {
+  background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.toast-default {
+  background: white !important;
+  color: #374151 !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Dark mode support */
+.dark .toast-default {
+  background: #1f2937 !important;
+  color: #f9fafb !important;
+  border: 1px solid #374151 !important;
+}
+
+/* Animation overrides */
+div[data-hot-toast] {
+  z-index: 9999 !important;
+}
+
+/* Notification permission banner */
+.notification-permission-banner {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1000;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  max-width: 350px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.notification-permission-banner.show {
+  transform: translateX(0);
+}
+
+.notification-permission-banner button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.notification-permission-banner button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}

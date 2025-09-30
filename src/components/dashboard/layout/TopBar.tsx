@@ -1,8 +1,8 @@
-// src/components/layout/TopBar.tsx
-
 import React, { Fragment, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../../../store/store';
 import {
   MoonIcon,
   SunIcon,
@@ -11,7 +11,7 @@ import {
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   ShieldCheckIcon,
-  Bars3Icon, // 1. Imported Bars3Icon
+  Bars3Icon,
   LanguageIcon,
   BellIcon,
   SparklesIcon,
@@ -22,6 +22,12 @@ import { useAuth } from '../../../hooks/useAuth';
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { useUserInfo } from '../../../hooks/useUserInfo';
 import { useNavigate } from 'react-router-dom';
+import { 
+  fetchNotifications, 
+  fetchNotificationStats, 
+  markAllNotificationsAsRead,
+  markNotificationAsRead
+} from '../../../features/user/notificationsSlice';
 
 interface TopBarProps {
   sidebarExpanded: boolean;
@@ -159,9 +165,9 @@ const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
                   <Menu.Item>
                     {({ active }) => (
                       <motion.button whileHover={{ x: 4 }} onClick={onLogout} className={`w-full flex items-center px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm transition-all duration-200 ${active ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400' : 'text-red-600 dark:text-red-400'}`}>
-                        <ArrowRightOnRectangleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
-                        {t('logout.logout')}
-                      </motion.button>
+                          <ArrowRightOnRectangleIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
+                          {t('logout.logout')}
+                        </motion.button>
                     )}
                   </Menu.Item>
                 </div>
@@ -178,18 +184,28 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
   const { t, i18n } = useTranslation();
   const { currentTheme, toggleTheme } = useTheme();
   const [time, setTime] = useState(new Date());
-
-  const [notifications, setNotifications] = useState([
-    { id: 1, text: "New tantalum analysis completed", unread: true, type: "success", time: "2 min ago" },
-    { id: 2, text: "Tungsten shipment ready for export", unread: true, type: "info", time: "15 min ago" },
-    { id: 3, text: "Monthly mineral report generated", unread: false, type: "info", time: "1 hour ago" },
-    { id: 4, text: "Quality check alert: Tin batch #4521", unread: true, type: "warning", time: "2 hours ago" },
-  ]);
+  
+  // Redux state and dispatch
+  const dispatch = useDispatch<AppDispatch>();
+  const { 
+    notifications, 
+    stats, 
+    status,
+    isFetched 
+  } = useSelector((state: RootState) => state.notifications);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Fetch notifications and stats on component mount
+  useEffect(() => {
+    if (!isFetched) {
+      dispatch(fetchNotifications({ page: 1, size: 20, unread_only: false }));
+      dispatch(fetchNotificationStats());
+    }
+  }, [dispatch, isFetched]);
 
   const changeLanguage = (lng: string) => { i18n.changeLanguage(lng); };
   const languages = [
@@ -197,15 +213,38 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
     { code: 'fr', name: 'Français', flag: '🇫🇷' },
     { code: 'rw', name: 'Kinyarwanda', flag: '🇷🇼' },
   ];
-  const markAllAsRead = () => { setNotifications(notifications.map(n => ({ ...n, unread: false }))); };
-  const unreadCount = notifications.filter(n => n.unread).length;
+
+  const markAllAsRead = () => { 
+    dispatch(markAllNotificationsAsRead());
+  };
+
+  const handleNotificationClick = (notification: any) => {
+    if (!notification.is_read) {
+      dispatch(markNotificationAsRead(notification.id));
+    }
+  };
+
+  const unreadCount = stats.unread_count;
+
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'success': return '✅';
       case 'warning': return '⚠️';
       case 'error': return '❌';
+      case 'dashboard_update': return '📊';
       default: return '📋';
     }
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'Just now';
+    if (diffInMinutes < 60) return `${diffInMinutes} min ago`;
+    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} hour(s) ago`;
+    return `${Math.floor(diffInMinutes / 1440)} day(s) ago`;
   };
 
   return (
@@ -217,21 +256,17 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* 3. ADDED: Primary toggle button for all screen sizes */}
-        
-          {
-            !sidebarExpanded && (
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 10 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleSidebar}
-                className="p-2 sm:p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
-                aria-label="Toggle sidebar"
-              >
-                    <Bars3Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-              </motion.button>
-            )
-          }
+        {!sidebarExpanded && (
+          <motion.button
+            whileHover={{ scale: 1.1, rotate: 10 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleSidebar}
+            className="p-2 sm:p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
+            aria-label="Toggle sidebar"
+          >
+            <Bars3Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+          </motion.button>
+        )}
         
         {/* Time & Date */}
         <div className="hidden lg:block">
@@ -306,7 +341,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
                 <AnimatePresence>
                   {unreadCount > 0 && (
                     <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white shadow-lg">
-                      {unreadCount}
+                      {unreadCount > 99 ? '99+' : unreadCount}
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -323,7 +358,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
                         </h3>
                         {unreadCount > 0 && (
                           <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={markAllAsRead} className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors">
-                            <span className="hidden sm:inline">{t('notifications.mark_all_read')} ({unreadCount})</span>
+                            <span className="hidden sm:inline">Mark all read ({unreadCount})</span>
                             <span className="sm:hidden">Read ({unreadCount})</span>
                           </motion.button>
                         )}
@@ -331,21 +366,41 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
                     </div>
                     <div className="max-h-64 sm:max-h-80 overflow-y-auto">
                       <AnimatePresence>
-                        {notifications.length === 0 ? (
+                        {status === 'loading' ? (
+                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 sm:p-8 text-center">
+                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Loading notifications...</p>
+                          </motion.div>
+                        ) : notifications.length === 0 ? (
                           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-6 sm:p-8 text-center">
                             <BellIcon className="w-8 h-8 sm:w-12 sm:h-12 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">No new notifications</p>
+                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">No notifications</p>
                           </motion.div>
                         ) : (
-                          notifications.map((notification, index) => (
-                            <motion.div key={notification.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className={`p-3 sm:p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${notification.unread ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}>
+                          notifications.slice(0, 10).map((notification: { id: React.Key | null | undefined; is_read: any; notification_type: any; title: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; message: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | Iterable<React.ReactNode> | null | undefined; created_at: string; }, index: number) => (
+                            <motion.div 
+                              key={notification.id} 
+                              initial={{ opacity: 0, x: -20 }} 
+                              animate={{ opacity: 1, x: 0 }} 
+                              transition={{ delay: index * 0.1 }} 
+                              onClick={() => handleNotificationClick(notification)}
+                              className={`p-3 sm:p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${!notification.is_read ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}
+                            >
                               <div className="flex items-start space-x-2 sm:space-x-3">
-                                <span className="text-sm sm:text-lg mt-0.5">{getNotificationIcon(notification.type)}</span>
+                                <span className="text-sm sm:text-lg mt-0.5">{getNotificationIcon(notification.notification_type || 'info')}</span>
                                 <div className="flex-1 min-w-0">
-                                  <p className={`text-xs sm:text-sm ${notification.unread ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'} line-clamp-2`}>{notification.text}</p>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{notification.time}</p>
+                                  {notification.title && (
+                                    <p className={`text-xs sm:text-sm font-semibold mb-1 ${!notification.is_read ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'} line-clamp-1`}>
+                                      {notification.title}
+                                    </p>
+                                  )}
+                                  <p className={`text-xs sm:text-sm ${!notification.is_read ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'} line-clamp-2`}>
+                                    {notification.message}
+                                  </p>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    {formatTimeAgo(notification.created_at)}
+                                  </p>
                                 </div>
-                                {notification.unread && (<div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>)}
+                                {!notification.is_read && (<div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>)}
                               </div>
                             </motion.div>
                           ))

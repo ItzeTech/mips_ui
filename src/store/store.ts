@@ -17,6 +17,7 @@ import salesReducer from '../features/finance/salesSlice';
 import advancePaymentsReducer from "../features/finance/advancePaymentSlice";
 import paymentsReducer from "../features/finance/paymentSlice";
 import expensesReducer from "../features/finance/expenseSlice";
+import notificationReducer from "../features/user/notificationsSlice";
 
 
 export const store = configureStore({
@@ -38,7 +39,8 @@ export const store = configureStore({
     sales: salesReducer,
     advancePayments: advancePaymentsReducer,
     payments: paymentsReducer,
-    expenses: expensesReducer
+    expenses: expensesReducer,
+    notifications: notificationReducer
   },
   // Middleware can be added here if needed
 });

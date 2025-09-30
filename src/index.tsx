@@ -28,21 +28,48 @@ root.render(
     <Provider store={store}>
       <React.Suspense fallback={<div className="flex justify-center items-center h-screen">Loading translations...</div>}>
         <App />
-        <Toaster 
-          position="top-center" 
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          gutter={8}
+          containerStyle={{
+            top: 80,
+            right: 20,
+          }}
           toastOptions={{
+            duration: 6000,
             style: {
-              borderRadius: '10px',
-              background: '#333',
-              color: '#fff',
+              background: '#fff',
+              color: '#363636',
+              borderRadius: '12px',
+              padding: '16px',
+              fontSize: '14px',
+              maxWidth: '400px',
+              wordWrap: 'break-word',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
             },
             success: {
-              duration: 3000,
-              icon: '✅',
+              iconTheme: {
+                primary: '#10b981',
+                secondary: '#fff',
+              },
+              style: {
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                color: '#fff',
+                border: 'none',
+              },
             },
             error: {
-              duration: 5000,
-              icon: '❌',
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+              style: {
+                background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                color: '#fff',
+                border: 'none',
+              },
+              duration: 8000,
             },
           }}
         />
