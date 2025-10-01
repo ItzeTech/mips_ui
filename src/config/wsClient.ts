@@ -77,13 +77,13 @@ export class WSClient {
       state.ws = null;
     }
 
-    console.log(`🔌 Connecting to ${type} channel...`);
+    // console.log(`🔌 Connecting to ${type} channel...`);
 
     try {
       state.ws = new WebSocket(url);
 
       state.ws.onopen = () => {
-        console.log(`✅ Connected to ${type} channel`);
+        // console.log(`✅ Connected to ${type} channel`);
         state.reconnectAttempts = 0; // Reset on successful connection
         this.startPingInterval(type);
       };
@@ -100,31 +100,31 @@ export class WSClient {
       };
 
       state.ws.onerror = (error) => {
-        console.error(`❌ ${type} WebSocket error:`, error);
+        // console.error(`❌ ${type} WebSocket error:`, error);
       };
 
       state.ws.onclose = async (event) => {
-        console.log(`🔌 ${type} channel closed (Code: ${event.code}, Reason: ${event.reason})`);
+        // console.log(`🔌 ${type} channel closed (Code: ${event.code}, Reason: ${event.reason})`);
         
         this.stopPingInterval(type);
 
         // Don't reconnect if intentionally closed
         if (state.intentionallyClosed) {
-          console.log(`ℹ️ ${type} connection was intentionally closed`);
+          // console.log(`ℹ️ ${type} connection was intentionally closed`);
           return;
         }
 
         // Handle token expiration (4001 is our custom code)
         if (event.code === 4001 && type === 'user' && this.onTokenExpired) {
-          console.log('🔄 Token expired, attempting to refresh...');
+          // console.log('🔄 Token expired, attempting to refresh...');
           try {
             this.token = await this.onTokenExpired();
-            console.log('✅ Token refreshed');
+            // console.log('✅ Token refreshed');
             // Retry with new token immediately
             state.reconnectAttempts = 0;
             this.scheduleReconnect(type, `${WS_BASE_URL}/user?token=${this.token}`, 0);
           } catch (error) {
-            console.error('❌ Failed to refresh token:', error);
+            // console.error('❌ Failed to refresh token:', error);
             // Fall through to normal reconnect logic
             this.scheduleReconnect(type, url);
           }
@@ -134,7 +134,7 @@ export class WSClient {
         }
       };
     } catch (error) {
-      console.error(`❌ Failed to create ${type} WebSocket:`, error);
+      // console.error(`❌ Failed to create ${type} WebSocket:`, error);
       this.scheduleReconnect(type, url);
     }
   }
@@ -148,7 +148,7 @@ export class WSClient {
     }
 
     if (state.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error(`❌ Max reconnection attempts (${this.maxReconnectAttempts}) reached for ${type}`);
+      // console.error(`❌ Max reconnection attempts (${this.maxReconnectAttempts}) reached for ${type}`);
       return;
     }
 
@@ -159,9 +159,9 @@ export class WSClient {
       ? customDelay 
       : Math.min(this.reconnectInterval * Math.pow(2, state.reconnectAttempts - 1), 30000);
 
-    console.log(
-      `🔄 Scheduling reconnect for ${type} (attempt ${state.reconnectAttempts}/${this.maxReconnectAttempts}) in ${delay}ms`
-    );
+    // console.log(
+    //   `🔄 Scheduling reconnect for ${type} (attempt ${state.reconnectAttempts}/${this.maxReconnectAttempts}) in ${delay}ms`
+    // );
 
     state.reconnectTimer = setTimeout(() => {
       this.connect(type, url);
@@ -178,7 +178,7 @@ export class WSClient {
     state.pingTimer = setInterval(() => {
       if (state.ws?.readyState === WebSocket.OPEN) {
         state.ws.send(JSON.stringify({ type: 'ping' }));
-        console.log(`🔄 Ping sent to ${type}`);
+        // console.log(`🔄 Ping sent to ${type}`);
       }
     }, this.pingInterval);
   }
@@ -199,7 +199,7 @@ export class WSClient {
     // Reconnect user channel with new token if currently connected
     const userState = this.connections.get('user')!;
     if (userState.ws && !userState.intentionallyClosed) {
-      console.log('🔄 Reconnecting user channel with new token...');
+      // console.log('🔄 Reconnecting user channel with new token...');
       this.disconnect('user');
       if (userState.messageHandler) {
         this.connectUser(userState.messageHandler);
@@ -226,7 +226,7 @@ export class WSClient {
       state.ws = null;
     }
 
-    console.log(`🔌 ${type} channel disconnected`);
+    // console.log(`🔌 ${type} channel disconnected`);
   }
 
   // 🔹 Close all connections

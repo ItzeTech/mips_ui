@@ -368,7 +368,7 @@ export default function FinancialTab({
                 />
 
                 <RenderInput
-                  label={t('tantalum.rma_usd_per_kg', 'RMA USD per Kg')}
+                  label={t('tantalum.rma_usd_per_kg', 'RMA per Kg')}
                   value={financialForm.rma_usd_per_ton_fee}
                   onChange={(value) => setFinancialForm(prev => ({ ...prev, rma_usd_per_ton_fee: value }))}
                   type="number"
@@ -466,7 +466,7 @@ export default function FinancialTab({
             />
 
             <HoverInfoCard
-              title={`${t('tantalum.rra', 'RRA')} (${(financialForm.rra_percentage_fee ?? TantalumSettingsData?.rra_percentage)}%)`}
+              title={t('tantalum.rra_fee_with_value', 'RRA', { value: (financialForm.rra_percentage_fee ?? TantalumSettingsData?.rra_percentage + "%") })}
               value={`$${formatNumber(calculatedValues.rra)}`}
               color="gray"
               formula="RRA percentage * RRA total amount"
@@ -479,7 +479,7 @@ export default function FinancialTab({
             />
 
             <HoverInfoCard
-              title={`${t('tantalum.rma', 'RMA')} ($${(financialForm.rma_usd_per_ton_fee ?? TantalumSettingsData?.rma_usd_per_ton)})`}
+              title={t('tantalum.rma_fee_with_value', 'RMA', { value: ("$" + (financialForm.rma_usd_per_ton_fee ?? TantalumSettingsData?.rma_usd_per_ton)) }) }
               value={`$${formatNumber(calculatedValues.rma)}`}
               color="gray"
               formula="RMA per ton * net weight"
@@ -492,7 +492,7 @@ export default function FinancialTab({
             />
 
             <HoverInfoCard
-              title={`${t('tantalum.inkomane_fee', 'Inkomane Fee')} (${(financialForm.inkomane_fee_per_kg_rwf_fee ?? TantalumSettingsData?.inkomane_fee_per_kg_rwf)} RWF)`}
+              title={t('tantalum.inkomane_fee_with_value', 'Inkomane Fee', { value: (financialForm.inkomane_fee_per_kg_rwf_fee ?? TantalumSettingsData?.inkomane_fee_per_kg_rwf) + " RWF" })}
               value={`${formatNumber(calculatedValues.inkomane_fee)} RWF`}
               color="gray"
               formula="inkomane fee * net weight"

@@ -362,7 +362,7 @@ export default function FinancialTab({
                 />
 
                 <RenderInput
-                  label={t('tantalum.rma_usd_per_kg', 'RMA USD per Kg')}
+                  label={t('tantalum.rma_usd_per_kg', 'RMA per Kg')}
                   value={financialForm.rma_usd_per_ton_fee}
                   onChange={(value) => setFinancialForm(prev => ({ ...prev, rma_usd_per_ton_fee: value }))}
                   type="number"
@@ -404,7 +404,7 @@ export default function FinancialTab({
                   <div className="mt-2 text-sm text-blue-700 dark:text-blue-400">
                     <ul className="list-disc pl-5 space-y-1">
                       <li>{t('tantalum.rra_percentage_label', 'RRA Percentage')}: {TungstenSettingsData?.rra_percentage}%</li>
-                      <li>{t('tantalum.rma_usd_per_kg_label', 'RMA USD per Kg')}: ${TungstenSettingsData?.rma_usd_per_ton ? TungstenSettingsData.rma_usd_per_ton : 0}</li>
+                      <li>{t('tantalum.rma_usd_per_kg_label', 'RMA per Kg')}: ${TungstenSettingsData?.rma_usd_per_ton ? TungstenSettingsData.rma_usd_per_ton : 0}</li>
                       <li>{t('tantalum.inkomane_fee_label', 'Inkomane Fee per Kg')}: {TungstenSettingsData?.inkomane_fee_per_kg_rwf} RWF</li>
                     </ul>
                   </div>

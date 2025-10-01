@@ -14,6 +14,8 @@ import {
 } from './features/user/notificationsSlice';
 import './toast.css';
 import { useBroadcastHandler } from './hooks/useBroadcastHandler';
+import { refreshWebSocketToken } from './config/wsTokenManager';
+import { store as storeRef } from './store/store';
 
 function App() {
   useThemeEffect();
@@ -30,12 +32,16 @@ function App() {
   useEffect(() => {
   if (!token) return;
     
-  const client = new WSClient({ token });
+  const client = new WSClient({ 
+    token,
+    onTokenExpired: async () => {
+      // Handle token expiration and refresh logic
+      const newToken = await refreshWebSocketToken(storeRef);
+      return newToken;
+    }
+  });
 
-  client.connectBroadcast((msg) => {
-    console.log("📢 Broadcast received:", msg);
-    // Handle broadcast message to update Redux state
-    
+  client.connectBroadcast((msg) => {    
     handleBroadcastMessage(msg);
   });
 

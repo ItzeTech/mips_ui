@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
 import { useNavigate } from 'react-router-dom';
+import { RoleGuard } from '../../../common/RoleGuard';
 
 interface TinHeaderProps {
   onCreateClick: () => void;
@@ -68,18 +69,22 @@ const TinHeader: React.FC<TinHeaderProps> = ({
             </motion.button>
           )}
           
-          <motion.button
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onCreateClick}
-            className="inline-flex items-center px-3 sm:px-4 py-2 text-xs sm:text-sm bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:from-amber-600 hover:via-orange-600 hover:to-red-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+          <RoleGuard
+            allowedRoles={['Manager', 'Stock Manager']}
           >
-            <PlusIcon className="w-4 h-4 mr-1 sm:mr-2" />
-            <span>{t('tin.create_new', 'Add New Tin')}</span>
-            <SparklesIcon className="w-3 h-3 ml-1 sm:ml-2" />
-          </motion.button>
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onCreateClick}
+              className="inline-flex items-center px-3 sm:px-4 py-2 text-xs sm:text-sm bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:from-amber-600 hover:via-orange-600 hover:to-red-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              <PlusIcon className="w-4 h-4 mr-1 sm:mr-2" />
+              <span>{t('tin.create_new', 'Add New Tin')}</span>
+              <SparklesIcon className="w-3 h-3 ml-1 sm:ml-2" />
+            </motion.button>
+          </RoleGuard>
         </div>
       </div>
       

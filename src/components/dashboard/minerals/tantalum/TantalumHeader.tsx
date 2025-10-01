@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
 import { useNavigate } from 'react-router-dom';
+import { RoleGuard } from '../../../common/RoleGuard';
 
 interface TantalumHeaderProps {
   onCreateClick: () => void;
@@ -66,19 +67,22 @@ const TantalumHeader: React.FC<TantalumHeaderProps> = ({
               <ChartBarIcon className="w-3 h-3 ml-1 sm:ml-2" />
             </motion.button>
           )}
-          
-          <motion.button
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onCreateClick}
-            className="inline-flex items-center px-3 sm:px-4 py-2 text-xs sm:text-sm bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+          <RoleGuard
+            allowedRoles={['Manager', 'Stock Manager']}
           >
-            <PlusIcon className="w-4 h-4 mr-1 sm:mr-2" />
-            <span>{t('tantalum.create_new', 'Add New Tantalum')}</span>
-            <SparklesIcon className="w-3 h-3 ml-1 sm:ml-2" />
-          </motion.button>
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onCreateClick}
+              className="inline-flex items-center px-3 sm:px-4 py-2 text-xs sm:text-sm bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              <PlusIcon className="w-4 h-4 mr-1 sm:mr-2" />
+              <span>{t('tantalum.create_new', 'Add New Tantalum')}</span>
+              <SparklesIcon className="w-3 h-3 ml-1 sm:ml-2" />
+            </motion.button>
+          </RoleGuard>
         </div>
       </div>
       

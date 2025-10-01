@@ -1,6 +1,7 @@
 // axiosInstance.ts
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { logout, setCredentials } from '../features/auth/authSlice';
+import { logout, logoutUserApi, setCredentials } from '../features/auth/authSlice';
+import { clearUser } from '../features/user/userSlice';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api/v1';
 
@@ -48,7 +49,9 @@ axiosInstance.interceptors.response.use(
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry && originalRequest.url !== '/auth/login') {
       if (originalRequest.url === '/auth/token/refresh') {
-        storeRef.dispatch(logout());
+        await storeRef.dispatch(logoutUserApi());
+        await storeRef.dispatch(logout());
+        clearUser();
         return Promise.reject(error);
       }
 
@@ -80,7 +83,9 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError: any) {
         console.log(refreshError)
         processQueue(refreshError, null);
-        storeRef.dispatch(logout());
+        await storeRef.dispatch(logoutUserApi());
+        await storeRef.dispatch(logout());
+        clearUser();
         window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {

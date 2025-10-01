@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { ScaleIcon, RectangleGroupIcon, ChartBarIcon, CurrencyDollarIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
+import { ScaleIcon, RectangleGroupIcon, ChartBarIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { useSelectedMinerals } from '../../../../hooks/useSelectedMinerals';
 
 interface TungstenStatsProps {
@@ -31,29 +31,14 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
     let totalWeightWithWO3 = 0;
 
     tungstens.forEach(item => {
-      if (item.wo3_percentage !== null) {
-        weightedSumWO3 += item.wo3_percentage * item.net_weight;
+      if (item.wo3_percentage !== null || item.alex_stewart_wo3_percentage !== null) {
+        weightedSumWO3 += (item.alex_stewart_wo3_percentage ?? item.wo3_percentage) * item.net_weight;
         totalWeightWithWO3 += item.net_weight;
       }
     });
 
     const avgWO3Percentage = totalWeightWithWO3 > 0 
       ? weightedSumWO3 / totalWeightWithWO3 
-      : 0;
-
-    // Calculate average Alex Stewart WO3
-    let alexStewartSum = 0;
-    let totalWeightAlexStewart = 0;
-
-    tungstens.forEach(item => {
-      if (item.alex_stewart_wo3_percentage !== null) {
-        alexStewartSum += item.alex_stewart_wo3_percentage * item.net_weight;
-        totalWeightAlexStewart += item.net_weight;
-      }
-    });
-
-    const avgAlexStewartWO3 = totalWeightAlexStewart > 0 
-      ? alexStewartSum / totalWeightAlexStewart 
       : 0;
 
     // Calculate total net amount
@@ -68,29 +53,14 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
     let selectedTotalWeightWithWO3 = 0;
 
     selectedTungstens.forEach(item => {
-      if (item.wo3_percentage !== null) {
-        selectedWeightedSumWO3 += item.wo3_percentage * item.net_weight;
+      if (item.wo3_percentage !== null || item.alex_stewart_wo3_percentage !== null) {
+        selectedWeightedSumWO3 += (item.alex_stewart_wo3_percentage ?? item.wo3_percentage) * item.net_weight;
         selectedTotalWeightWithWO3 += item.net_weight;
       }
     });
 
     const selectedAvgWO3Percentage = selectedTotalWeightWithWO3 > 0 
       ? selectedWeightedSumWO3 / selectedTotalWeightWithWO3 
-      : 0;
-
-
-    let selectedWeightedSumASWO3 = 0;
-    let selectedTotalWeightWithASWO3 = 0;
-
-    selectedTungstens.forEach(item => {
-      if (item.alex_stewart_wo3_percentage !== null) {
-        selectedWeightedSumASWO3 += item.alex_stewart_wo3_percentage * item.net_weight;
-        selectedTotalWeightWithASWO3 += item.net_weight;
-      }
-    });
-
-    const selectedAvgASWO3Percentage = selectedTotalWeightWithASWO3 > 0 
-      ? selectedWeightedSumASWO3 / selectedTotalWeightWithASWO3 
       : 0;
 
     const selectedTotalNetAmount = selectedTungstens.reduce(
@@ -100,11 +70,9 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
       totalItems,
       totalNetWeight,
       avgWO3Percentage,
-      avgAlexStewartWO3,
       totalNetAmount,
       selectedTotalNetWeight,
       selectedAvgWO3Percentage,
-      selectedAvgASWO3Percentage,
       selectedTotalNetAmount,
       selectedCount: selectedTungstens.length
     };
@@ -200,29 +168,6 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
             {hasSelected && (
               <p className="text-xs text-emerald-600 dark:text-emerald-400">
                 Sel: ${formatNumber(stats.selectedTotalNetAmount)}
-              </p>
-            )}
-          </div>
-        </div>
-      </motion.div>
-      
-      {/* Average Alex Stewart WO3 */}
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-md border border-gray-200 dark:border-gray-700"
-      >
-        <div className="flex items-center space-x-2 sm:space-x-3">
-          <div className="p-2 bg-gradient-to-r from-pink-500 to-rose-600 rounded-lg">
-            <CheckBadgeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-          </div>
-          <div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t('tungsten.avg_alex_stewart', 'Avg A.S. WO3 %')}</p>
-            <p className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              {formatNumber(stats.avgAlexStewartWO3)}%
-            </p>
-            {hasSelected && (
-              <p className="text-xs text-emerald-600 dark:text-emerald-400">
-                Sel: {formatNumber(stats.selectedAvgASWO3Percentage)}%
               </p>
             )}
           </div>

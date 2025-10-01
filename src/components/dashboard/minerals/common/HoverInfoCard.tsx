@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 interface HoverInfoCardProps {
   title: string;
@@ -20,7 +19,6 @@ const HoverInfoCard: React.FC<HoverInfoCardProps> = ({
   outputLabel,
   outputValue,
 }) => {
-  const { t } = useTranslation();
 
   return (
     <div className="relative group">
@@ -29,7 +27,7 @@ const HoverInfoCard: React.FC<HoverInfoCardProps> = ({
         className={`bg-white dark:bg-gray-800/50 p-4 rounded-xl shadow-sm border-2 border-${color}-200 dark:border-${color}-700`}
       >
         <div className="text-xs text-gray-500 dark:text-gray-300 mb-1">
-          {t(title.toLowerCase().replace(" ", "_"), title)}
+          {title}
         </div>
         <div
           className={`text-lg font-bold text-${color}-600 dark:text-${color}-200`}

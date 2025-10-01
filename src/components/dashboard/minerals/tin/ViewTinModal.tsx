@@ -266,7 +266,7 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                 </motion.button>
                 
                 <RoleGuard
-                  allowedRoles={['Lab Technician', 'Boss']}
+                  allowedRoles={['Lab Technician', 'Manager']}
                 >
                   <motion.button
                     variants={tabVariants}
@@ -286,7 +286,7 @@ const ViewTinModal: React.FC<ViewTinModalProps> = ({ isOpen, onClose }) => {
                 </RoleGuard>
                 
                 <RoleGuard
-                  allowedRoles={['Boss', 'Finance Officer', 'Manager']}
+                  allowedRoles={['Finance Officer', 'Manager']}
                 >
                   <motion.button
                     variants={tabVariants}
