@@ -372,7 +372,7 @@ export default function FinancialTab({
                   value={financialForm.rma_usd_per_ton_fee}
                   onChange={(value) => setFinancialForm(prev => ({ ...prev, rma_usd_per_ton_fee: value }))}
                   type="number"
-                  suffix="$"
+                  suffix="RWF"
                   field="rma_usd_per_ton_fee"
                   errors={errors}
                 />

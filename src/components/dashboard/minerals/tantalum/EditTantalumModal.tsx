@@ -165,7 +165,7 @@ const EditTantalumModal: React.FC<EditTantalumModalProps> = ({ isOpen, onClose, 
       if (settings) {
         setTantalumSetting({
           rra_percentage: settings.rra_percentage,
-          rma_usd_per_ton: settings.rma_usd_per_ton / 1000,
+          rma_usd_per_ton: settings.rma_usd_per_ton,
           inkomane_fee_per_kg_rwf: settings.inkomane_fee_per_kg_rwf,
           rra_price_per_percentage: settings.rra_price_per_percentage
         });
