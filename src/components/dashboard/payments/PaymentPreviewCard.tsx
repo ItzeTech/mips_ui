@@ -73,7 +73,7 @@ const PaymentPreviewCard: React.FC<PaymentPreviewCardProps> = ({ payment }) => {
             <div className="border-t border-gray-200 dark:border-gray-600 pt-3">
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-gray-900 dark:text-white">{t('payments.net_payment', 'Net Payment')}:</span>
-                <span className="font-bold text-lg text-green-600 dark:text-green-400">{formatAmount(payment.paid_amount)}</span>
+                <span className="font-bold text-lg text-green-600 dark:text-green-400">{formatAmount(payment.payable_amount)}</span>
               </div>
             </div>
           </div>

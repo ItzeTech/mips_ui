@@ -151,7 +151,7 @@ const PaymentsTable: React.FC<PaymentsTableProps> = ({ payments, onView }) => {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
                   >
-                    {t('payments.paid_amount', 'Paid Amount')}
+                    {t('payments.payable_amount', 'Payable Amount')}
                   </th>
                   <th
                     scope="col"
@@ -206,7 +206,7 @@ const PaymentsTable: React.FC<PaymentsTableProps> = ({ payments, onView }) => {
                       {formatAmount(payment.total_amount)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600 dark:text-green-400">
-                      {formatAmount(payment.paid_amount)}
+                      {formatAmount(payment.payable_amount)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {formatDate(payment.created_at)}

@@ -184,7 +184,11 @@ export interface Payment {
   total_weight: number;
   advance_amount: number;
   total_amount: number;
+  payable_amount: number;
   paid_amount: number;
+  is_fully_paid: boolean;
+  payment_status: 'UNPAID' | 'PARTIALLY_PAID' | 'FULLY_PAID';
+  last_payment_date: string | null;
   avg_ta2o5_percentage: number | null;
   avg_sn_percentage: number | null;
   avg_wo3_percentage: number | null;
@@ -226,6 +230,10 @@ export interface PaymentsResponse {
   limit: number;
 }
 
+export interface UpdatePaymentsData {
+  paid_amount?: number;
+}
+
 interface PaymentsState {
   payments: Payment[];
   selectedPayment: Payment | null;
@@ -239,6 +247,7 @@ interface PaymentsState {
   error: string | null;
   createStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   previewStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  updateStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   isFetched: boolean;
 }
 
@@ -255,6 +264,7 @@ const initialState: PaymentsState = {
   error: null,
   createStatus: 'idle',
   previewStatus: 'idle',
+  updateStatus: 'idle',
   isFetched: false
 };
 
@@ -325,6 +335,18 @@ export const previewPaymentCalculation = createAsyncThunk(
   }
 );
 
+export const updatePayment = createAsyncThunk(
+  'payments/updatePayment',
+  async ({ id, updateData }: { id: string; updateData: UpdatePaymentsData }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch(`/payments/${id}`, updateData);
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.detail || 'Failed to update payment');
+    }
+  }
+);
+
 const paymentSlice = createSlice({
   name: 'payments',
   initialState,
@@ -344,6 +366,9 @@ const paymentSlice = createSlice({
     },
     resetPreviewStatus: (state) => {
       state.previewStatus = 'idle';
+    },
+    resetUpdateStatus: (state) => {
+      state.updateStatus = 'idle';
     },
     setPagination: (state, action: PayloadAction<Partial<PaginationParams>>) => {
       state.pagination = { ...state.pagination, ...action.payload };
@@ -428,6 +453,26 @@ const paymentSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload as string;
       })
+
+      // Update payment
+      .addCase(updatePayment.pending, (state) => {
+        state.updateStatus = 'loading';
+        state.error = null;
+      })
+      .addCase(updatePayment.fulfilled, (state, action) => {
+        state.updateStatus = 'succeeded';
+        const index = state.payments.findIndex(payment => payment.id === action.payload.id);
+        if (index !== -1) {
+          state.payments[index] = action.payload;
+        }
+        if (state.selectedPayment?.id === action.payload.id) {
+          state.selectedPayment = action.payload;
+        }
+      })
+      .addCase(updatePayment.rejected, (state, action) => {
+        state.updateStatus = 'failed';
+        state.error = action.payload as string;
+      })
       
       // Preview payment
       .addCase(previewPaymentCalculation.pending, (state) => {
@@ -451,6 +496,7 @@ export const {
   clearError,
   resetCreateStatus,
   resetPreviewStatus,
+  resetUpdateStatus,
   setPagination
 } = paymentSlice.actions;
 

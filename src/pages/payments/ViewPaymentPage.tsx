@@ -10,13 +10,14 @@ import PaymentHeader from '../../components/dashboard/payments/PaymentHeader';
 import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
 import Badge from '../../components/common/Badge';
+import EditPaymentModal from '../../components/dashboard/payments/EditPaymentModal';
 
 const ViewPaymentPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { paymentId } = useParams<{ paymentId: string }>();
 
-  const { loadPaymentById, selectedPayment, status } = usePayments();
+  const { loadPaymentById, selectedPayment, status, updateStatus } = usePayments();
   const { error: err } = useSelector((state: RootState) => state.payments);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   
@@ -27,6 +28,9 @@ const ViewPaymentPage: React.FC = () => {
     tungsten: false,
     advancePayments: false
   });
+
+  const [showEditPaymentModal, setShowEditPaymentModal] = useState(false);
+    const [showUpdateSuccessMessage, setShowUpdateSuccessMessage] = useState(false);
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({
@@ -42,6 +46,20 @@ const ViewPaymentPage: React.FC = () => {
     }
   }, [paymentId, isInitialLoad, selectedPayment, loadPaymentById]);
 
+    useEffect(() => {
+      if (updateStatus === 'succeeded') {
+        setShowUpdateSuccessMessage(true);
+        setShowEditPaymentModal(false); // Close the edit modal on success
+        
+        // Hide success message after 5 seconds
+        const timer = setTimeout(() => {
+          setShowUpdateSuccessMessage(false);
+        }, 5000);
+        
+        return () => clearTimeout(timer);
+      }
+    }, [updateStatus]);
+
   const handleGoBack = useCallback(() => {
     navigate('/payments');
   }, [navigate]);
@@ -49,6 +67,10 @@ const ViewPaymentPage: React.FC = () => {
   const handlePrint = useCallback(() => {
     // This function is no longer needed as the actual printing is handled in the PaymentHeader component
     // We keep it as a placeholder for compatibility with the PaymentHeader props
+  }, []);
+
+  const handleEdit = useCallback(() => {
+    setShowEditPaymentModal(true);
   }, []);
 
   const formatAmount = useCallback((amount: number) => {
@@ -59,6 +81,18 @@ const ViewPaymentPage: React.FC = () => {
       maximumFractionDigits: 2
     }).format(amount);
   }, []);
+
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case 'FULLY_PAID':
+        return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
+      case 'PARTIALLY_PAID':
+        return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300';
+      case 'UNPAID':
+      default:
+        return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+    }
+  };
 
   const formatWeight = useCallback((weight: number | null) => {
     if (weight === null || weight === undefined) return '—';
@@ -139,10 +173,23 @@ const ViewPaymentPage: React.FC = () => {
               </div>
             </motion.div>
           )}
+
+          {showUpdateSuccessMessage && (
+            <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-700 dark:text-green-300">
+              <div className="flex items-center">
+                <CheckCircleIcon className="w-5 h-5 mr-2 flex-shrink-0" />
+                <div>
+                  <p className="font-medium">{t('payments.success', 'Success')}</p>
+                  <p className="text-sm">{t('payments.payment_updated', 'Payment details have been successfully updated.')}</p>
+                </div>
+              </div>
+            </div>
+          )}
           
           <PaymentHeader 
             payment={selectedPayment}
             onPrint={handlePrint}
+            onEdit={handleEdit}
           />
         </div>
         
@@ -185,13 +232,52 @@ const ViewPaymentPage: React.FC = () => {
                 
                 <div>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                    {t('payments.paid_amount', 'Net Paid Amount')}
+                    {t('payments.payable_amount', 'Payable Amount')}
+                  </p>
+                  <p className="text-lg font-semibold text-green-600 dark:text-green-400">
+                    {formatAmount(selectedPayment.payable_amount)}
+                  </p>
+                </div>
+                
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                    {t('payments.paid_amount', 'Paid Amount')}
                   </p>
                   <p className="text-lg font-semibold text-green-600 dark:text-green-400">
                     {formatAmount(selectedPayment.paid_amount)}
                   </p>
                 </div>
+
+                {selectedPayment.payable_amount !== null && (
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                      {t('payments.remaining', 'Remaining')}
+                    </p>
+                    <p className="text-lg font-semibold text-green-600 dark:text-green-400">
+                      ${Math.max(0, (selectedPayment.total_amount - (selectedPayment.paid_amount || 0))).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </p>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{t('sales.status', 'Status')}:</span>
+                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPaymentStatusColor(selectedPayment.payment_status)}`}>
+                    {selectedPayment.payment_status === 'FULLY_PAID' ? t('payments.fully_paid', 'Fully Paid') :
+                    selectedPayment.payment_status === 'PARTIALLY_PAID' ? t('payments.partially_paid', 'Partially Paid') :
+                    t('payments.unpaid', 'Unpaid')}
+                  </span>
+                </div>
                 
+                {selectedPayment.last_payment_date && (
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                      {t('payments.last_payment_date', 'Last Payment Date')}
+                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {formatDate(selectedPayment.last_payment_date)}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
                     {t('payments.total_weight', 'Total Weight')}
@@ -713,6 +799,13 @@ const ViewPaymentPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <EditPaymentModal
+        isOpen={showEditPaymentModal}
+        onClose={() => setShowEditPaymentModal(false)}
+        payment={selectedPayment}
+      />
+
     </div>
   );
 };

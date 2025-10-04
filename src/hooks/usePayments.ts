@@ -15,7 +15,9 @@ import {
   setPagination,
   Payment,
   CreatePaymentData,
-  PaginationParams
+  PaginationParams,
+  updatePayment,
+  UpdatePaymentsData
 } from '../features/finance/paymentSlice';
 
 export const usePayments = () => {
@@ -30,6 +32,7 @@ export const usePayments = () => {
     error,
     createStatus,
     previewStatus,
+    updateStatus,
     isFetched
   } = useSelector((state: RootState) => state.payments);
   
@@ -111,6 +114,18 @@ export const usePayments = () => {
     return previewStatus === 'succeeded';
   }, [previewStatus]);
   
+  const isUpdateSuccessful = useCallback(() => {
+    return updateStatus === 'succeeded';
+  }, [updateStatus]);
+
+  const handleUpdatePayment = useCallback(async (id: string, updateData: UpdatePaymentsData) => {
+    const result = await dispatch(updatePayment({ id, updateData }));
+    if (updatePayment.fulfilled.match(result)) {
+      return result.payload;
+    }
+    return null;
+  }, [dispatch]);
+
   return {
     // State
     payments,
@@ -121,6 +136,7 @@ export const usePayments = () => {
     error,
     createStatus,
     previewStatus,
+    updateStatus,
     isFetched,
     
     // Actions
@@ -134,12 +150,14 @@ export const usePayments = () => {
     handleClearError,
     handleResetCreateStatus,
     handleResetPreviewStatus,
+    handleUpdatePayment,
     handleSetPagination,
     
     // Helper functions
     isPaymentLoading,
     hasError,
     isCreateSuccessful,
-    isPreviewSuccessful
+    isPreviewSuccessful,
+    isUpdateSuccessful
   };
 };

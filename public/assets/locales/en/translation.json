@@ -964,7 +964,12 @@
         "status": "Status",
         "remaining": "Remaining",
         "paid_amount_placeholder": "Enter paid amount",
-        "payment_status": "Payment Status"
+        "payment_status": "Payment Status",
+        "edit_payment": "Edit payment",
+        "partially_paid": "Partially Paid",
+        "success": "Success",
+        "payment_updated": "Payment details have been successfully updated.",
+        "last_payment_date": "Last Payment Date"
       },
       "payments": {
         "filter": "Filter",
@@ -985,6 +990,7 @@
         "total_weight": "Total Weight",
         "total_amount": "Total Amount",
         "paid_amount": "Paid Amount",
+        "payable_amount": "Payable Amount",
         "date": "Date",
         "actions_title": "Actions",
         "view": "View",
@@ -1041,6 +1047,16 @@
         "payment_status": "Payment Status",
         "unpaid": "Unpaid",
         "remaining": "Remaining",
+        "save_changes": "Save Changes",
+        "edit_payment": "Edit payment",
+        "partially_paid": "Partially Paid",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "updating": "Updating...",
+        "fully_paid": "Fully Paid",
+        "success": "Success",
+        "payment_updated": "Payment details have been successfully updated.",
+        "last_payment_date": "Last Payment Date",
         "pagination": {
           "showing": "Showing",
           "to": "to",

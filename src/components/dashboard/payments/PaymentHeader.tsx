@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import { 
   PrinterIcon,
   CurrencyDollarIcon,
-  EyeIcon
+  EyeIcon,
+  PencilIcon
 } from '@heroicons/react/24/outline';
 import { Payment } from '../../../features/finance/paymentSlice';
 import axiosInstance from '../../../config/axiosInstance';
@@ -12,9 +13,10 @@ import axiosInstance from '../../../config/axiosInstance';
 interface PaymentHeaderProps {
   payment: Payment;
   onPrint: () => void;
+  onEdit: () => void;
 }
 
-const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint }) => {
+const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint, onEdit }) => {
   const { t } = useTranslation();
   const [printModalOpen, setPrintModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -119,6 +121,16 @@ const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint }) => {
             </div>
             
             <div className="flex flex-wrap gap-2 sm:gap-3">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onEdit}
+                className="inline-flex items-center px-3 sm:px-4 py-2 text-xs sm:text-sm bg-green-100 hover:bg-green-200 dark:bg-green-900/30 dark:hover:bg-green-900/50 text-green-700 dark:text-green-300 rounded-lg transition-colors"
+              >
+                <PencilIcon className="w-4 h-4 mr-1 sm:mr-2" />
+                <span>{t('payments.edit', 'Edit')}</span>
+              </motion.button>
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
