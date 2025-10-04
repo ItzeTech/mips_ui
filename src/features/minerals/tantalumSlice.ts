@@ -411,7 +411,7 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
 
 
   const rraPercentage = useCustomFees ? (data.rra_percentage_fee) : rra_percentage;
-  const rmaUsdPerKg = useCustomFees ? (data.rma_usd_per_ton_fee ?? 0) / 1000 : rma_usd_per_ton;
+  const rmaUsdPerKg = useCustomFees ? (data.rma_usd_per_ton_fee ?? 0) : rma_usd_per_ton;
   const inkomaneFeePerKg = useCustomFees ? data.inkomane_fee_per_kg_rwf_fee : inkomane_fee_per_kg_rwf;
   const rraPricePerPercentage = useCustomFees ? data.rra_price_per_percentage_fee : rra_price_per_percentage;
 
@@ -429,7 +429,7 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
   }
 
   if (net_weight) {
-    calculatedData.rma = (rmaUsdPerKg ?? rma_usd_per_ton) * net_weight;
+    calculatedData.rma = ((rmaUsdPerKg ?? rma_usd_per_ton) / (exchange_rate ?? 1)) * net_weight;
   }
 
   if (net_weight) {
@@ -442,7 +442,7 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
   }
 
   if (calculatedData.rra && calculatedData.rma && calculatedData.inkomane_fee && exchange_rate) {
-    calculatedData.total_charge = calculatedData.rra + ((calculatedData.rma ?? 0) / exchange_rate) + 
+    calculatedData.total_charge = calculatedData.rra + ((calculatedData.rma ?? 0)) + 
       (calculatedData.inkomane_fee / exchange_rate) + ((calculatedData.advance ?? 0) / exchange_rate) + ((data.transport_charge ?? 0)) + ((data.alex_stewart_charge ?? 0));
   }
 
