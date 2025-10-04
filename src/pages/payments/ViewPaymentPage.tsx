@@ -254,7 +254,7 @@ const ViewPaymentPage: React.FC = () => {
                       {t('payments.remaining', 'Remaining')}
                     </p>
                     <p className="text-lg font-semibold text-green-600 dark:text-green-400">
-                      ${Math.max(0, (selectedPayment.total_amount - (selectedPayment.paid_amount || 0))).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      ${Math.max(0, (selectedPayment.payable_amount - (selectedPayment.paid_amount || 0))).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </p>
                   </div>
                 )}
