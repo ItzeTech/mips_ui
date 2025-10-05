@@ -37,6 +37,19 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
     }
   };
 
+   const translateMineral = (type: string) => {
+    switch (type) {
+      case 'TANTALUM':
+        return t('sidebar.menu.tantalum');
+      case 'TIN':
+        return t('sidebar.menu.tin');
+      case 'TUNGSTEN':
+        return t('sidebar.menu.tungsten');
+      default:
+        return type;
+    }
+  };
+
   return (
     <div className="space-y-5">
       {/* Buyer */}
@@ -160,7 +173,7 @@ const SaleDetails: React.FC<SaleDetailsProps> = ({ sale }) => {
                 {t('sales.mineral_type', 'Mineral Type')}
               </p>
               <p className="text-sm font-medium text-gray-900 dark:text-white">
-                {sale.mineral_type}
+                {translateMineral(sale.mineral_type).toUpperCase()}
               </p>
             </div>
             <div>

@@ -32,6 +32,14 @@ const TungstenTable: React.FC<TungstenTableProps> = ({ tungstens, onView, onEdit
     });
   };
 
+  const formatNumber = (num: number | null, decimals = 2) => {
+    if (num === null) return '—';
+    return num.toLocaleString('en-US', { 
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+  };
+
   const getStockStatusColor = (status: StockStatus) => {
     switch (status) {
       case 'in-stock':
@@ -154,7 +162,7 @@ const TungstenTable: React.FC<TungstenTableProps> = ({ tungstens, onView, onEdit
                           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center flex-wrap gap-1 mt-0.5">
                             <div className="flex items-center">
                               <ScaleIcon className="w-3 h-3 mr-0.5" />
-                              {tungsten.net_weight} kg
+                              {formatNumber(tungsten.net_weight)} kg
                             </div>
                             {tungsten.wo3_percentage !== null && (
                               <span className="px-1.5 py-0.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-md text-xs">
@@ -192,11 +200,6 @@ const TungstenTable: React.FC<TungstenTableProps> = ({ tungstens, onView, onEdit
                             <UserIcon className="w-3 h-3 mr-1 text-emerald-500" />
                             {tungsten.supplier_name}
                           </div>
-                          {tungsten.supplier_id && (
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              ID: {tungsten.supplier_id.substring(0, 6)}...
-                            </div>
-                          )}
                         </div>
                       ) : (
                         <span className="text-xs text-gray-400 dark:text-gray-500 italic">

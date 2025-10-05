@@ -188,15 +188,27 @@ const PaymentsTable: React.FC<PaymentsTableProps> = ({ payments, onView }) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex flex-wrap gap-1">
-                        {payment.mineral_types.map((type) => (
-                          <Badge
-                            key={type}
-                            color={getMineralTypeColor(type)}
-                            size="sm"
-                          >
-                            {type}
-                          </Badge>
-                        ))}
+                        {payment.mineral_types.map((type) => {
+                          // Translate the mineral type
+                          const translatedType = (() => {
+                            switch (type) {
+                              case 'TANTALUM':
+                                return t('sidebar.menu.tantalum');
+                              case 'TIN':
+                                return t('sidebar.menu.tin');
+                              case 'TUNGSTEN':
+                                return t('sidebar.menu.tungsten');
+                              default:
+                                return type; // fallback if unknown
+                            }
+                          })();
+
+                          return (
+                            <Badge key={type} color={getMineralTypeColor(type)} size="sm">
+                              {translatedType.toUpperCase()}
+                            </Badge>
+                          );
+                        })}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">

@@ -114,6 +114,20 @@ const SalesTable: React.FC<SalesTableProps> = ({ sales, onView }) => {
     }
   };
 
+  const translateMineral = (type: string) => {
+    switch (type) {
+      case 'TANTALUM':
+        return t('sidebar.menu.tantalum');
+      case 'TIN':
+        return t('sidebar.menu.tin');
+      case 'TUNGSTEN':
+        return t('sidebar.menu.tungsten');
+      default:
+        return type;
+    }
+  };
+
+
   return (
     <>
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-4 md:mb-5">
@@ -189,7 +203,7 @@ const SalesTable: React.FC<SalesTableProps> = ({ sales, onView }) => {
                         <div className="ml-3">
                           <div className="text-sm font-medium text-gray-900 dark:text-white flex items-center">
                             <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md mr-2 ${getMineralTypeColor(sale.mineral_type)}`}>
-                              {sale.mineral_type}
+                               {translateMineral(sale.mineral_type).toUpperCase()}
                             </span>
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center flex-wrap gap-1 mt-0.5">
@@ -251,7 +265,7 @@ const SalesTable: React.FC<SalesTableProps> = ({ sales, onView }) => {
                         
                         {sale.net_sales_amount !== null && (
                           <div className="text-xs text-gray-500 dark:text-gray-400">
-                            Net: ${formatNumber(sale.net_sales_amount)}
+                            {t('common.net', 'NET')}: ${formatNumber(sale.net_sales_amount)}
                           </div>
                         )}
                         
@@ -277,7 +291,7 @@ const SalesTable: React.FC<SalesTableProps> = ({ sales, onView }) => {
                       </div>
                       {sale.updated_at && sale.updated_at !== sale.created_at && (
                         <div className="text-xs text-gray-500 dark:text-gray-400">
-                          Updated: {formatDate(sale.updated_at)}
+                          {t('common.updated', 'Updated')}: {formatDate(sale.updated_at)}
                         </div>
                       )}
                     </td>

@@ -98,7 +98,7 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
             </p>
             {hasSelected && (
               <p className="text-xs text-emerald-600 dark:text-emerald-400">
-                Sel: {formatNumber(stats.selectedTotalNetWeight)} kg
+                {t('common.selected', 'Selected')} {formatNumber(stats.selectedTotalNetWeight)} kg
               </p>
             )}
           </div>
@@ -121,7 +121,7 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
             </p>
             {hasSelected && (
               <p className="text-xs text-emerald-600 dark:text-emerald-400">
-                Selected: {stats.selectedCount}
+                {t('common.selected', 'Selected')} {stats.selectedCount}
               </p>
             )}
           </div>
@@ -144,7 +144,7 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
             </p>
             {hasSelected && (
               <p className="text-xs text-emerald-600 dark:text-emerald-400">
-                Sel: {formatNumber(stats.selectedAvgWO3Percentage)}%
+                {t('common.selected', 'Selected')} {formatNumber(stats.selectedAvgWO3Percentage)}%
               </p>
             )}
           </div>
@@ -167,7 +167,7 @@ const TungstenStats: React.FC<TungstenStatsProps> = ({ tungstens, selectedTungst
             </p>
             {hasSelected && (
               <p className="text-xs text-emerald-600 dark:text-emerald-400">
-                Sel: ${formatNumber(stats.selectedTotalNetAmount)}
+                {t('common.selected', 'Selected')} ${formatNumber(stats.selectedTotalNetAmount)}
               </p>
             )}
           </div>

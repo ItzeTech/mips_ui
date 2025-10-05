@@ -19,6 +19,7 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
   const [payableAmount, SetPayableAmount] = useState<number | null>(null);
   const [paidAmount, setPaidAmount] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showGreaterMessage, setShowGreaterMessage] = useState(false);
   
   useEffect(() => {
     if (isOpen && payment) {
@@ -129,13 +130,30 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                         type="number"
                         id="paidAmount"
                         value={paidAmount === null ? '' : paidAmount}
-                        onChange={(e) => setPaidAmount(e.target.value === '' ? null : Number(e.target.value))}
+                        onChange={(e) => {
+                          const value = e.target.value === '' ? null : Number(e.target.value);
+                          if (value === null || value <= ( payableAmount ?? 0)) {
+                            setPaidAmount(value);
+                            setShowGreaterMessage(false);
+                          }else if((payableAmount ?? 0) < value){
+                            setPaidAmount(payableAmount);
+                            setShowGreaterMessage(true);
+                          }
+                        }}
                         step="0.01"
                         min="0"
+                        max={( payableAmount !== null) ? payableAmount : undefined}
+                      
                         className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500"
                         placeholder={t('payments.paid_amount_placeholder', 'Enter paid amount')}
                       />
                     </div>
+                    {
+                      (showGreaterMessage) && 
+                      <span className="mt-1 text-xs text-red-600 dark:text-red-400">
+                        {t('payments.paid_amount_exceeds', 'Paid amount cannot exceed the total payable amount. If you wish to pay more, please record it as an advance payment.')}
+                      </span>
+                    }
                     <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                       {t('payments.payment_status', 'Payment Status')}: 
                       <span className={`ml-1 font-medium ${

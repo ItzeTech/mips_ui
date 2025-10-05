@@ -376,7 +376,7 @@ const ViewPaymentPage: React.FC = () => {
               <div className="p-3">
                 {/* Weight Distribution Chart */}
                 <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Weight Distribution</p>
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('payments.weight_distribution', 'Weight Distribution')}</p>
                   <div className="flex items-center h-5 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
                     {selectedPayment.tantalum_total_weight && (
                       <div 
@@ -410,19 +410,19 @@ const ViewPaymentPage: React.FC = () => {
                     {selectedPayment.tantalum_total_weight && (
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-purple-500 dark:bg-purple-600 rounded-sm mr-1"></div>
-                        <span>Tantalum: {Math.round((selectedPayment.tantalum_total_weight / selectedPayment.total_weight) * 100)}%</span>
+                        <span>{t('sidebar.menu.tantalum', 'Tantalum')}: {Math.round((selectedPayment.tantalum_total_weight / selectedPayment.total_weight) * 100)}%</span>
                       </div>
                     )}
                     {selectedPayment.tin_total_weight && (
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-gray-500 dark:bg-gray-600 rounded-sm mr-1"></div>
-                        <span>Tin: {Math.round((selectedPayment.tin_total_weight / selectedPayment.total_weight) * 100)}%</span>
+                        <span>{t('sidebar.menu.tin', 'Tin')}: {Math.round((selectedPayment.tin_total_weight / selectedPayment.total_weight) * 100)}%</span>
                       </div>
                     )}
                     {selectedPayment.tungsten_total_weight && (
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-yellow-500 dark:bg-yellow-600 rounded-sm mr-1"></div>
-                        <span>Tungsten: {Math.round((selectedPayment.tungsten_total_weight / selectedPayment.total_weight) * 100)}%</span>
+                        <span>{t('sidebar.menu.tungsten', 'Tungsten')}: {Math.round((selectedPayment.tungsten_total_weight / selectedPayment.total_weight) * 100)}%</span>
                       </div>
                     )}
                   </div>
@@ -437,28 +437,28 @@ const ViewPaymentPage: React.FC = () => {
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="font-semibold text-purple-800 dark:text-purple-300 flex items-center">
                             <BeakerIcon className="w-4 h-4 mr-1.5" />
-                            Tantalum
+                            {t('sidebar.menu.tantalum', 'Tantalum')}
                           </h3>
                           <Badge color="purple" size="sm">
-                            {selectedPayment.tantalum_minerals.length} minerals
+                            {selectedPayment.tantalum_minerals.length} {t('common.minerals', 'minerals')}
                           </Badge>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.weight', 'Weight')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">
                               {formatWeight(selectedPayment.tantalum_total_weight)}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Avg. Ta₂O₅</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.avg_ta2o5', 'Avg. Ta₂O₅')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">
                               {formatPercentage(selectedPayment.avg_ta2o5_percentage)}
                             </p>
                           </div>
                           <div className="col-span-2">
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.amount', 'Amount')}</p>
                             <p className="font-medium text-green-600 dark:text-green-400">
                               {formatAmount(selectedPayment.tantalum_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
                             </p>
@@ -476,28 +476,28 @@ const ViewPaymentPage: React.FC = () => {
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="font-semibold text-gray-800 dark:text-gray-300 flex items-center">
                             <BeakerIcon className="w-4 h-4 mr-1.5" />
-                            Tin
+                            {t('sidebar.menu.tin', 'Tin')}
                           </h3>
                           <Badge color="gray" size="sm">
-                            {selectedPayment.tin_minerals.length} minerals
+                            {selectedPayment.tin_minerals.length} {t('common.minerals', 'minerals')}
                           </Badge>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.weight', 'Weight')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">
                               {formatWeight(selectedPayment.tin_total_weight)}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Avg. Sn</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.avg_sn', 'Avg. Sn')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">
                               {formatPercentage(selectedPayment.avg_sn_percentage)}
                             </p>
                           </div>
                           <div className="col-span-2">
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.amount', 'Amount')}</p>
                             <p className="font-medium text-green-600 dark:text-green-400">
                               {formatAmount(selectedPayment.tin_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
                             </p>
@@ -515,28 +515,28 @@ const ViewPaymentPage: React.FC = () => {
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="font-semibold text-yellow-800 dark:text-yellow-300 flex items-center">
                             <BeakerIcon className="w-4 h-4 mr-1.5" />
-                            Tungsten
+                            {t('sidebar.menu.tungsten', 'Tungsten')}
                           </h3>
                           <Badge color="yellow" size="sm">
-                            {selectedPayment.tungsten_minerals.length} minerals
+                            {selectedPayment.tungsten_minerals.length} {t('common.minerals', 'minerals')}
                           </Badge>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.weight', 'Weight')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">
                               {formatWeight(selectedPayment.tungsten_total_weight)}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Avg. WO₃</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.avg_wo3', 'Avg. WO₃')}</p>
                             <p className="font-medium text-gray-900 dark:text-white">
                               {formatPercentage(selectedPayment.avg_wo3_percentage)}
                             </p>
                           </div>
                           <div className="col-span-2">
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('common.amount', 'Amount')}</p>
                             <p className="font-medium text-green-600 dark:text-green-400">
                               {formatAmount(selectedPayment.tungsten_minerals.reduce((sum, m) => sum + (m.net_amount || 0), 0))}
                             </p>
@@ -573,7 +573,7 @@ const ViewPaymentPage: React.FC = () => {
                     >
                       <span className="font-medium text-purple-800 dark:text-purple-300 flex items-center">
                         <BeakerIcon className="w-4 h-4 mr-2" />
-                        Tantalum ({selectedPayment.tantalum_minerals.length})
+                        {t('sidebar.menu.tantalum', 'Tantalum')} ({selectedPayment.tantalum_minerals.length})
                       </span>
                       {expandedSections.tantalum ? (
                         <ChevronUpIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -588,11 +588,11 @@ const ViewPaymentPage: React.FC = () => {
                           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-800/50">
                               <tr>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Lot Number</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Weight</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Ta₂O₅</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Amount</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.lot_number', 'Lot Number')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.weight', 'Weight')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.ta2o5', 'Ta₂O₅')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.amount', 'Amount')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.status', 'Status')}</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -608,8 +608,8 @@ const ViewPaymentPage: React.FC = () => {
                                     {mineral.net_amount ? formatAmount(mineral.net_amount) : '—'}
                                   </td>
                                   <td className="px-3 py-2 whitespace-nowrap">
-                                    <Badge color={mineral.finance_status === 'PAID' ? 'green' : 'yellow'} size="sm">
-                                      {mineral.finance_status || 'UNKNOWN'}
+                                    <Badge color={mineral.finance_status === 'paid' ? 'green' : 'yellow'} size="sm">
+                                      {mineral.finance_status === 'paid' ? t('common.paid', 'paid') : t('common.unpaid', 'Unpaid')}
                                     </Badge>
                                   </td>
                                 </tr>
@@ -631,7 +631,7 @@ const ViewPaymentPage: React.FC = () => {
                     >
                       <span className="font-medium text-gray-800 dark:text-gray-300 flex items-center">
                         <BeakerIcon className="w-4 h-4 mr-2" />
-                        Tin ({selectedPayment.tin_minerals.length})
+                        {t('sidebar.menu.tin', 'Tin')} ({selectedPayment.tin_minerals.length})
                       </span>
                       {expandedSections.tin ? (
                         <ChevronUpIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -646,11 +646,11 @@ const ViewPaymentPage: React.FC = () => {
                           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-800/50">
                               <tr>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Lot Number</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Weight</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Sn</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Amount</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.lot_number', 'Lot Number')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.weight', 'Weight')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.sn', 'Sn')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.amount', 'Amount')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.status', 'Status')}</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -666,8 +666,8 @@ const ViewPaymentPage: React.FC = () => {
                                     {mineral.net_amount ? formatAmount(mineral.net_amount) : '—'}
                                   </td>
                                   <td className="px-3 py-2 whitespace-nowrap">
-                                    <Badge color={mineral.finance_status === 'PAID' ? 'green' : 'yellow'} size="sm">
-                                      {mineral.finance_status || 'UNKNOWN'}
+                                    <Badge color={mineral.finance_status === 'paid' ? 'green' : 'yellow'} size="sm">
+                                      {mineral.finance_status === 'paid' ? t('common.paid', 'paid') : t('common.unpaid', 'Unpaid')}
                                     </Badge>
                                   </td>
                                 </tr>
@@ -689,7 +689,7 @@ const ViewPaymentPage: React.FC = () => {
                     >
                       <span className="font-medium text-yellow-800 dark:text-yellow-300 flex items-center">
                         <BeakerIcon className="w-4 h-4 mr-2" />
-                        Tungsten ({selectedPayment.tungsten_minerals.length})
+                        {t('sidebar.menu.tungsten', 'Tungsten')} ({selectedPayment.tungsten_minerals.length})
                       </span>
                       {expandedSections.tungsten ? (
                         <ChevronUpIcon className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
@@ -704,11 +704,11 @@ const ViewPaymentPage: React.FC = () => {
                           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-800/50">
                               <tr>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Lot Number</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Weight</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">WO₃</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Amount</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.lot_number', 'Lot Number')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.weight', 'Weight')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.wo3', 'WO₃')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.amount', 'Amount')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.status', 'Status')}</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -724,8 +724,8 @@ const ViewPaymentPage: React.FC = () => {
                                     {mineral.net_amount ? formatAmount(mineral.net_amount) : '—'}
                                   </td>
                                   <td className="px-3 py-2 whitespace-nowrap">
-                                    <Badge color={mineral.finance_status === 'PAID' ? 'green' : 'yellow'} size="sm">
-                                      {mineral.finance_status || 'UNKNOWN'}
+                                    <Badge color={mineral.finance_status === 'paid' ? 'green' : 'yellow'} size="sm">
+                                      {mineral.finance_status === 'paid' ? t('common.paid', 'paid') : t('common.unpaid', 'Unpaid')}
                                     </Badge>
                                   </td>
                                 </tr>
@@ -747,7 +747,7 @@ const ViewPaymentPage: React.FC = () => {
                     >
                       <span className="font-medium text-green-800 dark:text-green-300 flex items-center">
                         <BanknotesIcon className="w-4 h-4 mr-2" />
-                        Advance Payments ({selectedPayment.advance_payments.length})
+                        {t('sidebar.menu.advance_payments', 'Advance Payments')} ({selectedPayment.advance_payments.length})
                       </span>
                       {expandedSections.advancePayments ? (
                         <ChevronUpIcon className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -762,10 +762,10 @@ const ViewPaymentPage: React.FC = () => {
                           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-800/50">
                               <tr>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Amount</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Method</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Date</th>
-                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.amount', 'Amount')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.method', 'Method')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.date', 'Date')}</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{t('common.status', 'Status')}</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -782,7 +782,7 @@ const ViewPaymentPage: React.FC = () => {
                                   <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">{formatDate(advance.date)}</td>
                                   <td className="px-3 py-2 whitespace-nowrap">
                                     <Badge color={advance.status === 'Paid' ? 'green' : 'yellow'} size="sm">
-                                      {advance.status}
+                                      {advance.status === 'Paid' ? t('common.paid', 'Paid') : t('common.unpaid', 'Unpaid')}
                                     </Badge>
                                   </td>
                                 </tr>

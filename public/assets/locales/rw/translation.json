@@ -26,10 +26,34 @@
       "update_financial_error": "Kuvugurura amakuru y'imari byanze. Ongera ugerageze.",
       "no": "Oya",
       "save_changes": "Kubika Impinduka",
-      "continue": "Komeza"
+      "continue": "Komeza",
+      "amount": "Amafaranga",
+      "method": "Uburyo",
+      "date": "Itariki",
+      "status": "Imiterere",
+      "paid": "Yishyuwe",
+      "unpaid": "Ntarishyurwa",
+      "lot_number": "Nomero y'Igice",
+      "weight": "Uburemere",
+      "ta2o5": "Ta₂O₅",
+      "sn": "Sn",
+      "wo3": "WO₃",
+      "minerals": "Ibirahuri",
+      "avg_wo3": "WO₃ Impuzandengo",
+      "avg_sn": "Sn Impuzandengo",
+      "avg_ta2o5": "Ta₂O₅ Impuzandengo",
+      "net": "NET",
+      "updated": "Ivuguruye",
+      "in_stock": "Iri mu bubiko",
+      "withdrawn": "Ryakuweho",
+      "resampled": "Ryongeye gufatwa",
+      "invoiced": "Rifite fagitire",
+      "advance_given": "Amafaranga yahawe mbere",
+      "exported": "Ryoherejwe",
+      "selected": "Byatoranyijwe"
     },
     "sidebar": {
-      "app_name": "RwandaMining",
+      "app_name": "Rwanda Mining",
       "app_subtitle": "Sisitemu yo Gucunga",
       "minerals_category": "Amabuye y'Agaciro",
       "finance_category": "Imari",
@@ -566,7 +590,10 @@
       "fe_percentage": "Fe %",
       "w_percentage": "W %",
       "alex_stewart_ta2o5": "Alex Stewart Ta2O5",
-      "alex_stewart_nb2o5": "Alex Stewart Nb2O5"
+      "alex_stewart_nb2o5": "Alex Stewart Nb2O5",
+      "compute_selected": "Kubara",
+      "items_selected": "ibintu byahiswemo",
+      "clear_selection": "Gukuraho ihitamo"
     },
     "tin": {
       "title": "Gucunga Sitani",
@@ -968,7 +995,8 @@
       "partially_paid": "Byishyuwe Igice",
       "success": "Byagenze Neza",
       "payment_updated": "Amakuru y'kwishyura yavuguruwe neza.",
-      "last_payment_date": "Itariki ya Nyuma y'Kwishyura"
+      "last_payment_date": "Itariki ya Nyuma y'Kwishyura",
+      "paid_amount_exceeds": "Amafaranga yishyuwe ntashobora kurenza ayagombwa kwishyurwa."
     },
     "payments": {
       "filter": "Shungura",
@@ -1056,6 +1084,8 @@
       "success": "Byagenze Neza",
       "payment_updated": "Amakuru y'kwishyura yavuguruwe neza.",
       "last_payment_date": "Itariki ya Nyuma y'Kwishyura",
+      "paid_amount_exceeds": "Amafaranga yishyuwe ntashobora kurenza ayo ugomba kwishyura. Niba ushaka kwishyura arenga ayo, uyashyire muri advance.",
+      "weight_distribution": "Ikwirakwizwa ry'uburemere",
       "pagination": {
         "showing": "Kwerekana",
         "to": "kugeza",

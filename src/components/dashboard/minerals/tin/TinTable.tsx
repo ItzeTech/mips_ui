@@ -41,6 +41,14 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
     });
   };
 
+  const formatNumber = (num: number | null, decimals = 2) => {
+    if (num === null) return '—';
+    return num.toLocaleString('en-US', { 
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+  };
+
   const getStockStatusColor = (status: StockStatus) => {
     switch (status) {
       case 'in-stock':
@@ -177,7 +185,7 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                         <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center flex-wrap gap-1 mt-0.5">
                           <div className="flex items-center">
                             <ScaleIcon className="w-3 h-3 mr-0.5" />
-                            {tin.net_weight} kg
+                            {formatNumber(tin.net_weight)} kg
                           </div>
                           {tin.internal_sn_percentage !== null && (
                             <span className="px-1.5 py-0.5 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-md text-xs">
@@ -215,11 +223,6 @@ const TinTable: React.FC<TinTableProps> = ({ tins, onView, onEdit }) => {
                           <UserIcon className="w-3 h-3 mr-1 text-amber-500" />
                           {tin.supplier_name}
                         </div>
-                        {tin.supplier_id && (
-                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            ID: {tin.supplier_id.substring(0, 6)}...
-                          </div>
-                        )}
                       </div>
                     ) : (
                       <span className="text-xs text-gray-400 dark:text-gray-500 italic">
