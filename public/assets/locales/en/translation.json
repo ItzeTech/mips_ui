@@ -92,6 +92,7 @@
       "exported": "Exported",
       "in_stock": "in stock",
       "of_total": "of total",
+      "of_max": "of max",
       
       "minerals_inventory": "Minerals Inventory",
       "all_minerals": "All Minerals",

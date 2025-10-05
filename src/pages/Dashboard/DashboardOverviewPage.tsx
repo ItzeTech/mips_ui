@@ -229,6 +229,19 @@ const MineralsDashboardPage: React.FC = () => {
     }
   };
 
+  const translateMineral = (type: string) => {
+    switch (type) {
+      case 'TANTALUM':
+        return t('sidebar.menu.tantalum');
+      case 'TIN':
+        return t('sidebar.menu.tin');
+      case 'TUNGSTEN':
+        return t('sidebar.menu.tungsten');
+      default:
+        return type;
+    }
+  };
+
   // Card animations
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -424,7 +437,7 @@ const statsData = useMemo<StatCardData[]>(() => {
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getMineralBadgeColor(mineral.type)}`}>
-                          {mineral.type}
+                          {translateMineral(mineral.type).toUpperCase()}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
@@ -521,7 +534,7 @@ const statsData = useMemo<StatCardData[]>(() => {
                   <IconWrapper Icon={FiDatabase} className="h-5 w-5" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">{mineral.type}</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">{translateMineral(mineral.type).toUpperCase()}</h3>
                 </div>
               </div>
               
@@ -611,20 +624,21 @@ const statsData = useMemo<StatCardData[]>(() => {
                   {mineralDistributionData.map((item, idx) => {
                     const scale = maxWeight > 0 ? item.weight / maxWeight : 0;
                     return (
-                      <motion.div 
-                        key={item.type}
-                        initial={{ height: 0 }}
-                        animate={{ height: `${Math.max(scale * 180, 5)}px` }}
-                        transition={{ duration: 0.8, delay: 0.2 + idx * 0.1 }}
-                        className="relative w-16 flex flex-col items-center"
-                      >
-                        <div 
-                          className={`w-full rounded-t-lg ${getMineralColor(item.type)}`} 
-                          style={{ flexGrow: 1 }}
-                        ></div>
-                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">{item.type}</div>
+                      <div key={item.type} className="flex flex-col items-center">
+                        <div className="relative w-16 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                          <motion.div 
+                            initial={{ height: '0%' }}
+                            animate={{ height: `${scale * 100}%` }}
+                            transition={{ duration: 0.8, delay: 0.2 + idx * 0.1 }}
+                            className={`absolute bottom-0 w-full ${getMineralColor(item.type)}`}
+                          ></motion.div>
+                        </div>
+                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">{translateMineral(item.type).toUpperCase()}</div>
                         <div className="font-medium text-gray-900 dark:text-white">{item.weight.toFixed(2)} kg</div>
-                      </motion.div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          {(scale * 100).toFixed(0)}% {t('dashboard.of_max')}
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
@@ -650,21 +664,22 @@ const statsData = useMemo<StatCardData[]>(() => {
                     const maxCount = Math.max(...mineralsData.map(m => m.count));
                     const scale = maxCount > 0 ? mineral.count / maxCount : 0;
                     return (
-                      <motion.div 
-                        key={mineral.type}
-                        initial={{ height: 0 }}
-                        animate={{ height: `${Math.max(scale * 180, 5)}px` }}
-                        transition={{ duration: 0.8, delay: 0.2 + idx * 0.1 }}
-                        className="relative w-16 flex flex-col items-center"
-                      >
-                        <div 
-                          className={`w-full rounded-t-lg ${getMineralColor(mineral.type)}`} 
-                          style={{ flexGrow: 1 }}
-                        ></div>
-                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">{mineral.type}</div>
+                      <div key={mineral.type} className="flex flex-col items-center">
+                        <div className="relative w-16 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                          <motion.div 
+                            initial={{ height: '0%' }}
+                            animate={{ height: `${scale * 100}%` }}
+                            transition={{ duration: 0.8, delay: 0.2 + idx * 0.1 }}
+                            className={`absolute bottom-0 w-full ${getMineralColor(mineral.type)}`}
+                          ></motion.div>
+                        </div>
+                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">{translateMineral(mineral.type).toUpperCase()}</div>
                         <div className="font-medium text-gray-900 dark:text-white">{mineral.count}</div>
-                      </motion.div>
-                    );
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          {(scale * 100).toFixed(0)}% {t('dashboard.of_total')}
+                        </div>
+                      </div>                    
+                      );
                   })}
                 </div>
               </div>
@@ -702,7 +717,7 @@ const statsData = useMemo<StatCardData[]>(() => {
                             className={`absolute bottom-0 w-full ${getMineralColor(mineral.type)}`}
                           ></motion.div>
                         </div>
-                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">{mineral.type}</div>
+                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">{translateMineral(mineral.type).toUpperCase()}</div>
                         <div className="font-medium text-gray-900 dark:text-white">{mineral.exportedWeight.toFixed(2)} kg</div>
                         <div className="text-xs text-gray-500 dark:text-gray-400">
                           {(exportedRatio * 100).toFixed(0)}% {t('dashboard.of_total')}
