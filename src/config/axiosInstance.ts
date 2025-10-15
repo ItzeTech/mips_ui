@@ -3,7 +3,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { logout, logoutUserApi, setCredentials } from '../features/auth/authSlice';
 import { clearUser } from '../features/user/userSlice';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
