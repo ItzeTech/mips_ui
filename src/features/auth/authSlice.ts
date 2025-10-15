@@ -82,20 +82,14 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.status = 'succeeded';
       state.error = null;
-      if (action.payload.access_token && typeof action.payload.access_token === 'string') {
-        try {
-          const decodedToken = jwtDecode<DecodedToken>(action.payload.access_token);
-          state.user = { email: decodedToken.sub, id: decodedToken.uid };
-        } catch (e) {
-          console.error("Failed to decode token:", e);
-          state.user = null;
-        }
-      } else {
-        console.warn("No valid access_token in payload", action.payload);
-        state.user = null;
+      try {
+        const decodedToken = jwtDecode<DecodedToken>(action.payload?.access_token);
+        state.user = { /* map decoded fields to user object as needed */ email: decodedToken.sub, id: decodedToken.uid };
+      } catch (e) {
+        console.error("Failed to decode token:", e);
+        state.user = null; // Or handle differently
       }
       saveState(AUTH_STATE_KEY, state);
-
     },
     logout(state) {
       state.accessToken = null;
