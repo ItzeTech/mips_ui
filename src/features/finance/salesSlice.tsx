@@ -265,7 +265,7 @@ const salesSlice = createSlice({
       })
       .addCase(fetchSales.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.sales = action.payload.items;
+        state.sales = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
           total: action.payload.total,

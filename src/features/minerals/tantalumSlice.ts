@@ -299,7 +299,7 @@ const tantalumSlice = createSlice({
       })
       .addCase(fetchTantalums.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.tantalums = action.payload.items;
+        state.tantalums = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
           total: action.payload.total,

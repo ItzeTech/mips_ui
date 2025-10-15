@@ -311,7 +311,7 @@ const tinSlice = createSlice({
       })
       .addCase(fetchTins.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.tins = action.payload.items;
+        state.tins = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
           total: action.payload.total,

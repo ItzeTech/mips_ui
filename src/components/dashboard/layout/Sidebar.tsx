@@ -134,14 +134,15 @@ const navItems: NavItem[] = [
 
 const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
   const location = useLocation();
-  const { roles } = useAuth();
+  const { roles = [] } = useAuth();
   const { t } = useTranslation();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   // Check if user has access to nav item
   const hasAccess = (item: NavItem) => {
-    return item.allowedRoles.some(role => roles.includes(role));
+    return item.allowedRoles.some(role => (roles || []).includes(role));
   };
+
 
   // Group items by category
   const groupedNavItems = useMemo(() => {

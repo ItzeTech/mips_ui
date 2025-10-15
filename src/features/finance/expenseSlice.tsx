@@ -203,7 +203,7 @@ const expenseSlice = createSlice({
       })
       .addCase(fetchExpenses.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.expenses = action.payload.items;
+        state.expenses = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
           total: action.payload.total,

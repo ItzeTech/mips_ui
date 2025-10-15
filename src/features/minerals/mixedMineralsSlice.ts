@@ -161,7 +161,7 @@ const mixedMineralsSlice = createSlice({
       })
       .addCase(fetchMixedMinerals.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.minerals = action.payload.items;
+        state.minerals = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
           total: action.payload.total,

@@ -212,7 +212,7 @@ const advancePaymentSlice = createSlice({
       })
       .addCase(fetchAdvancePayments.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.advancePayments = action.payload.items;
+        state.advancePayments = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
           total: action.payload.total,

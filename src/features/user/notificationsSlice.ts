@@ -200,7 +200,7 @@ const notificationsSlice = createSlice({
       })
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.notifications = action.payload.items;
+        state.notifications = action.payload?.items || [];
         state.pagination = {
           total: action.payload.total,
           page: action.payload.page,

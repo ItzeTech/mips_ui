@@ -295,7 +295,7 @@ const tungstenSlice = createSlice({
       })
       .addCase(fetchTungstens.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.tungstens = action.payload.items;
+        state.tungstens = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
           total: action.payload.total,

@@ -224,7 +224,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
     }
   };
 
-  const unreadCount = stats.unread_count;
+  const unreadCount = stats?.unread_count ?? 0;
 
   const getNotificationIcon = (type: string) => {
     switch (type) {

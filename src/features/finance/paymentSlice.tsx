@@ -383,7 +383,7 @@ const paymentSlice = createSlice({
       })
       .addCase(fetchPayments.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.payments = action.payload.items;
+        state.payments = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
           total: action.payload.total,
