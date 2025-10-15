@@ -36,11 +36,11 @@ interface TopBarProps {
 }
 
 const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
-  const { roles } = useAuth();
+  const { roles = [] } = useAuth();
   const { user } = useUserInfo();
   const navigate = useNavigate();
   const allowedRoles = ['Finance Officer', 'Manager', 'Boss'];
-  const userHasRequiredRole = roles.some(role => allowedRoles.includes(role));
+  const userHasRequiredRole = roles?.some(role => allowedRoles.includes(role)) ?? false;
 
   const menuItems = [
     {
