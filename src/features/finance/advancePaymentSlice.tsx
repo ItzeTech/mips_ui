@@ -215,9 +215,9 @@ const advancePaymentSlice = createSlice({
         state.advancePayments = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          limit: action.payload.limit,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          limit: action.payload?.limit || 10,
         };
       })
       .addCase(fetchAdvancePayments.rejected, (state, action) => {
@@ -308,9 +308,9 @@ const advancePaymentSlice = createSlice({
         state.advancePayments = action.payload.items;
         state.isFetched = true;
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          limit: action.payload.limit,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          limit: action.payload?.limit || 10,
         };
       })
       .addCase(fetchSupplierAdvancePayments.rejected, (state, action) => {
@@ -327,9 +327,9 @@ const advancePaymentSlice = createSlice({
         state.status = 'succeeded';
         state.advancePayments = action.payload.items;
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          limit: action.payload.limit,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          limit: action.payload?.limit || 10,
         };
       })
       .addCase(searchAdvancePayments.rejected, (state, action) => {

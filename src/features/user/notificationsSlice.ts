@@ -202,9 +202,9 @@ const notificationsSlice = createSlice({
         state.status = 'succeeded';
         state.notifications = action.payload?.items || [];
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          size: action.payload.size,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          size: action.payload?.size || 10,
         };
         state.isFetched = true;
       })

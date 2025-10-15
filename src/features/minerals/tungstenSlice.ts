@@ -298,9 +298,9 @@ const tungstenSlice = createSlice({
         state.tungstens = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          limit: action.payload.limit,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          limit: action.payload?.limit || 10,
         };
       })
       .addCase(fetchTungstens.rejected, (state, action) => {
