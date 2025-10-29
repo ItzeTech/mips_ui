@@ -11,7 +11,7 @@ interface AdvancePaymentHeaderProps {
   onPrint: () => void;
 }
 
-const AdvancePaymentHeader: React.FC<AdvancePaymentHeaderProps> = ({ payment, onEdit, onPrint }) => {
+const AdvancePaymentHeader: React.FC<AdvancePaymentHeaderProps> = ({ payment, onEdit }) => {
   const { t } = useTranslation();
 
   const formatDate = (dateString: string | null) => {

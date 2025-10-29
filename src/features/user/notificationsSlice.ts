@@ -249,7 +249,7 @@ const notificationsSlice = createSlice({
       })
 
       // Mark all as read
-      .addCase(markAllNotificationsAsRead.fulfilled, (state, action) => {
+      .addCase(markAllNotificationsAsRead.fulfilled, (state) => {
         state.notifications = state.notifications.map(n => ({ ...n, is_read: true, read_at: new Date().toISOString() }));
         state.stats.unread_count = 0;
         state.stats.read_count = state.stats.total_count;

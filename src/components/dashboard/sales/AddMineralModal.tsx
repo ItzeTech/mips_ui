@@ -20,12 +20,6 @@ interface AddMineralModalProps {
   sale: any;
 }
 
-interface MineralWithReplenish {
-  id: string;
-  replenish_enabled: boolean;
-  replenish_amount: number;
-}
-
 const AddMineralModal: React.FC<AddMineralModalProps> = ({ isOpen, onClose, sale }) => {
   const { t } = useTranslation();
   const { handleAddMineralsToSale, addMineralsStatus } = useSales();

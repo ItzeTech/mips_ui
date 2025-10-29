@@ -22,7 +22,7 @@ interface SupplierSelectorProps {
   selectedSupplierId?: string;
 }
 
-const SupplierSelector: React.FC<SupplierSelectorProps> = ({ onSelect, selectedSupplierId }) => {
+const SupplierSelector: React.FC<SupplierSelectorProps> = ({ onSelect, selectedSupplierId: _selectedSupplierId }) => {
   const { t } = useTranslation();
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [isOpen, setIsOpen] = useState(false);

@@ -53,12 +53,12 @@
       "selected": "Selected"
     },
     "sidebar": {
-      "app_name": "Rwanda Mining",
+      "app_name": "AgaciroTrade",
       "app_subtitle": "Management System",
       "minerals_category": "Minerals",
       "finance_category": "Finance",
       "version": "Version",
-      "edition": "Mining Pro",
+      "edition": "AgaciroTrade Pro",
       "menu": {
         "dashboard": "Dashboard",
         "manage_users": "Manage Users",

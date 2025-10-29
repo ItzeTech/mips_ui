@@ -30,8 +30,6 @@ export const DashboardLayoutWithOutlet: React.FC = () => {
     }, []);
 
     const handleLogout = () => {
-        // Here you would typically call your logout API
-        console.log('Logging out...');
         // Navigate to login page
         setTimeout(() => {
         navigate('/login');

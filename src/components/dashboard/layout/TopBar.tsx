@@ -334,7 +334,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
 
         {/* Notifications */}
         <Popover className="relative">
-          {({ open }) => (
+          {() => (
             <>
               <Popover.Button as={motion.button} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="relative p-2 sm:p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg">
                 <BellIcon className="h-4 w-4 sm:h-5 sm:w-5" />

@@ -450,7 +450,5 @@ export const calculateFinancials = (data: Partial<Tantalum>, {rra_percentage, in
     calculatedData.net_amount = calculatedData.total_amount - calculatedData.total_charge;
   }
 
-  console.log(calculatedData);
-
   return calculatedData;
 };

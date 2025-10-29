@@ -99,7 +99,7 @@ const CreateSalePage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [summaryUpdateTrigger, setSummaryUpdateTrigger] = useState(0);
+  // const [summaryUpdateTrigger, setSummaryUpdateTrigger] = useState(0);
   
   // Reference to the SelectedMineralsList component to access its methods
   const mineralsListRef = useRef<any>(null);
@@ -124,13 +124,13 @@ const CreateSalePage: React.FC = () => {
   }, [err]);
   
   // Set up periodic updates for the summary
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSummaryUpdateTrigger(prev => prev + 1);
-    }, 500); // Update every half second
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setSummaryUpdateTrigger(prev => prev + 1);
+  //   }, 500); // Update every half second
     
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
   
   const selectedMineralsForType = getByType(validMineralType?.toLowerCase() as any);
   

@@ -7,10 +7,15 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true,
+  withCredentials: true, // ⭐ Enable this for cookies/refresh tokens
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 let storeRef: any = null;
+
 export const injectStore = (_store: any) => {
   storeRef = _store;
 };
@@ -24,7 +29,10 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error('❌ Request interceptor error:', error);
+    return Promise.reject(error);
+  }
 );
 
 let isRefreshing = false;
@@ -47,45 +55,67 @@ axiosInstance.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    if (error.response?.status === 401 && originalRequest && !originalRequest._retry && originalRequest.url !== '/auth/login') {
-      if (originalRequest.url === '/auth/token/refresh') {
-        await storeRef.dispatch(logoutUserApi());
-        await storeRef.dispatch(logout());
-        clearUser();
+    // Handle 401 errors
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+      
+      // Don't retry login requests
+      if (originalRequest.url === '/auth/login') {
         return Promise.reject(error);
       }
 
+      // If refresh token fails, logout
+      if (originalRequest.url === '/auth/token/refresh') {
+        await storeRef?.dispatch(logoutUserApi());
+        await storeRef?.dispatch(logout());
+        await storeRef?.dispatch(clearUser());
+        window.location.href = '/login';
+        return Promise.reject(error);
+      }
+
+      // Queue requests while refreshing
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then(token => {
-          if (originalRequest.headers) originalRequest.headers['Authorization'] = `Bearer ${token}`;
-          return axiosInstance(originalRequest);
-        }).catch(err => Promise.reject(err));
+        })
+          .then(token => {
+            if (originalRequest.headers) {
+              originalRequest.headers['Authorization'] = `Bearer ${token}`;
+            }
+            return axiosInstance(originalRequest);
+          })
+          .catch(err => Promise.reject(err));
       }
 
       originalRequest._retry = true;
       isRefreshing = true;
 
       try {
-        const { data } = await axios.post(`${API_BASE_URL}/auth/token/refresh`, {}, { withCredentials: true });
+        const { data } = await axios.post(
+          `${API_BASE_URL}/auth/token/refresh`,
+          {},
+          { withCredentials: true }
+        );
 
         const newAccessToken = data.access_token;
         const newRoles = data.roles;
 
-        storeRef.dispatch(setCredentials({ access_token: newAccessToken, token_type: 'bearer', roles: newRoles }));
+        storeRef?.dispatch(setCredentials({
+          access_token: newAccessToken,
+          token_type: 'bearer',
+          roles: newRoles
+        }));
 
         if (originalRequest.headers) {
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         }
+
         processQueue(null, newAccessToken);
         return axiosInstance(originalRequest);
       } catch (refreshError: any) {
-        console.log(refreshError)
         processQueue(refreshError, null);
-        await storeRef.dispatch(logoutUserApi());
-        await storeRef.dispatch(logout());
-        clearUser();
+        await storeRef?.dispatch(logoutUserApi());
+        await storeRef?.dispatch(logout());
+        await storeRef?.dispatch(clearUser());
         window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {

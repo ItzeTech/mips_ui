@@ -69,7 +69,6 @@ const LoginPage: React.FC = () => {
     if (loginUser.fulfilled.match(resultAction)) {
       // The thunk was successful, response data is in resultAction.payload
       const loginData = resultAction.payload as LoginResponse;
-      console.log(loginData)
       dispatch(setCredentials(loginData));
       navigate(from, { replace: true });
     }

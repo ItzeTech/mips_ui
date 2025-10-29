@@ -321,10 +321,10 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, toggleSidebar }) => {
               {expanded && (
                 <div className="text-center">
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                    {t('sidebar.version', 'Version')} 2.0.1
+                    {t('sidebar.version', 'Version')} 1.0.0
                   </span>
                   <div className="text-xs text-gray-400 dark:text-gray-500">
-                    {t('sidebar.edition', 'Mining Pro')}
+                    {t('sidebar.edition', 'AgaciroTrade Pro')}
                   </div>
                 </div>
               )}

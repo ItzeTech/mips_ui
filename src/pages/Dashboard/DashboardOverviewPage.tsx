@@ -700,7 +700,7 @@ const statsData = useMemo<StatCardData[]>(() => {
               </h3>
               <div className="h-60 flex items-center justify-center">
                 <div className="flex space-x-8">
-                  {mineralsData.map((mineral, idx) => {
+                  {mineralsData.map((mineral) => {
                     // Calculate ratio of exported vs total (including exported)
                     const totalWithExported = mineral.totalWeight + mineral.exportedWeight;
                     const exportedRatio = totalWithExported > 0 

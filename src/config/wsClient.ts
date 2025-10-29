@@ -99,9 +99,9 @@ export class WSClient {
         }
       };
 
-      state.ws.onerror = (error) => {
-        // console.error(`❌ ${type} WebSocket error:`, error);
-      };
+      // state.ws.onerror = (error) => {
+      //   // console.error(`❌ ${type} WebSocket error:`, error);
+      // };
 
       state.ws.onclose = async (event) => {
         // console.log(`🔌 ${type} channel closed (Code: ${event.code}, Reason: ${event.reason})`);

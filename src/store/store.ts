@@ -18,6 +18,7 @@ import advancePaymentsReducer from "../features/finance/advancePaymentSlice";
 import paymentsReducer from "../features/finance/paymentSlice";
 import expensesReducer from "../features/finance/expenseSlice";
 import notificationReducer from "../features/user/notificationsSlice";
+import { injectStore } from '../config/axiosInstance';
 
 
 export const store = configureStore({
@@ -44,6 +45,6 @@ export const store = configureStore({
   },
   // Middleware can be added here if needed
 });
-
+injectStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -1,5 +1,5 @@
 // components/dashboard/payments/SmartMineralSelector.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -77,30 +77,26 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
     tungsten: true
   });
 
-  useEffect(() => {
-    if (supplierId) {
-      fetchUnpaidMinerals();
-    }
-  }, [supplierId]);
+  // useEffect(() => {
+  //   if (supplierId) {
+  //     fetchUnpaidMinerals();
+  //   }
+  // }, [supplierId]);
 
-  const fetchUnpaidMinerals = async () => {
+  const fetchUnpaidMinerals = useCallback(async () => {
     setLoading(true);
     setError(null);
     
     try {
-      console.log('Fetching unpaid minerals for supplier:', supplierId);
       
       // Fetch tantalum minerals
       const tantalumResponse = await axiosInstance.get(`/tantalum/supplier/${supplierId}/unpaid`);
-      console.log('Tantalum response:', tantalumResponse);
       
       // Fetch tin minerals  
       const tinResponse = await axiosInstance.get(`/tin/supplier/${supplierId}/unpaid`);
-      console.log('Tin response:', tinResponse);
       
       // Fetch tungsten minerals
       const tungstenResponse = await axiosInstance.get(`/tungsten/supplier/${supplierId}/unpaid`);
-      console.log('Tungsten response:', tungstenResponse);
 
       // Extract data consistently
       const tantalumData = Array.isArray(tantalumResponse.data?.data?.items) 
@@ -121,12 +117,6 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
         ? tungstenResponse.data.data 
         : [];
 
-      console.log("=== EXTRACTED MINERAL DATA ===");
-      console.log("Tantalum count:", tantalumData.length);
-      console.log("Tin count:", tinData.length);
-      console.log("Tungsten count:", tungstenData.length);
-      console.log("=== END EXTRACTED DATA ===");
-
       setMinerals({
         tantalum: tantalumData,
         tin: tinData,
@@ -136,19 +126,15 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
       // Auto-select first available mineral type that has records
       setTimeout(() => {
         if (tantalumData.length > 0 && selectedMinerals.tantalum.length === 0) {
-          console.log('Auto-selecting first tantalum mineral:', tantalumData[0].id);
           onSelectionChange('tantalum', [tantalumData[0].id]);
         } else if (tinData.length > 0 && selectedMinerals.tin.length === 0) {
-          console.log('Auto-selecting first tin mineral:', tinData[0].id);
           onSelectionChange('tin', [tinData[0].id]);
         } else if (tungstenData.length > 0 && selectedMinerals.tungsten.length === 0) {
-          console.log('Auto-selecting first tungsten mineral:', tungstenData[0].id);
           onSelectionChange('tungsten', [tungstenData[0].id]);
         }
       }, 100);
 
     } catch (error) {
-      console.error('Failed to fetch unpaid minerals:', error);
       setError('Failed to fetch unpaid minerals');
       setMinerals({
         tantalum: [],
@@ -158,7 +144,11 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [supplierId, onSelectionChange, selectedMinerals]);
+
+  useEffect(() => {
+    fetchUnpaidMinerals();
+  }, [fetchUnpaidMinerals]);
 
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

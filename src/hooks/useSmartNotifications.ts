@@ -87,7 +87,6 @@ export const useSmartNotifications = () => {
   const showToastNotification = useCallback((notification: NotificationData) => {
   // Prevent duplicates early
   if (wasNotificationShown(notification.id)) {
-    console.log('Duplicate toast notification prevented:', notification.id);
     return;
   }
 
@@ -146,7 +145,6 @@ export const useSmartNotifications = () => {
   const showBrowserNotification = useCallback((notification: NotificationData) => {
     // Check for duplicates
     if (wasNotificationShown(notification.id)) {
-      console.log('Duplicate browser notification prevented:', notification.id);
       return null;
     }
 
@@ -183,7 +181,6 @@ export const useSmartNotifications = () => {
   const uniqueId = notification.id;
 
   if (wasNotificationShown(uniqueId)) {
-    console.log('Duplicate smart notification prevented:', uniqueId);
     return;
   }
 

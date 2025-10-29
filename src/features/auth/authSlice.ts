@@ -49,7 +49,9 @@ export const loginUser = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        'Login failed'
+        error.response?.data?.message || 
+        error.message || 
+        'Login failed. Please try again.'
       );
     }
   }
@@ -58,7 +60,7 @@ export const loginUser = createAsyncThunk(
 // Async thunk for logout (optional API call)
 export const logoutUserApi = createAsyncThunk(
   'auth/logoutUserApi',
-  async (_, { rejectWithValue }) => {
+  async (_,) => {
     try {
       // Replace with your actual API endpoint if you have one
       await axiosInstance.post('/auth/logout');
@@ -113,7 +115,22 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.status = 'succeeded'; // Mark as succeeded, actual credential set happens in component
+        state.accessToken = action.payload.access_token;
+        state.roles = action.payload.roles;
+        state.isAuthenticated = true;
+        state.status = 'succeeded';
+        state.error = null;
+        try {
+          const decodedToken = jwtDecode<DecodedToken>(action.payload.access_token);
+          state.user = { 
+            email: decodedToken.sub, 
+            id: decodedToken.uid 
+          };
+        } catch (e) {
+          console.error("Failed to decode token:", e);
+          state.user = null;
+        }
+        saveState(AUTH_STATE_KEY, state);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';
@@ -123,7 +140,14 @@ const authSlice = createSlice({
         state.roles = [];
       })
       .addCase(logoutUserApi.fulfilled, (state) => {
-        logout()
+        state.accessToken = null;
+        state.roles = [];
+        state.isAuthenticated = false;
+        state.user = null;
+        state.status = 'idle';
+        state.error = null;
+        removeState(AUTH_STATE_KEY);
+        localStorage.clear();
       })
       .addCase(logoutUserApi.rejected, (state, action) => {
         console.error("Logout API call failed:", action.payload);

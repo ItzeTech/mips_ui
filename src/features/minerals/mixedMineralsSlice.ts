@@ -120,7 +120,6 @@ export const updateMixedMineralStatus = createAsyncThunk(
   'mixedMinerals/updateMixedMineralStatus',
   async ({ id, status }: { id: string; status: UpdateMixedMineralStatusData }, { rejectWithValue }) => {
     try {
-      console.log(status)
       const response = await axiosInstance.put(`/mixed-minerals/${id}`, {status: status});
       return response.data.data;
     } catch (error: any) {

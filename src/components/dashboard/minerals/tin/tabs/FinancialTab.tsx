@@ -57,7 +57,7 @@ export default function FinancialTab({
   TinSettingsData,
   setUseCustomFees,
   useCustomFees,
-  isFinancialDisabled
+  isFinancialDisabled: _isFinancialDisabled
 }: FinancialTabInterface) {
 
     const { t } = useTranslation();

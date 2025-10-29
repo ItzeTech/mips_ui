@@ -16,7 +16,7 @@ interface PaymentHeaderProps {
   onEdit: () => void;
 }
 
-const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint, onEdit }) => {
+const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint: _onPrint, onEdit }) => {
   const { t } = useTranslation();
   const [printModalOpen, setPrintModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

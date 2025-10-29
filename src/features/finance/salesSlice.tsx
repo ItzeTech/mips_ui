@@ -121,7 +121,7 @@ export const fetchSales = createAsyncThunk(
 
 export const createSale = createAsyncThunk(
   'sales/createSale',
-  async (saleData: CreateSaleData, { rejectWithValue, dispatch }) => {
+  async (saleData: CreateSaleData, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post('/sales', saleData);
       
@@ -142,7 +142,6 @@ export const createSale = createAsyncThunk(
       
       return response.data.data;
     } catch (error: any) {
-      console.log(error.response?.data?.detail)
       return rejectWithValue(error.response?.data?.detail || 'Failed to create sale');
     }
   }
@@ -174,7 +173,7 @@ export const updateSale = createAsyncThunk(
 
 export const addMineralsToSale = createAsyncThunk(
   'sales/addMineralsToSale',
-  async ({ saleId, salesData }: { saleId: string; salesData: SaleMineralInput[] }, { rejectWithValue, dispatch, getState }) => {
+  async ({ saleId, salesData }: { saleId: string; salesData: SaleMineralInput[] }, { rejectWithValue, getState }) => {
     try {
       const state: any = getState();
       const sale = state.sales.sales.find((s: Sale) => s.id === saleId) || state.sales.selectedSale;
@@ -208,7 +207,7 @@ export const addMineralsToSale = createAsyncThunk(
 // In salesSlice.tsx
 export const removeMineralFromSale = createAsyncThunk(
   'sales/removeMineralFromSale',
-  async ({ saleId, mineralId }: { saleId: string; mineralId: string }, { rejectWithValue, dispatch, getState }) => {
+  async ({ saleId, mineralId }: { saleId: string; mineralId: string }, { rejectWithValue, getState }) => {
     try {
       const state: any = getState();
       const sale = state.sales.sales.find((s: Sale) => s.id === saleId) || state.sales.selectedSale;
