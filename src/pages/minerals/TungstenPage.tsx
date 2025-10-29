@@ -269,8 +269,10 @@ const TungstenPage: React.FC = () => {
         
       const matchesFinanceStatus =
         financeStatusFilter === 'all' ||
-        tungsten.finance_status === financeStatusFilter;
-        
+        (financeStatusFilter === 'unpaid' 
+        ? (tungsten.finance_status === 'unpaid' || tungsten.finance_status === 'invoiced')
+        : tungsten.finance_status === financeStatusFilter);
+
       return matchesSearch && matchesStockStatus && matchesFinanceStatus;
     });
   }, [tungstens, searchTerm, stockStatusFilter, financeStatusFilter, serverSideSearch]);

@@ -108,9 +108,9 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             exit="exit"
             variants={modalVariants}
           >
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6">
-              {/* Header */}
-              <div className="flex items-start justify-between mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
+              {/* Header - Fixed */}
+              <div className="flex items-start justify-between p-6 pb-4 flex-shrink-0">
                 <div className="flex items-center">
                   <div className={`p-3 rounded-full ${typeStyles.iconBg} mr-4`}>
                     <IconComponent className={`w-6 h-6 ${typeStyles.iconColor}`} />
@@ -130,19 +130,20 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                 </button>
               </div>
 
-              {/* Message */}
-              <div className="mb-6">
+              {/* Content - Scrollable */}
+              <div className="px-6 pb-4 overflow-y-auto flex-1">
+                {/* Message */}
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
                   {message}
                 </p>
 
-                {/* Show changes if provided */}
+                {/* Show changes if provided - Scrollable */}
                 {changes.length > 0 && (
                   <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                     <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
                       {t('common.changes_to_be_made', 'Changes to be made:')}
                     </h4>
-                    <div className="space-y-2">
+                    <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
                       {changes.map((change, index) => (
                         <div key={index} className="text-sm">
                           <span className="font-medium text-gray-700 dark:text-gray-300">
@@ -164,8 +165,8 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                 )}
               </div>
 
-              {/* Actions */}
-              <div className="flex space-x-3 justify-end">
+              {/* Actions - Fixed */}
+              <div className="flex space-x-3 justify-end p-6 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
                 <button
                   onClick={onClose}
                   disabled={isLoading}

@@ -119,7 +119,7 @@ const TantalumSearchBar: React.FC<TantalumSearchBarProps> = ({
                 <option value="paid">{t('tantalum.finance_paid', 'Paid')}</option>
                 <option value="unpaid">{t('tantalum.finance_unpaid', 'Unpaid')}</option>
                 <option value="invoiced">{t('tantalum.finance_invoiced', 'Invoiced')}</option>
-                <option value="exported">{t('tantalum.finance_exported', 'Exported')}</option>
+                {/* <option value="exported">{t('tantalum.finance_exported', 'Exported')}</option> */}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
                 <ChevronLeftIcon className="w-3.5 h-3.5 transform rotate-90" />
