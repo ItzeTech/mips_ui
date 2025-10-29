@@ -43,13 +43,15 @@ export const loginUser = createAsyncThunk(
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
+          withCredentials: false,
         }
       );
 
       return response.data;
     } catch (error: any) {
+      console.error("❌ Login error:", error);
       return rejectWithValue(
-        error.response?.data?.message || 
+        error.response?.data?.detail || 
         error.message || 
         'Login failed. Please try again.'
       );
