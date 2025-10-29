@@ -12,6 +12,18 @@ RUN npm install --legacy-peer-deps
 # Copy the rest of the app
 COPY . .
 
+# ⭐ Accept build arguments
+ARG GENERATE_SOURCEMAP
+ARG REACT_APP_API_BASE_URL
+ARG REACT_APP_WS_BASE_URL
+ARG NODE_ENV=production
+
+# ⭐ Set as environment variables for build
+ENV GENERATE_SOURCEMAP=$GENERATE_SOURCEMAP
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+ENV REACT_APP_WS_BASE_URL=$REACT_APP_WS_BASE_URL
+ENV NODE_ENV=$NODE_ENV
+
 # Build the app
 RUN npm run build
 
