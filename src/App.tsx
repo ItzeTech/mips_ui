@@ -28,34 +28,6 @@ function App() {
   } = useSmartNotifications();
 
   const { handleBroadcastMessage } = useBroadcastHandler();
-
-   // ⭐ Display environment configuration in console (works in both dev and production)
-  useEffect(() => {
-    const envConfig = {
-      'Environment': process.env.NODE_ENV,
-      'API Base URL': process.env.REACT_APP_API_BASE_URL,
-      'WebSocket URL': process.env.REACT_APP_WS_BASE_URL,
-      'Build Time': new Date().toISOString(),
-      'User Agent': navigator.userAgent,
-    };
-
-    // Only log environment info in non-production to avoid leaking data in production builds.
-    if (process.env.NODE_ENV !== 'production') {
-      /* eslint-disable no-console */
-      console.log('%c🌍 Application Environment Configuration', 'color: #4CAF50; font-size: 16px; font-weight: bold;');
-      console.table(envConfig);
-      /* eslint-enable no-console */
-    }
-    
-    // Also make it available globally for easy access
-    (window as any).__APP_ENV__ = envConfig;
-
-    if (process.env.NODE_ENV !== 'production') {
-      /* eslint-disable no-console */
-      console.log('%cℹ️ Tip: Type "__APP_ENV__" in console to view configuration anytime', 'color: #2196F3; font-style: italic;');
-      /* eslint-enable no-console */
-    }
-  }, []);
   
   useEffect(() => {
   if (!token) return;

@@ -21,6 +21,7 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [showEnvInfo, setShowEnvInfo] = useState(true); // ⭐ Toggle for env info
 
   const from = location.state?.from?.pathname || '/dashboard';
 
@@ -80,8 +81,102 @@ const LoginPage: React.FC = () => {
     <motion.div 
       initial={{ opacity: 0 }} 
       animate={{ opacity: 1 }} 
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-indigo-950 dark:to-gray-900 p-4 sm:p-6 lg:p-8"
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-indigo-950 dark:to-gray-900 p-4 sm:p-6 lg:p-8 relative"
     >
+      {/* ⭐ Environment Info Toggle Button */}
+      <button
+        onClick={() => setShowEnvInfo(!showEnvInfo)}
+        className="fixed bottom-4 right-4 z-50 bg-gray-800 dark:bg-gray-700 text-white px-3 py-2 rounded-full shadow-lg hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors text-xs font-medium"
+        title="Show environment configuration"
+      >
+        🌍 ENV
+      </button>
+
+      {/* ⭐ Environment Info Panel */}
+      <AnimatePresence>
+        {showEnvInfo && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-20 right-4 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-4 max-w-md w-full mx-4 border border-gray-200 dark:border-gray-700"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center">
+                🌍 Environment Configuration
+              </h3>
+              <button
+                onClick={() => setShowEnvInfo(false)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              {/* Environment */}
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 mb-1 font-medium">Environment:</p>
+                <p className={`font-mono px-2 py-1 rounded inline-block ${
+                  process.env.NODE_ENV === 'production' 
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                    : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                }`}>
+                  {process.env.NODE_ENV || 'Not Set'}
+                </p>
+              </div>
+
+              {/* API Base URL */}
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 mb-1 font-medium">API Base URL:</p>
+                <p className="font-mono bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded break-all">
+                  {process.env.REACT_APP_API_BASE_URL || '❌ Not Set'}
+                </p>
+              </div>
+
+              {/* WebSocket URL */}
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 mb-1 font-medium">WebSocket URL:</p>
+                <p className="font-mono bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded break-all">
+                  {process.env.REACT_APP_WS_BASE_URL || '❌ Not Set'}
+                </p>
+              </div>
+
+              {/* Build Time */}
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 mb-1 font-medium">Build Time:</p>
+                <p className="font-mono bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
+                  {new Date().toLocaleString()}
+                </p>
+              </div>
+
+              {/* Status Indicators */}
+              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-gray-500 dark:text-gray-400 mb-2 font-medium">Status:</p>
+                <div className="space-y-1">
+                  <p className="flex items-center">
+                    <span className={process.env.REACT_APP_API_BASE_URL ? 'text-green-600' : 'text-red-600'}>
+                      {process.env.REACT_APP_API_BASE_URL ? '✓' : '✗'}
+                    </span>
+                    <span className="ml-2 text-gray-700 dark:text-gray-300">
+                      API {process.env.REACT_APP_API_BASE_URL ? 'Configured' : 'Not Configured'}
+                    </span>
+                  </p>
+                  <p className="flex items-center">
+                    <span className={process.env.REACT_APP_WS_BASE_URL ? 'text-green-600' : 'text-red-600'}>
+                      {process.env.REACT_APP_WS_BASE_URL ? '✓' : '✗'}
+                    </span>
+                    <span className="ml-2 text-gray-700 dark:text-gray-300">
+                      WebSocket {process.env.REACT_APP_WS_BASE_URL ? 'Configured' : 'Not Configured'}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -100,7 +195,6 @@ const LoginPage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700"
             >
-              {/* <FiLogIn className="h-10 w-10 text-white" /> */}
               <IconWrapper Icon={FiLogIn} className="h-10 w-10 text-white" />
             </motion.div>
             
@@ -132,7 +226,6 @@ const LoginPage: React.FC = () => {
                 className="mx-8 mb-4 overflow-hidden"
               >
                 <div className="p-4 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 flex items-start">
-                  {/* <FiAlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 mr-3 flex-shrink-0" /> */}
                   <IconWrapper Icon={FiAlertCircle} className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 mr-3 flex-shrink-0" />
                   <p className="text-sm text-red-700 dark:text-red-300">
                     {formError || authError}
@@ -157,7 +250,6 @@ const LoginPage: React.FC = () => {
                   }}
                 >
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    {/* <FiUser className={`h-5 w-5 ${focusedField === 'username' ? 'text-indigo-500' : 'text-gray-400'} transition-colors duration-200`} /> */}
                     <IconWrapper Icon={FiUser} className={`h-5 w-5 ${focusedField === 'username' ? 'text-indigo-500' : 'text-gray-400'} transition-colors duration-200`} />
                   </div>
                   <input
