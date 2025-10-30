@@ -60,25 +60,25 @@
       "version": "Verisiyo",
       "edition": "AgaciroTrade Pro",
       "menu": {
-        "dashboard": "Ikibaho",
-        "manage_users": "Gucunga Abakoresha",
-        "suppliers": "Abatanga",
+        "dashboard": "dashboard",
+        "manage_users": "Gucunga abakoresha system",
+        "suppliers": "Abakiriya",
         "settings": "Igenamiterere",
-        "mixed_minerals": "Amabuye Yavanze",
-        "tantalum": "Tantalum",
-        "tin": "Sitani",
-        "tungsten": "Tungsten",
-        "sales": "Ingurisha",
-        "payments": "Kwishyura",
-        "advance_payments": "Amafaranga Mbere",
-        "expenses": "Amafaranga Yakoreshejwe"
+        "mixed_minerals": "Amabuye y'invanjye",
+        "tantalum": "Coltan",
+        "tin": "Gasegereti",
+        "tungsten": "Wolfram",
+        "sales": "Ibyagurishijwe",
+        "payments": "Kwishyura abakiriya",
+        "advance_payments": "Advance kubakiriya",
+        "expenses": "Depanse"
       }
     },
     "dashboard": {
-      "minerals_dashboard": "Ikibaho cy'Amabuye y'Agaciro",
+      "minerals_dashboard": "dashboard cy'Amabuye y'Agaciro",
       "overview": "Incamake",
       "analytics": "Isesengura",
-      "loading": "Iri gupakira amakuru y'ikibaho...",
+      "loading": "Iri gushaka amakuru ya dashboard...",
       "retry": "Ongera ugerageze",
       
       "total_minerals": "Amabuye Yose",
@@ -86,32 +86,32 @@
       "total_advance": "Amafaranga Mbere Yose",
       "exported_minerals": "Amabuye Yoherejwe Hanze",
       "payments": "kwishyura",
-      "paid": "Byishyuwe",
-      "invoiced": "Bifite Fakture",
-      "unpaid": "Bitarishyurwa",
-      "exported": "Byoherejwe Hanze",
+      "paid": "Ibyishyuwe",
+      "invoiced": "ibyabariwe",
+      "unpaid": "Ibiitarishyurwa",
+      "exported": "ibyagurishijwe",
       "in_stock": "mububiko",
       "of_total": "mubisanzwe",
-       "of_max": "ntarengwa",
+      "of_max": "ntarengwa",
       
       "minerals_inventory": "Ububiko bw'Amabuye y'Agaciro",
       "all_minerals": "Amabuye Yose",
-      "tantalum": "Tantalum",
-      "tin": "Sitani",
-      "tungsten": "Tungsten",
+      "tantalum": "Coltan",
+      "tin": "Gasegereti",
+      "tungsten": "Wolfram",
       
       "mineral_type": "Ubwoko bw'Ibuye",
       "items_count": "Umubare w'Ibintu",
       "mineral_distribution": "Ikwirakwizwa ry'Amabuye",
       "minerals_count": "Umubare w'Amabuye",
       "detailed_breakdown": "Ibisobanuro Birambuye",
-      "exported_comparison": "Igereranya ry'Abyoherejwe Hanze",
-      
-      "weight_breakdown": "Ikigereranyo cy'Uburemere",
+      "exported_comparison": "Igereranya ry'ibyagurishijwe",
+
+      "weight_breakdown": "Ikigereranyo ry'ibiro",
       "count_breakdown": "Ikigereranyo cy'Umubare",
       "total_count": "Umubare Wose",
       "paid_count": "Umubare w'Abishyuwe",
-      "invoiced_count": "Umubare w'Afite Fakture",
+      "invoiced_count": "Umubare w'ababariwe",
       "unpaid_count": "Umubare w'Atishyuwe",
       "exported_count": "Umubare w'Ayoherejwe Hanze",
       "paid_weight": "Uburemere bw'Abishyuwe",
@@ -119,33 +119,34 @@
       "unpaid_weight": "Uburemere bw'Atishyuwe",
       "exported_weight": "Uburemere bw'Ayoherejwe Hanze",
       "total": "Byose",
-      
+
       "item_count_legend": "Ibisobanuro by'Umubare",
-      
+
       "filter_by_type": "Shungura ukurikije Ubwoko",
-      "export_dashboard": "Kohereza Ikibaho",
+      "export_dashboard": "Kohereza dashboard",
       "refresh_data": "Kuvugurura Amakuru",
       "last_updated": "Ivuguruye Bwa Nyuma",
-      
+
       "no_data": "Nta makuru aboneka",
       "error_loading": "Ikosa mu gupakira amakuru"
     },
     "menu":{
       "users": "Abakoresha",
-      "dashboard": "Ikibaho",
-      "manage_users": "Gucunga Abakoresha",
-      "suppliers": "Abatanga",
+      "dashboard": "dashboard",
+      "manage_users": "Gucunga abakoresha system",
+      "suppliers": "Abakiriya",
       "reports": "Raporo",
       "settings": "Igenamiterere",
-      "mixed_minerals": "Amabuye Yavanze",
-      "tantalum": "Tantalum",
-      "tin": "Sitani",
-      "tungsten": "Tungsten",
+      "mixed_minerals": "Amabuye y'invanjye",
+      "tantalum": "Coltan",
+      "tin": "Gasegereti",
+      "tungsten": "Wolfram",
       "profile": "Umwirondoro",
-      "sales": "Ingurisha",
-      "payments": "Kwishyura",
-      "advances": "Amafaranga Mbere",
-      "calculations": "Imibare"
+      "sales": "Ibyagurishijwe",
+      "payments": "Kwishyura abakiriya",
+      "advances": "Advance kubakiriya",
+      "calculations": "Imibare",
+      "expenses": "Depanse"
     },
     "login": {
       "welcome_back": "Murakaza Neza",
@@ -193,7 +194,7 @@
     "unauthorized": {
       "title": "Uruhushya Rwahakaniwe",
       "description": "Ntufite uburenganzira bwo kubona uyu rubuga.",
-      "go_to_dashboard": "Jya ku kibaho"
+      "go_to_dashboard": "Jya ku dashboard"
     },
     "profilePage": {
       "my_profile": "Umwirondoro Wanjye",
