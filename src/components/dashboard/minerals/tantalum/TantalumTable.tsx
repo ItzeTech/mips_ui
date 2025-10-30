@@ -41,6 +41,14 @@ const TantalumTable: React.FC<TantalumTableProps> = ({ tantalums, onView, onEdit
     });
   };
 
+  const formatNumber = (num: number | null, decimals = 2) => {
+    if (num === null) return '—';
+    return num.toLocaleString('en-US', { 
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+  };
+
   const getStockStatusColor = (status: StockStatus) => {
     switch (status) {
       case 'in-stock':
@@ -176,7 +184,7 @@ const TantalumTable: React.FC<TantalumTableProps> = ({ tantalums, onView, onEdit
                           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center flex-wrap gap-1 mt-0.5">
                             <div className="flex items-center">
                               <ScaleIcon className="w-3 h-3 mr-0.5" />
-                              {tantalum.net_weight} kg
+                              {formatNumber(tantalum.net_weight)} kg
                             </div>
                             {tantalum.internal_ta2o5 !== null && (
                               <span className="px-1.5 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-xs">
@@ -214,11 +222,6 @@ const TantalumTable: React.FC<TantalumTableProps> = ({ tantalums, onView, onEdit
                             <UserIcon className="w-3 h-3 mr-1 text-blue-500" />
                             {tantalum.supplier_name}
                           </div>
-                          {tantalum.supplier_id && (
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              ID: {tantalum.supplier_id.substring(0, 6)}...
-                            </div>
-                          )}
                         </div>
                       ) : (
                         <span className="text-xs text-gray-400 dark:text-gray-500 italic">

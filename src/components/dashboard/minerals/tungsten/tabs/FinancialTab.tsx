@@ -56,7 +56,7 @@ export default function FinancialTab({
   TungstenSettingsData,
   setUseCustomFees,
   useCustomFees,
-  isFinancialDisabled
+  isFinancialDisabled: _isFinancialDisabled
 }: FinancialTabInterface) {
 
     const { t } = useTranslation();

@@ -21,7 +21,7 @@ interface TinHeaderProps {
 
 const TinHeader: React.FC<TinHeaderProps> = ({ 
   onCreateClick,
-  selectedTins
+  selectedTins: _selectedTins
 }) => {
   const { t } = useTranslation();
   const { clearByType, getCountByType } = useSelectedMinerals();

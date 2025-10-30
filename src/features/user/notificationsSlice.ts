@@ -200,11 +200,11 @@ const notificationsSlice = createSlice({
       })
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.notifications = action.payload.items;
+        state.notifications = action.payload?.items || [];
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          size: action.payload.size,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          size: action.payload?.size || 10,
         };
         state.isFetched = true;
       })
@@ -249,7 +249,7 @@ const notificationsSlice = createSlice({
       })
 
       // Mark all as read
-      .addCase(markAllNotificationsAsRead.fulfilled, (state, action) => {
+      .addCase(markAllNotificationsAsRead.fulfilled, (state) => {
         state.notifications = state.notifications.map(n => ({ ...n, is_read: true, read_at: new Date().toISOString() }));
         state.stats.unread_count = 0;
         state.stats.read_count = state.stats.total_count;

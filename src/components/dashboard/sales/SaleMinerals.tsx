@@ -69,6 +69,29 @@ const SaleMinerals: React.FC<SaleMineralsProps> = ({ sale, showSupplier = false 
     }
   };
 
+  const translateMineralStatus = (type: string) => {
+    switch (type) {
+      case 'in-stock':
+        return t('common.in_stock');
+      case 'withdrawn':
+        return t('common.withdrawn');
+      case 'resampled':
+        return t('common.resampled');
+      case 'paid':
+        return t('common.paid');
+      case 'unpaid':
+        return t('common.unpaid');
+      case 'invoiced':
+        return t('common.invoiced');
+      case 'advance given':
+        return t('common.advance_given');
+      case 'exported':
+        return t('common.exported');
+      default:
+        return type;
+    }
+  };
+
   const handleRemoveMineral = async (mineralId: string) => {
     if (window.confirm(t('sales.confirm_remove_mineral', 'Are you sure you want to remove this mineral from the sale?'))) {
       await handleRemoveMineralFromSale(sale.id, mineralId);
@@ -114,10 +137,10 @@ const SaleMinerals: React.FC<SaleMineralsProps> = ({ sale, showSupplier = false 
                         {mineral.lot_number}
                         <div className="flex flex-wrap gap-1 mt-1 sm:mt-0">
                           <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md ${getStockStatusColor(mineral.stock_status)}`}>
-                            {mineral.stock_status}
+                            {translateMineralStatus(mineral.stock_status).toUpperCase()}
                           </span>
                           <span className={`px-1.5 py-0.5 text-xs leading-5 font-medium rounded-md ${getFinanceStatusColor(mineral.finance_status)}`}>
-                            {mineral.finance_status}
+                            {translateMineralStatus(mineral.finance_status).toUpperCase()}
                           </span>
                         </div>
                       </div>

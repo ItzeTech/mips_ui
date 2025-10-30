@@ -106,7 +106,7 @@ export const useBroadcastHandler = () => {
         break;
       
       default:
-        console.log('Unknown broadcast type:', type);
+        break;
     }
   };
 

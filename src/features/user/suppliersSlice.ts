@@ -157,11 +157,11 @@ const suppliersSlice = createSlice({
       })
       .addCase(fetchSuppliers.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.suppliers = action.payload.items;
+        state.suppliers = action.payload?.items || [];
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          size: action.payload.size,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          size: action.payload?.size || 10,
         };
       })
       .addCase(fetchSuppliers.rejected, (state, action) => {

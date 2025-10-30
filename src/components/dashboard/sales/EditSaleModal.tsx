@@ -20,6 +20,7 @@ const EditSaleModal: React.FC<EditSaleModalProps> = ({ isOpen, onClose, sale }) 
   const [netSalesAmount, setNetSalesAmount] = useState<number | null>(null);
   const [paidAmount, setPaidAmount] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showGreaterMessage, setShowGreaterMessage] = useState(false);
   
   useEffect(() => {
     if (isOpen && sale) {
@@ -151,12 +152,27 @@ const EditSaleModal: React.FC<EditSaleModalProps> = ({ isOpen, onClose, sale }) 
                         type="number"
                         id="paidAmount"
                         value={paidAmount === null ? '' : paidAmount}
-                        onChange={(e) => setPaidAmount(e.target.value === '' ? null : Number(e.target.value))}
+                        onChange={(e) => {
+                          const value = e.target.value === '' ? null : Number(e.target.value);
+                          if (value === null || value <= ( netSalesAmount ?? 0)) {
+                            setPaidAmount(value);
+                            setShowGreaterMessage(false);
+                          }else if((netSalesAmount ?? 0) < value){
+                            setPaidAmount(netSalesAmount);
+                            setShowGreaterMessage(true);
+                          }
+                        }}
                         step="0.01"
                         min="0"
                         className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500"
                         placeholder={t('sales.paid_amount_placeholder', 'Enter paid amount')}
                       />
+                      {
+                        (showGreaterMessage) && 
+                        <span className="mt-1 text-xs text-red-600 dark:text-red-400">
+                          {t('sales.paid_amount_exceeds', 'Paid amount cannot exceed Net Sales Amount')}
+                        </span>
+                      }
                     </div>
                     <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                       {t('sales.payment_status', 'Payment Status')}: 

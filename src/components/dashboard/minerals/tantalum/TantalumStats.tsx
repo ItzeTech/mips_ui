@@ -138,7 +138,7 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
             </p>
             {hasSelected && (
               <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                Sel: {formatNumber(stats.selectedTotalNetWeight)} kg
+                {t('common.selected', 'Selected')} {formatNumber(stats.selectedTotalNetWeight)} kg
               </p>
             )}
           </div>
@@ -161,7 +161,7 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
             </p>
             {hasSelected && (
               <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                Selected: {stats.selectedCount}
+                {t('common.selected', 'Selected')} {stats.selectedCount}
               </p>
             )}
           </div>
@@ -184,7 +184,7 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
             </p>
             {hasSelected && (
               <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                Sel: {formatNumber(stats.selectedAvgTa2O5Percentage)}%
+                {t('common.selected', 'Selected')} {formatNumber(stats.selectedAvgTa2O5Percentage)}%
               </p>
             )}
           </div>
@@ -207,7 +207,7 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
             </p>
             {hasSelected && (
               <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                Sel: ${formatNumber(stats.selectedTotalNetAmount)}
+                {t('common.selected', 'Selected')} ${formatNumber(stats.selectedTotalNetAmount)}
               </p>
             )}
           </div>
@@ -230,7 +230,7 @@ const TantalumStats: React.FC<TantalumStatsProps> = ({ tantalums, selectedTantal
             </p>
             {hasSelected && (
               <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                Sel: {formatNumber(stats.selectedAvgNbPercentage)}%
+                {t('common.selected', 'Selected')} {formatNumber(stats.selectedAvgNbPercentage)}%
               </p>
             )}
           </div>

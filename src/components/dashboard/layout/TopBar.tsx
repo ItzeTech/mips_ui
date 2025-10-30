@@ -36,11 +36,11 @@ interface TopBarProps {
 }
 
 const UserDropdown = ({ sidebarExpanded, onLogout, t }: any) => {
-  const { roles } = useAuth();
+  const { roles = [] } = useAuth();
   const { user } = useUserInfo();
   const navigate = useNavigate();
   const allowedRoles = ['Finance Officer', 'Manager', 'Boss'];
-  const userHasRequiredRole = roles.some(role => allowedRoles.includes(role));
+  const userHasRequiredRole = roles?.some(role => allowedRoles.includes(role)) ?? false;
 
   const menuItems = [
     {
@@ -224,7 +224,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
     }
   };
 
-  const unreadCount = stats.unread_count;
+  const unreadCount = stats?.unread_count ?? 0;
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -334,7 +334,7 @@ const TopBar: React.FC<TopBarProps> = ({ sidebarExpanded, onLogout, toggleSideba
 
         {/* Notifications */}
         <Popover className="relative">
-          {({ open }) => (
+          {() => (
             <>
               <Popover.Button as={motion.button} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="relative p-2 sm:p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg">
                 <BellIcon className="h-4 w-4 sm:h-5 sm:w-5" />

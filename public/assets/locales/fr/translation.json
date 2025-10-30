@@ -26,15 +26,39 @@
       "update_financial_error": "Échec de la mise à jour des données financières. Veuillez réessayer.",
       "no": "Non",
       "save_changes": "Enregistrer les modifications",
-      "continue": "Continuer"
+      "continue": "Continuer",
+      "amount": "Montant",
+      "method": "Méthode",
+      "date": "Date",
+      "status": "Statut",
+      "paid": "Payé",
+      "unpaid": "Impayé",
+      "lot_number": "Numéro de lot",
+      "weight": "Poids",
+      "ta2o5": "Ta₂O₅",
+      "sn": "Sn",
+      "wo3": "WO₃",
+      "minerals": "Minéraux",
+      "avg_wo3": "WO₃ Moyenne",
+      "avg_sn": "Sn Moyenne",
+      "avg_ta2o5": "Ta₂O₅ Moyenne",
+      "in_stock": "En stock",
+      "net": "NET",
+      "updated": "Mis à jour",
+      "withdrawn": "Retiré",
+      "resampled": "Rééchantillonné",
+      "invoiced": "Facturé",
+      "advance_given": "Avance donnée",
+      "exported": "Exporté",
+      "selected": "Sélectionné"
     },
     "sidebar": {
-      "app_name": "RwandaMining",
+      "app_name": "AgaciroTrade",
       "app_subtitle": "Système de Gestion",
       "minerals_category": "Minéraux",
       "finance_category": "Finance",
       "version": "Version",
-      "edition": "Mining Pro",
+      "edition": "AgaciroTrade Pro",
       "menu": {
         "dashboard": "Tableau de bord",
         "manage_users": "Gérer les utilisateurs",
@@ -68,6 +92,7 @@
       "exported": "Exporté",
       "in_stock": "en stock",
       "of_total": "du total",
+      "of_max": "sur max",
       
       "minerals_inventory": "Inventaire des minéraux",
       "all_minerals": "Tous les minéraux",
@@ -566,7 +591,10 @@
       "fe_percentage": "Fe %",
       "w_percentage": "W %",
       "alex_stewart_ta2o5": "Alex Stewart Ta2O5",
-      "alex_stewart_nb2o5": "Alex Stewart Nb2O5"
+      "alex_stewart_nb2o5": "Alex Stewart Nb2O5",
+      "compute_selected": "Calculer",
+      "items_selected": "articles sélectionnés",
+      "clear_selection": "Effacer la sélection"
     },
     "tin": {
       "title": "Gestion de l'étain",
@@ -968,7 +996,8 @@
       "partially_paid": "Partiellement payé",
       "success": "Succès",
       "payment_updated": "Les détails du paiement ont été mis à jour avec succès.",
-      "last_payment_date": "Date du dernier paiement"
+      "last_payment_date": "Date du dernier paiement",
+      "paid_amount_exceeds": "Le montant payé ne peut pas dépasser le montant net des ventes."
     },
     "payments": {
       "filter": "Filtrer",
@@ -1056,6 +1085,8 @@
       "success": "Succès",
       "payment_updated": "Les détails du paiement ont été mis à jour avec succès.",
       "last_payment_date": "Date du dernier paiement",
+      "paid_amount_exceeds": "Le montant payé ne peut pas dépasser le montant total à payer. Si vous souhaitez payer davantage, enregistrez-le comme un paiement anticipé.",
+      "weight_distribution": "Répartition du poids",
       "pagination": {
         "showing": "Affichage",
         "to": "à",

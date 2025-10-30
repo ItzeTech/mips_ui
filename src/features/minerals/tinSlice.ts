@@ -311,12 +311,12 @@ const tinSlice = createSlice({
       })
       .addCase(fetchTins.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.tins = action.payload.items;
+        state.tins = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          limit: action.payload.limit,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          limit: action.payload?.limit || 10,
         };
       })
       .addCase(fetchTins.rejected, (state, action) => {
@@ -427,17 +427,6 @@ export const calculateFinancials = (
 
   let calculatedData: Partial<Tin> = { ...data };
 
-  // --- Debug Logging ---
-  console.log("=== DEBUG: Input Data ===", {
-    lme_rate,
-    purchase_sn_percentage,
-    net_weight,
-    exchange_rate,
-    price_of_tag_per_kg_rwf,
-    fluctuation_fee,
-    internal_tc,
-    settings
-  });
 
   const rraPercentage = useCustomFees ? data.rra_percentage_fee : settings.rra_percentage;
   const rmaUsdPerKg = useCustomFees ? data.rma_per_kg_rwf_fee : settings.rma_per_kg_rwf;

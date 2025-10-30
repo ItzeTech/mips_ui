@@ -57,7 +57,7 @@ export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/users/');
+      const response = await axiosInstance.get('/users');
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch users');
@@ -69,7 +69,7 @@ export const createUser = createAsyncThunk(
   'users/createUser',
   async (userData: CreateUserData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('/users/', userData);
+      const response = await axiosInstance.post('/users', userData);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to create user');
@@ -127,7 +127,7 @@ const usersSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.users = action.payload;
+        state.users = action.payload || [];
         state.isFetched = true;
       })
       .addCase(fetchUsers.rejected, (state, action) => {

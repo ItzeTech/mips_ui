@@ -17,7 +17,7 @@ interface LogoutDialogProps {
   onConfirm: () => void;
 }
 
-const LogoutDialog: React.FC<LogoutDialogProps> = ({ isOpen, onClose, onConfirm }) => {
+const LogoutDialog: React.FC<LogoutDialogProps> = ({ isOpen, onClose, onConfirm: _onConfirm }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

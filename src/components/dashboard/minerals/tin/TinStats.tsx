@@ -107,7 +107,7 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
             </p>
             {hasSelected && (
               <p className="text-xs text-amber-600 dark:text-amber-400">
-                Sel: {formatNumber(stats.selectedTotalNetWeight)} kg
+                {t('common.selected', 'Selected')} {formatNumber(stats.selectedTotalNetWeight)} kg
               </p>
             )}
           </div>
@@ -130,7 +130,7 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
             </p>
             {hasSelected && (
               <p className="text-xs text-amber-600 dark:text-amber-400">
-                Selected: {stats.selectedCount}
+                {t('common.selected', 'Selected')} {stats.selectedCount}
               </p>
             )}
           </div>
@@ -153,7 +153,7 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
             </p>
             {hasSelected && (
               <p className="text-xs text-amber-600 dark:text-amber-400">
-                Sel: {formatNumber(stats.selectedAvgSnPercentage)}%
+                {t('common.selected', 'Selected')} {formatNumber(stats.selectedAvgSnPercentage)}%
               </p>
             )}
           </div>
@@ -176,7 +176,7 @@ const TinStats: React.FC<TinStatsProps> = ({ tins, selectedTins }) => {
             </p>
             {hasSelected && (
               <p className="text-xs text-amber-600 dark:text-amber-400">
-                Sel: ${formatNumber(stats.selectedTotalNetAmount)}
+                {t('common.selected', 'Selected')} ${formatNumber(stats.selectedTotalNetAmount)}
               </p>
             )}
           </div>

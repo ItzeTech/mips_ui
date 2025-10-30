@@ -1,4 +1,4 @@
-const WS_BASE_URL = process.env.REACT_APP_WS_BASE_URL || "ws://127.0.0.1:5000/ws";
+const WS_BASE_URL = process.env.REACT_APP_WS_BASE_URL;
 
 interface WSClientOptions {
   token: string;
@@ -99,9 +99,9 @@ export class WSClient {
         }
       };
 
-      state.ws.onerror = (error) => {
-        // console.error(`❌ ${type} WebSocket error:`, error);
-      };
+      // state.ws.onerror = (error) => {
+      //   // console.error(`❌ ${type} WebSocket error:`, error);
+      // };
 
       state.ws.onclose = async (event) => {
         // console.log(`🔌 ${type} channel closed (Code: ${event.code}, Reason: ${event.reason})`);

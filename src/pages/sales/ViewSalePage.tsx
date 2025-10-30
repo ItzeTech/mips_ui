@@ -323,9 +323,6 @@ const ViewSalePage: React.FC = () => {
               <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center">
                   <span className="mr-2">{t('sales.sale_details', 'Sale Details')}</span>
-                  <span className="px-2 py-0.5 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full">
-                    ID: {selectedSale?.id.substring(0, 8)}...
-                  </span>
                 </h2>
               </div>
               

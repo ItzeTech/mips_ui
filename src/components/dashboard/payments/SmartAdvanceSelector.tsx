@@ -1,5 +1,5 @@
 // components/dashboard/payments/SmartAdvanceSelector.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -41,13 +41,7 @@ const SmartAdvanceSelector: React.FC<SmartAdvanceSelectorProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  useEffect(() => {
-    if (supplierId) {
-      fetchUnpaidAdvances();
-    }
-  }, [supplierId]);
-
-  const fetchUnpaidAdvances = async () => {
+  const fetchUnpaidAdvances = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -71,7 +65,11 @@ const SmartAdvanceSelector: React.FC<SmartAdvanceSelectorProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [supplierId, onSelectionChange]);
+
+  useEffect(() => {
+    fetchUnpaidAdvances();
+  }, [fetchUnpaidAdvances]);
 
   const formatAmount = (amount: number, currency: string = 'USD') => {
     if (currency === 'RWF') {

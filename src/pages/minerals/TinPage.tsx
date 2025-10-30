@@ -269,7 +269,9 @@ const TinPage: React.FC = () => {
         
       const matchesFinanceStatus =
         financeStatusFilter === 'all' ||
-        tin.finance_status === financeStatusFilter;
+        (financeStatusFilter === 'unpaid' 
+        ? (tin.finance_status === 'unpaid' || tin.finance_status === 'invoiced')
+        : tin.finance_status === financeStatusFilter);
         
       return matchesSearch && matchesStockStatus && matchesFinanceStatus;
     });

@@ -20,7 +20,7 @@ interface TantalumHeaderProps {
 
 const TantalumHeader: React.FC<TantalumHeaderProps> = ({ 
   onCreateClick,
-  selectedTantalums
+  selectedTantalums: _selectedTantalums
 }) => {
   const { t } = useTranslation();
   const { clearByType, getCountByType } = useSelectedMinerals();

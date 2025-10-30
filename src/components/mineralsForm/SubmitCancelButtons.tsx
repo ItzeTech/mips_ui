@@ -15,7 +15,7 @@ interface SubmitCancelButtonsProps {
 const SubmitCancelButtons: React.FC<SubmitCancelButtonsProps> = ({
   loading,
   onCancel,
-  submitLabel = 'Submit',
+  submitLabel: _submitLabel = 'Submit',
   creating,
   create,
   cancel

@@ -55,6 +55,19 @@ const SaleHeader: React.FC<SaleHeaderProps> = ({
     }
   };
 
+  const translateMineral = (type: string) => {
+    switch (type) {
+      case 'TANTALUM':
+        return t('sidebar.menu.tantalum');
+      case 'TIN':
+        return t('sidebar.menu.tin');
+      case 'TUNGSTEN':
+        return t('sidebar.menu.tungsten');
+      default:
+        return type;
+    }
+  };
+
   return (
     <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
       <div className="p-4 sm:p-6">
@@ -70,7 +83,7 @@ const SaleHeader: React.FC<SaleHeaderProps> = ({
                   {t('sales.sale_id', 'Sale ID')}: {sale.id.substring(0, 8)}...
                 </h2>
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium ${getMineralTypeColor(sale.mineral_type)}`}>
-                  {sale.mineral_type}
+                  {translateMineral(sale.mineral_type).toUpperCase()}
                 </span>
               </div>
               

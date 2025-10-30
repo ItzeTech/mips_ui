@@ -16,7 +16,7 @@ interface PaymentHeaderProps {
   onEdit: () => void;
 }
 
-const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint, onEdit }) => {
+const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint: _onPrint, onEdit }) => {
   const { t } = useTranslation();
   const [printModalOpen, setPrintModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,6 +87,21 @@ const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint, onEdit 
     }
   };
 
+  const translatedMinerals = payment.mineral_types
+  .map((type) => {
+    switch (type) {
+      case 'TANTALUM':
+        return t('sidebar.menu.tantalum');
+      case 'TIN':
+        return t('sidebar.menu.tin');
+      case 'TUNGSTEN':
+        return t('sidebar.menu.tungsten');
+      default:
+        return type; // fallback to original if unknown
+    }
+  })
+  .join(', ').toUpperCase();
+
   return (
     <>
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
@@ -112,7 +127,7 @@ const PaymentHeader: React.FC<PaymentHeaderProps> = ({ payment, onPrint, onEdit 
                   <span className="font-medium text-gray-900 dark:text-white">{formatAmount(payment.total_amount)}</span>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-700/30 px-3 py-1 rounded-lg">
-                  <span className="text-gray-700 dark:text-gray-300">{payment.mineral_types.join(', ')}</span>
+                  <span className="text-gray-700 dark:text-gray-300">{translatedMinerals}</span>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-700/30 px-3 py-1 rounded-lg">
                   <span className="text-gray-700 dark:text-gray-300">{payment.total_weight.toFixed(2)} kg</span>

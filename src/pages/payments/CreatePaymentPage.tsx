@@ -1,5 +1,5 @@
 // pages/payments/CreatePaymentPage.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -51,12 +51,21 @@ const CreatePaymentPage: React.FC = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [hasPreviewedCurrentSelection, setHasPreviewedCurrentSelection] = useState(false);
   
-  // Reset everything when component mounts (for fresh start)
+  const resetForm = useCallback(() => {
+    setSupplierId(null);
+    setSelectedSupplierName('');
+    setSelectedMinerals({ tantalum: [], tin: [], tungsten: [] });
+    setSelectedAdvances([]);
+    handleClearPreviewPayment();
+    setShowPreview(false);
+    setHasPreviewedCurrentSelection(false);
+  }, [handleClearPreviewPayment]);
+
   useEffect(() => {
     resetForm();
-  }, []);
-  
-  useEffect(() => {
+  }, [resetForm]);
+
+    useEffect(() => {
     if (createStatus === 'succeeded') {
       setShowSuccessMessage(true);
       resetForm();
@@ -67,17 +76,7 @@ const CreatePaymentPage: React.FC = () => {
       
       return () => clearTimeout(timer);
     }
-  }, [createStatus]);
-  
-  const resetForm = () => {
-    setSupplierId(null);
-    setSelectedSupplierName('');
-    setSelectedMinerals({ tantalum: [], tin: [], tungsten: [] });
-    setSelectedAdvances([]);
-    handleClearPreviewPayment();
-    setShowPreview(false);
-    setHasPreviewedCurrentSelection(false);
-  };
+  }, [createStatus, resetForm]);
   
   const handleSupplierSelect = (id: string, name: string) => {
     setSupplierId(id);

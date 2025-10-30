@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import './config/i18n'; // Initialize i18n
 import { loadState } from './utils/localStorage'; // For initial theme
-import { injectStore } from './config/axiosInstance'; 
+// import { injectStore } from './config/axiosInstance'; 
 import { Toaster } from 'react-hot-toast';
 
 // Set initial theme from localStorage or system preference
@@ -18,7 +18,7 @@ if (initialTheme === 'dark') {
   document.documentElement.classList.remove('dark');
 }
 
-injectStore(store);
+// injectStore(store);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

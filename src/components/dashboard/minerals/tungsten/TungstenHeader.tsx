@@ -12,7 +12,7 @@ interface TungstenHeaderProps {
   selectedTungstens: any[];
 }
 
-const TungstenHeader: React.FC<TungstenHeaderProps> = ({ onCreateClick, selectedTungstens }) => {
+const TungstenHeader: React.FC<TungstenHeaderProps> = ({ onCreateClick, selectedTungstens: _selectedSupplierId }) => {
   const { t } = useTranslation();
   const { clearByType, getCountByType } = useSelectedMinerals();
 

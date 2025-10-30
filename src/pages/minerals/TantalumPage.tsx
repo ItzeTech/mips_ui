@@ -268,7 +268,9 @@ const filteredTantalums = useMemo(() => {
       
     const matchesFinanceStatus =
       financeStatusFilter === 'all' ||
-      tantalum.finance_status === financeStatusFilter;
+      (financeStatusFilter === 'unpaid' 
+        ? (tantalum.finance_status === 'unpaid' || tantalum.finance_status === 'invoiced')
+        : tantalum.finance_status === financeStatusFilter);
       
     return matchesSearch && matchesStockStatus && matchesFinanceStatus;
   });

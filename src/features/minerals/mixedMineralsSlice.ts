@@ -120,7 +120,6 @@ export const updateMixedMineralStatus = createAsyncThunk(
   'mixedMinerals/updateMixedMineralStatus',
   async ({ id, status }: { id: string; status: UpdateMixedMineralStatusData }, { rejectWithValue }) => {
     try {
-      console.log(status)
       const response = await axiosInstance.put(`/mixed-minerals/${id}`, {status: status});
       return response.data.data;
     } catch (error: any) {
@@ -161,12 +160,12 @@ const mixedMineralsSlice = createSlice({
       })
       .addCase(fetchMixedMinerals.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.minerals = action.payload.items;
+        state.minerals = action.payload?.items || [];
         state.isFetched = true;
         state.pagination = {
-          total: action.payload.total,
-          page: action.payload.page,
-          limit: action.payload.limit,
+          total: action.payload?.total || 0,
+          page: action.payload?.page || 1,
+          limit: action.payload?.limit || 10,
         };
       })
       .addCase(fetchMixedMinerals.rejected, (state, action) => {

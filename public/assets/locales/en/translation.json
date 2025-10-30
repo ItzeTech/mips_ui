@@ -26,15 +26,39 @@
       "update_financial_error": "Failed to update financial data. Please try again.",
       "no": "No",
       "save_changes": "Save Changes",
-      "continue": "Continue"
+      "continue": "Continue",
+      "amount": "Amount",
+      "method": "Method",
+      "date": "Date",
+      "status": "Status",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "lot_number": "Lot Number",
+      "weight": "Weight",
+      "ta2o5": "Ta₂O₅",
+      "sn": "Sn",
+      "wo3": "WO₃",
+      "minerals": "Minerals",
+      "avg_wo3": "Avg. WO₃",
+      "avg_sn": "Avg. Sn",
+      "avg_ta2o5": "Avg. Ta₂O₅",
+      "net": "NET",
+      "updated": "Updated",
+      "in_stock": "In Stock",
+      "withdrawn": "Withdrawn",
+      "resampled": "Resampled",
+      "invoiced": "Invoiced",
+      "advance_given": "Advance Given",
+      "exported": "Exported",
+      "selected": "Selected"
     },
     "sidebar": {
-      "app_name": "RwandaMining",
+      "app_name": "AgaciroTrade",
       "app_subtitle": "Management System",
       "minerals_category": "Minerals",
       "finance_category": "Finance",
       "version": "Version",
-      "edition": "Mining Pro",
+      "edition": "AgaciroTrade Pro",
       "menu": {
         "dashboard": "Dashboard",
         "manage_users": "Manage Users",
@@ -68,6 +92,7 @@
       "exported": "Exported",
       "in_stock": "in stock",
       "of_total": "of total",
+      "of_max": "of max",
       
       "minerals_inventory": "Minerals Inventory",
       "all_minerals": "All Minerals",
@@ -566,7 +591,10 @@
       "fe_percentage": "Fe %",
       "w_percentage": "W %",
       "alex_stewart_ta2o5": "Alex Stewart Ta2O5",
-      "alex_stewart_nb2o5": "Alex Stewart Nb2O5"
+      "alex_stewart_nb2o5": "Alex Stewart Nb2O5",
+      "compute_selected": "Compute",
+      "items_selected": "items selected",
+      "clear_selection": "Clear selection"
       },
       "tin": {
         "title": "Tin Management",
@@ -969,7 +997,8 @@
         "partially_paid": "Partially Paid",
         "success": "Success",
         "payment_updated": "Payment details have been successfully updated.",
-        "last_payment_date": "Last Payment Date"
+        "last_payment_date": "Last Payment Date",
+        "paid_amount_exceeds": "Paid amount cannot exceed the Net Sales Amount."
       },
       "payments": {
         "filter": "Filter",
@@ -1057,6 +1086,7 @@
         "success": "Success",
         "payment_updated": "Payment details have been successfully updated.",
         "last_payment_date": "Last Payment Date",
+        "paid_amount_exceeds": "Paid amount cannot exceed the total payable amount. If you wish to pay more, please record it as an advance payment.",
         "pagination": {
           "showing": "Showing",
           "to": "to",
