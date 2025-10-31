@@ -50,7 +50,14 @@
       "invoiced": "Invoiced",
       "advance_given": "Advance Given",
       "exported": "Exported",
-      "selected": "Selected"
+      "selected": "Selected",
+      "selected_items": "Selected Items",
+      "mineral_analysis": "Mineral Analysis",
+      "weight_summary": "Weight Summary",
+      "net_payment": "Net Payment",
+      "financial_summary": "Financial Summary",
+      "preview_description": "Review calculation before creating",
+      "payment_preview": "Payment Preview"
     },
     "sidebar": {
       "app_name": "AgaciroTrade",

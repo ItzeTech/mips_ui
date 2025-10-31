@@ -1,5 +1,5 @@
 // components/dashboard/payments/SmartAdvanceSelector.tsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -27,13 +27,14 @@ interface SmartAdvanceSelectorProps {
   supplierId: string;
   selectedAdvanceIds: string[];
   onSelectionChange: (ids: string[]) => void;
-  onDataChange?: () => void; // New prop
+  onDataChange?: () => void;
 }
 
 const SmartAdvanceSelector: React.FC<SmartAdvanceSelectorProps> = ({
   supplierId,
   selectedAdvanceIds,
-  onSelectionChange
+  onSelectionChange,
+  onDataChange
 }) => {
   const { t } = useTranslation();
   const [advances, setAdvances] = useState<AdvancePayment[]>([]);
@@ -41,9 +42,28 @@ const SmartAdvanceSelector: React.FC<SmartAdvanceSelectorProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
 
+  // Use refs to store the latest callbacks without causing re-renders
+  const onSelectionChangeRef = useRef(onSelectionChange);
+  const onDataChangeRef = useRef(onDataChange);
+
+  // Update refs when callbacks change
+  useEffect(() => {
+    onSelectionChangeRef.current = onSelectionChange;
+  }, [onSelectionChange]);
+
+  useEffect(() => {
+    onDataChangeRef.current = onDataChange;
+  }, [onDataChange]);
+
+  // Track if auto-selection has been performed for this supplier
+  const hasAutoSelectedRef = useRef<string | null>(null);
+
   const fetchUnpaidAdvances = useCallback(async () => {
+    if (!supplierId) return;
+    
     setLoading(true);
     setError(null);
+    
     try {
       const response = await axiosInstance.post(
         `/advance-payments/supplier/${supplierId}/by-status`,
@@ -53,10 +73,11 @@ const SmartAdvanceSelector: React.FC<SmartAdvanceSelectorProps> = ({
       const advanceData = Array.isArray(response.data.data.items) ? response.data.data.items : [];
       setAdvances(advanceData);
       
-      // Auto-select all advances
-      if (advanceData.length > 0) {
+      // Auto-select all advances only once per supplier
+      if (advanceData.length > 0 && hasAutoSelectedRef.current !== supplierId) {
+        hasAutoSelectedRef.current = supplierId;
         const allAdvanceIds = advanceData.map((advance: any) => advance.id);
-        onSelectionChange(allAdvanceIds);
+        onSelectionChangeRef.current(allAdvanceIds);
       }
     } catch (error) {
       console.error('Failed to fetch unpaid advances:', error);
@@ -65,11 +86,13 @@ const SmartAdvanceSelector: React.FC<SmartAdvanceSelectorProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [supplierId, onSelectionChange]);
+  }, [supplierId]); // Only supplierId as dependency
 
   useEffect(() => {
-    fetchUnpaidAdvances();
-  }, [fetchUnpaidAdvances]);
+    if (supplierId) {
+      fetchUnpaidAdvances();
+    }
+  }, [supplierId, fetchUnpaidAdvances]);
 
   const formatAmount = (amount: number, currency: string = 'USD') => {
     if (currency === 'RWF') {
@@ -94,15 +117,18 @@ const SmartAdvanceSelector: React.FC<SmartAdvanceSelectorProps> = ({
       : [...selectedAdvanceIds, advanceId];
     
     onSelectionChange(newSelection);
+    onDataChange?.();
   };
 
   const handleSelectAll = () => {
     const allIds = advances.map(a => a.id);
     onSelectionChange(allIds);
+    onDataChange?.();
   };
 
   const handleDeselectAll = () => {
     onSelectionChange([]);
+    onDataChange?.();
   };
 
   const selectedCount = selectedAdvanceIds.length;

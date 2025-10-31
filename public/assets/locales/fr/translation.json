@@ -50,7 +50,14 @@
       "invoiced": "Facturé",
       "advance_given": "Avance donnée",
       "exported": "Exporté",
-      "selected": "Sélectionné"
+      "selected": "Sélectionné",
+      "selected_items": "Éléments sélectionnés",
+      "mineral_analysis": "Analyse minérale",
+      "weight_summary": "Résumé du poids",
+      "net_payment": "Paiement net",
+      "financial_summary": "Résumé financier",
+      "preview_description": "Vérifier le calcul avant de créer",
+      "payment_preview": "Aperçu du paiement"
     },
     "sidebar": {
       "app_name": "AgaciroTrade",

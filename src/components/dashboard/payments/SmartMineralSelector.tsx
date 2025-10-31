@@ -1,5 +1,5 @@
 // components/dashboard/payments/SmartMineralSelector.tsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -36,7 +36,7 @@ interface SmartMineralSelectorProps {
     tungsten: string[];
   };
   onSelectionChange: (type: 'tantalum' | 'tin' | 'tungsten', ids: string[]) => void;
-  onDataChange?: () => void; // New prop to notify parent of changes
+  onDataChange?: () => void;
 }
 
 const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
@@ -77,26 +77,36 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
     tungsten: true
   });
 
-  // useEffect(() => {
-  //   if (supplierId) {
-  //     fetchUnpaidMinerals();
-  //   }
-  // }, [supplierId]);
+  // Use ref to store the latest callback without causing re-renders
+  const onSelectionChangeRef = useRef(onSelectionChange);
+  const onDataChangeRef = useRef(onDataChange);
 
+  // Update refs when callbacks change
+  useEffect(() => {
+    onSelectionChangeRef.current = onSelectionChange;
+  }, [onSelectionChange]);
+
+  useEffect(() => {
+    onDataChangeRef.current = onDataChange;
+  }, [onDataChange]);
+
+  // Track if auto-selection has been performed for this supplier
+  const hasAutoSelectedRef = useRef<string | null>(null);
+
+  // Fetch function without callback dependencies
   const fetchUnpaidMinerals = useCallback(async () => {
+    if (!supplierId) return;
+    
     setLoading(true);
     setError(null);
     
     try {
-      
-      // Fetch tantalum minerals
-      const tantalumResponse = await axiosInstance.get(`/tantalum/supplier/${supplierId}/unpaid`);
-      
-      // Fetch tin minerals  
-      const tinResponse = await axiosInstance.get(`/tin/supplier/${supplierId}/unpaid`);
-      
-      // Fetch tungsten minerals
-      const tungstenResponse = await axiosInstance.get(`/tungsten/supplier/${supplierId}/unpaid`);
+      // Fetch all mineral types in parallel
+      const [tantalumResponse, tinResponse, tungstenResponse] = await Promise.all([
+        axiosInstance.get(`/tantalum/supplier/${supplierId}/unpaid`),
+        axiosInstance.get(`/tin/supplier/${supplierId}/unpaid`),
+        axiosInstance.get(`/tungsten/supplier/${supplierId}/unpaid`)
+      ]);
 
       // Extract data consistently
       const tantalumData = Array.isArray(tantalumResponse.data?.data?.items) 
@@ -124,17 +134,23 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
       });
 
       // Auto-select first available mineral type that has records
-      setTimeout(() => {
-        if (tantalumData.length > 0 && selectedMinerals.tantalum.length === 0) {
-          onSelectionChange('tantalum', [tantalumData[0].id]);
-        } else if (tinData.length > 0 && selectedMinerals.tin.length === 0) {
-          onSelectionChange('tin', [tinData[0].id]);
-        } else if (tungstenData.length > 0 && selectedMinerals.tungsten.length === 0) {
-          onSelectionChange('tungsten', [tungstenData[0].id]);
-        }
-      }, 100);
+      // Only run once per supplier
+      if (hasAutoSelectedRef.current !== supplierId) {
+        hasAutoSelectedRef.current = supplierId;
+        
+        setTimeout(() => {
+          if (tantalumData.length > 0) {
+            onSelectionChangeRef.current('tantalum', [tantalumData[0].id]);
+          } else if (tinData.length > 0) {
+            onSelectionChangeRef.current('tin', [tinData[0].id]);
+          } else if (tungstenData.length > 0) {
+            onSelectionChangeRef.current('tungsten', [tungstenData[0].id]);
+          }
+        }, 100);
+      }
 
     } catch (error) {
+      console.error('Error fetching unpaid minerals:', error);
       setError('Failed to fetch unpaid minerals');
       setMinerals({
         tantalum: [],
@@ -144,11 +160,14 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [supplierId, onSelectionChange, selectedMinerals]);
+  }, [supplierId]); // Only supplierId as dependency
 
+  // Fetch minerals when supplier changes
   useEffect(() => {
-    fetchUnpaidMinerals();
-  }, [fetchUnpaidMinerals]);
+    if (supplierId) {
+      fetchUnpaidMinerals();
+    }
+  }, [supplierId, fetchUnpaidMinerals]);
 
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -187,7 +206,7 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
       : [...currentSelection, mineralId];
     
     onSelectionChange(type, newSelection);
-    onDataChange?.(); // Notify parent of changes
+    onDataChange?.();
   };
 
   const handleSelectAll = (type: 'tantalum' | 'tin' | 'tungsten') => {
@@ -195,13 +214,13 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
     if (Array.isArray(mineralList)) {
       const allIds = mineralList.map(m => m.id);
       onSelectionChange(type, allIds);
-      onDataChange?.(); // Notify parent of changes
+      onDataChange?.();
     }
   };
 
   const handleDeselectAll = (type: 'tantalum' | 'tin' | 'tungsten') => {
     onSelectionChange(type, []);
-    onDataChange?.(); // Notify parent of changes
+    onDataChange?.();
   };
 
   const toggleSection = (type: 'tantalum' | 'tin' | 'tungsten') => {
@@ -289,17 +308,15 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
           </div>
           <div className="flex items-center space-x-2">
             {totalCount > 0 && (
-              <>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    selectedCount === filteredCount ? handleDeselectAll(type) : handleSelectAll(type);
-                  }}
-                  className={`px-3 py-1 text-xs rounded-lg text-white transition-colors ${colors.button}`}
-                >
-                  {selectedCount === filteredCount ? t('payments.deselect_all', 'Deselect All') : t('payments.select_all', 'Select All')}
-                </button>
-              </>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  selectedCount === filteredCount ? handleDeselectAll(type) : handleSelectAll(type);
+                }}
+                className={`px-3 py-1 text-xs rounded-lg text-white transition-colors ${colors.button}`}
+              >
+                {selectedCount === filteredCount ? t('payments.deselect_all', 'Deselect All') : t('payments.select_all', 'Select All')}
+              </button>
             )}
             {isExpanded ? (
               <ChevronUpIcon className="w-5 h-5 text-gray-400" />
@@ -384,7 +401,7 @@ const SmartMineralSelector: React.FC<SmartMineralSelectorProps> = ({
                                   <span className="truncate">{formatAmount(mineral.net_amount)}</span>
                                   {percentage && (
                                     <span className="ml-1">{` | ${formatPercentage(percentage)}`}</span>
-                                    )}
+                                  )}
                                 </div>
                               </div>
                             </div>

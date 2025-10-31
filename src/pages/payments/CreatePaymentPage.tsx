@@ -299,7 +299,7 @@ const CreatePaymentPage: React.FC = () => {
                 </p>
               </div>
               
-              <div className="p-6">
+              <div className="p-6 z-20">
                 <SupplierSelector onSelect={handleSupplierSelect} />
                 {selectedSupplierName && (
                   <motion.div 

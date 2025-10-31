@@ -50,7 +50,14 @@
       "invoiced": "Rifite fagitire",
       "advance_given": "Amafaranga yahawe mbere",
       "exported": "Ryoherejwe",
-      "selected": "Byatoranyijwe"
+      "selected": "Byatoranyijwe",
+      "selected_items": "Ibintu Byatoranijwe",
+      "mineral_analysis": "Isesengura ry'Amabuye y'Agaciro",
+      "weight_summary": "Incamake y'Uburemere",
+      "net_payment": "Kwishyura Nyakuri",
+      "financial_summary": "Incamake y'Imari",
+      "preview_description": "Suzuma ibibarwa mbere yo gukora",
+      "payment_preview": "Reba Kwishyura"
     },
     "sidebar": {
       "app_name": "AgaciroTrade",
