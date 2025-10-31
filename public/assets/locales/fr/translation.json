@@ -1090,6 +1090,7 @@
       "updating": "Mise à jour...",
       "fully_paid": "Entièrement payé",
       "success": "Succès",
+      "payment_created": "Le paiement a été créé avec succès.",
       "payment_updated": "Les détails du paiement ont été mis à jour avec succès.",
       "last_payment_date": "Date du dernier paiement",
       "paid_amount_exceeds": "Le montant payé ne peut pas dépasser le montant total à payer. Si vous souhaitez payer davantage, enregistrez-le comme un paiement anticipé.",

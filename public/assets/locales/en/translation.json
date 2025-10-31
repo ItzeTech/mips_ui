@@ -1091,6 +1091,7 @@
         "updating": "Updating...",
         "fully_paid": "Fully Paid",
         "success": "Success",
+        "payment_created": "Payment has been successfully created.",
         "payment_updated": "Payment details have been successfully updated.",
         "last_payment_date": "Last Payment Date",
         "paid_amount_exceeds": "Paid amount cannot exceed the total payable amount. If you wish to pay more, please record it as an advance payment.",

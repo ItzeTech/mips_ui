@@ -1091,6 +1091,7 @@
       "updating": "Iri Guhindura...",
       "fully_paid": "Byishyuwe Byose",
       "success": "Byagenze Neza",
+      "payment_created": "Kwishyura byaremwe neza.",
       "payment_updated": "Amakuru y'kwishyura yahinduwe neza.",
       "last_payment_date": "Itariki ya Nyuma y'Kwishyura",
       "paid_amount_exceeds": "Amafaranga yishyuwe ntashobora kurenza ayo ugomba kwishyura. Niba ushaka kwishyura arenga ayo, uyashyire muri advance.",
